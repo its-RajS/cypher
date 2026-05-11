@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import Logo from "@/assets/svgs/logo";
 import Link from "next/link";
 import { useAuth } from "@clerk/nextjs";
+import { DASHBOARD_URL } from "@/lib/routes";
 
 const Navbar = () => {
   const { isSignedIn, isLoaded } = useAuth();
@@ -39,29 +40,40 @@ const Navbar = () => {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-4">
-          {/* <Link
-            href="/login"
-            className="text-sm font-medium text-slate-300 hover:text-white transition-colors"
-          >
-            Login
-          </Link> */}
-          <Link
-            target={!isLoaded ? "_parent" : isSignedIn ? "__blank" : "_parent"}
-            href={
-              !isLoaded
-                ? "/"
-                : !isSignedIn
-                  ? "/waitlist"
-                  : "http://localhost:3001"
-            }
-          >
+          {!isLoaded ? (
             <Button
               size="sm"
               className="rounded-full cursor-pointer bg-blue-600 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-500 shadow-lg shadow-blue-500/20"
             >
-              {!isLoaded ? "..." : isSignedIn ? "Dashboard" : "Sign In"}
+              ...
             </Button>
-          </Link>
+          ) : isSignedIn ? (
+            <Link href={DASHBOARD_URL}>
+              <Button
+                size="sm"
+                className="rounded-full cursor-pointer bg-blue-600 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-500 shadow-lg shadow-blue-500/20"
+              >
+                Dashboard
+              </Button>
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/signin"
+                className="text-sm font-medium text-slate-300 transition-colors hover:text-white"
+              >
+                Sign In
+              </Link>
+              <Link href="/signup">
+                <Button
+                  size="sm"
+                  className="rounded-full cursor-pointer bg-blue-600 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-500 shadow-lg shadow-blue-500/20"
+                >
+                  Sign Up
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>

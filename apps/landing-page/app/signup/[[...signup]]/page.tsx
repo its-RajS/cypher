@@ -1,5 +1,6 @@
 import { SignUp } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import { DASHBOARD_URL } from "@/lib/routes";
 
 export default function Page() {
   return (
@@ -13,6 +14,8 @@ export default function Page() {
       <div className="relative z-10 flex flex-col items-center gap-6 w-full max-w-100">
         <SignUp
           signInUrl="/signin"
+          forceRedirectUrl={DASHBOARD_URL}
+          fallbackRedirectUrl={DASHBOARD_URL}
           appearance={{
             baseTheme: dark,
             variables: {

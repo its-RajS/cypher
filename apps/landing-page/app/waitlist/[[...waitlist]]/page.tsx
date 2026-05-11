@@ -1,7 +1,12 @@
 import { Waitlist } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import { redirect } from "next/navigation";
 
 export default function Page() {
+  if (process.env.NODE_ENV === "development") {
+    redirect("/signup");
+  }
+
   return (
     <div className="relative w-full h-screen flex items-center justify-center bg-[#020202] overflow-hidden">
       {/* Background Grid */}
