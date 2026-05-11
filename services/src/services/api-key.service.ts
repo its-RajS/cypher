@@ -12,8 +12,8 @@ export class ApiKeyService {
     private readonly db: any,
   ) {}
 
-  private generateApiKey(): {plainTextKey: string, hashedKey: string} {
-    const hashedKey = crypto.randomUUID().replace(/-/g, "");
+  private generateApiKey(): { plainTextKey: string; hashedKey: string } {
+    const hashedKey = crypto.randomUUID().replace(/-/g, '');
     const secret = crypto.randomBytes(32).toString('base64url');
     const plainTextKey = `CYPH${hashedKey}_${secret}`;
     return { plainTextKey, hashedKey };
@@ -38,7 +38,7 @@ export class ApiKeyService {
 
     const prefix = plainTextKey.substring(0, 18) + '...';
 
-    await this.db.insert(api_key).values({
+    await this.db.insert(api_key).values({ 
       id: hashedKey,
       user_id: userId,
       prefix,
@@ -49,7 +49,7 @@ export class ApiKeyService {
   }
 
   async listApiKeys(userId: string) {}
- b
+
   async deleteApiKey(userId: string) {}
 
   async regenerateApiKey(userId: string, id: string) {}
