@@ -12,4 +12,4 @@ export function extractApiKey(apiKey: string): string | null {
   if (!/^[a-f-0-9]{32}$/i.test(keyId)) return null;
 
   return keyId;
-};
+}

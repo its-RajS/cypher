@@ -13,6 +13,9 @@ import { DRIZZLE_DB } from '../database/database.module';
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import * as schema from '../database/schema';
 import { extractApiKey } from 'src/utils/apiKeyVerifier';
+import { generateKeyDigest } from 'src/utils/keyDigest';
+import { and, eq, isNull } from 'drizzle-orm';
+import * as argon2 from 'argon2';
 
 interface AuthenticatedRequest {
   headers: Record<string, string | string[] | undefined>;
@@ -29,7 +32,7 @@ function getHeaderValue(
 }
 
 interface CachedKey {
-  userId: string;
+  user_id: string;
   expiredAt?: number;
 }
 
@@ -65,7 +68,73 @@ export class ClerkAuthGuard implements CanActivate {
       if (!keyId) {
         throw new UnauthorizedException('Invalid API key');
       }
-      return true;
+      const keyDigest = generateKeyDigest(apiKey);
+      const lruKey = `${VERSION}:${keyDigest}`;
+      const now = Date.now();
+
+      try {
+        // Fasted way to verify the apikey with LRU
+        const cachedKey = localCache.get(lruKey);
+        if (cachedKey && cachedKey.expiredAt && cachedKey.expiredAt > now) {
+          req.user = {
+            id: cachedKey.user_id,
+            keyId,
+          };
+          return true;
+        }
+
+        // Second fastest way to verify the apikey with REDIS
+        const redisKeyDigest = `cyph:api_key:${VERSION}:${keyDigest}`;
+        const redisDigest = await this.redis.hgetall(redisKeyDigest);
+        if (redisDigest?.invalid === '1') {
+          throw new UnauthorizedException('Invalid API key');
+        }
+
+        if (redisDigest?.user_id) {
+          localCache.set(lruKey, {
+            user_id: redisDigest.user_id,
+            expiredAt: now + LRU_SOFT_TTL,
+          });
+          req.user = {
+            id: redisDigest.user_id,
+            keyId,
+          };
+          return true;
+        }
+
+        // User req is for the first time or after a long time
+        const record = await this.db.query.api_key.findFirst({
+          where: (ak) => and(eq(ak.id, keyId), isNull(ak.revoked_at)),
+          columns: {
+            user_id: true,
+            value: true,
+            revoked_at: true,
+          },
+        });
+
+        if (!record) {
+          throw new UnauthorizedException('Unauthorized');
+        }
+
+        const isValid = await argon2.verify(record.value, apiKey);
+        if (!isValid) {
+          await this.redis.hset(redisKeyDigest, 'invalid', '1');
+          await this.redis.expire(redisKeyDigest, REDIS_HARD_TTL);
+          throw new UnauthorizedException('Unauthorized');
+        }
+
+        await this.redis.hset(redisKeyDigest, {
+          user_id: record.user_id,
+        });
+        req.user = {
+          id: record.user_id,
+          keyId,
+        };
+        return true;
+      } catch (error) {
+        console.error('Authorization Error:', error);
+        throw new UnauthorizedException('Error in API KEY');
+      }
     } else {
       // for the user that are authenticated using clerk
       const token = getHeaderValue(req.headers['authorization'])?.split(' ')[1];
@@ -83,7 +152,7 @@ export class ClerkAuthGuard implements CanActivate {
         };
         return true;
       } catch (error) {
-        void error;
+        console.error('Authorization Error:', error);
         throw new UnauthorizedException(
           'Something went wrong! Please upload your file using our SDK.',
         );
