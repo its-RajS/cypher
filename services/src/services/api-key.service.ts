@@ -29,7 +29,7 @@ export class ApiKeyService {
       throw new Error('You have reached the maximum limit of 5 API keys');
     }
     const { plainTextKey, hashedKey } = this.generateApiKey();
-    const hash = argon2.hash(plainTextKey, {
+    const hash = await argon2.hash(plainTextKey, {
       type: argon2.argon2id,
       timeCost: 2,
       memoryCost: 65536,

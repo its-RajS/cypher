@@ -1,9 +1,19 @@
-import { Controller, Param, Post, Req, Get, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Param,
+  Post,
+  Req,
+  Get,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ClerkAuthGuard } from 'src/guards/clerk.gaurds';
 import { ApiKeyService } from 'src/services/api-key.service';
 
 @Controller('api-keys')
 @ApiTags('API KEYS')
+@UseGuards(ClerkAuthGuard)
 @ApiBearerAuth()
 export class ApiKeyController {
   constructor(private readonly apiKeyService: ApiKeyService) {}

@@ -8,5 +8,5 @@ export const api_key = pgTable('api_key', {
   value: text('value').notNull(),
   created_at: timestamp('created_at').defaultNow(),
   last_used_at: timestamp('last_used_at').defaultNow(),
-  revoked_at: timestamp('revoked_at').defaultNow(),
+  revoked_at: timestamp('revoked_at'),
 });
