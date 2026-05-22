@@ -1,15 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { count, eq } from 'drizzle-orm';
+import { and, count, eq } from 'drizzle-orm';
 import { DRIZZLE_DB } from 'src/database/database.module';
 import { api_key } from 'src/database/schema';
 import * as crypto from 'crypto';
 import * as argon2 from 'argon2';
+import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
+import * as schema from 'src/database/schema';
 
 @Injectable()
 export class ApiKeyService {
   constructor(
     @Inject(DRIZZLE_DB)
-    private readonly db: any,
+    private readonly db: NeonHttpDatabase<typeof schema>,
   ) {}
 
   private generateApiKey(): { plainTextKey: string; hashedKey: string } {
@@ -22,7 +24,9 @@ export class ApiKeyService {
   async createApiKey(userId: string) {
     //! Deafult 5 api keys Limit
     const [result] = await this.db
-      .select({ count: count() })
+      .select({
+        count: count(),
+      })
       .from(api_key)
       .where(eq(api_key.user_id, userId));
     if (result.count >= 5) {
@@ -48,9 +52,33 @@ export class ApiKeyService {
     return { key: plainTextKey };
   }
 
-  async listApiKeys(userId: string) {}
+  async listApiKeys(userId: string) {
+    return await this.db
+      .select({
+        id: api_key.id,
+        prefix: api_key.prefix,
+        createdAt: api_key.created_at,
+        lastUsedAt: api_key.last_used_at,
+        revokedAt: api_key.revoked_at,
+      })
+      .from(api_key)
+      .where(eq(api_key.user_id, userId));
+  }
 
-  async deleteApiKey(userId: string) {}
+  async deleteApiKey(userId: string, id: string) {
+    await this.db
+      .update(api_key)
+      .set({
+        revoked_at: new Date(),
+      })
+      .where(and(eq(api_key.user_id, userId), eq(api_key.id, id)));
 
-  async regenerateApiKey(userId: string, id: string) {}
+    return {
+      success: true,
+    };
+  }
+
+  async regenerateApiKey(userId: string, id: string) {
+    
+  }
 }

@@ -32,8 +32,8 @@ export class ApiKeyController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Revoke an API key' })
-  async deleteApiKey(@Req() req: any) {
-    return this.apiKeyService.deleteApiKey(req.user.id);
+  async deleteApiKey(@Req() req: any, @Param('id') id: string) {
+    return this.apiKeyService.deleteApiKey(req.user.id, id);
   }
 
   @Post(':id/regenerate')
