@@ -33,7 +33,8 @@ function getHeaderValue(
 
 interface CachedKey {
   user_id: string;
-  expiredAt?: number;
+  apiKeyDigest: string;
+  expiredAt: number;
 }
 
 const VERSION = 'v1';
@@ -69,13 +70,17 @@ export class ClerkAuthGuard implements CanActivate {
         throw new UnauthorizedException('Invalid API key');
       }
       const keyDigest = generateKeyDigest(apiKey);
-      const lruKey = `${VERSION}:${keyDigest}`;
+      const lruKey = `${VERSION}:${keyId}`;
       const now = Date.now();
 
       try {
         // Fasted way to verify the apikey with LRU
         const cachedKey = localCache.get(lruKey);
-        if (cachedKey && cachedKey.expiredAt && cachedKey.expiredAt > now) {
+        if (
+          cachedKey &&
+          cachedKey.apiKeyDigest === keyDigest &&
+          cachedKey.expiredAt > now
+        ) {
           req.user = {
             id: cachedKey.user_id,
             keyId,
@@ -84,15 +89,19 @@ export class ClerkAuthGuard implements CanActivate {
         }
 
         // Second fastest way to verify the apikey with REDIS
-        const redisKeyDigest = `cyph:api_key:${VERSION}:${keyDigest}`;
+        const redisKeyDigest = `cyph:api_key:${VERSION}:${keyId}`;
         const redisDigest = await this.redis.hgetall(redisKeyDigest);
-        if (redisDigest?.invalid === '1') {
+        if (
+          redisDigest?.invalid === '1' ||
+          redisDigest?.apiKeyDigest !== keyDigest
+        ) {
           throw new UnauthorizedException('Invalid API key');
         }
 
         if (redisDigest?.user_id) {
           localCache.set(lruKey, {
             user_id: redisDigest.user_id,
+            apiKeyDigest: keyDigest,
             expiredAt: now + LRU_SOFT_TTL,
           });
           req.user = {
@@ -125,6 +134,8 @@ export class ClerkAuthGuard implements CanActivate {
 
         await this.redis.hset(redisKeyDigest, {
           user_id: record.user_id,
+          apiKeyDigest: keyDigest,
+          expiredAt: now + REDIS_HARD_TTL,
         });
         req.user = {
           id: record.user_id,
