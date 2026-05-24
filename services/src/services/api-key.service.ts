@@ -79,6 +79,21 @@ export class ApiKeyService {
   }
 
   async regenerateApiKey(userId: string, id: string) {
-    
+    const { plainTextKey, hashedKey: newKeyID } = this.generateApiKey();
+    const hash = await argon2.hash(plainTextKey, {
+      type: argon2.argon2id,
+      timeCost: 2,
+      memoryCost: 65536,
+      parallelism: 1, 
+    });
+
+    const prefix = plainTextKey.substring(0, 18) + '...';
+
+    await this.db
+      .update(api_key)
+      .set({ id: newKeyID, prefix, value: hash })
+      .where(and(eq(api_key.user_id, userId), eq(api_key.id, id)));
+
+    return { key: plainTextKey };
   }
 }
