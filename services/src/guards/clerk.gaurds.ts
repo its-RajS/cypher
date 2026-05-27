@@ -24,7 +24,7 @@ import {
   VERSION,
 } from 'src/configs';
 
-interface AuthenticatedRequest {
+export interface AuthenticatedRequest {
   headers: Record<string, string | string[] | undefined>;
   user?: {
     id: string;
@@ -108,14 +108,16 @@ export class ClerkAuthGuard implements CanActivate {
         // Second fastest way to verify the apikey with REDIS
         const redisKeyDigest = `cyph:api_key:${VERSION}:${keyId}`;
         const redisDigest = await this.redis.hgetall(redisKeyDigest);
+        const hasRedisData = Object.keys(redisDigest).length > 0;
         if (
-          redisDigest?.invalid === '1' ||
-          redisDigest?.apiKeyDigest !== keyDigest
+          hasRedisData &&
+          (redisDigest.invalid === '1' ||
+            redisDigest.apiKeyDigest !== keyDigest)
         ) {
           throw new UnauthorizedException('Invalid API key');
         }
 
-        if (redisDigest?.user_id) {
+        if (hasRedisData && redisDigest.user_id) {
           localCache.set(lruKey, {
             user_id: redisDigest.user_id,
             apiKeyDigest: keyDigest,

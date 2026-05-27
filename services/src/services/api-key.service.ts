@@ -8,7 +8,7 @@ import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import * as schema from 'src/database/schema';
 import Redis from 'ioredis';
 import { REDIS_CLIENT } from 'src/infra/redis.module';
-import { localCache, VERSION } from 'src/configs';
+import { LAST_USED_HASH, localCache, VERSION } from 'src/configs';
 
 @Injectable()
 export class ApiKeyService {
@@ -104,5 +104,27 @@ export class ApiKeyService {
       .where(and(eq(api_key.user_id, userId), eq(api_key.id, id)));
 
     return { key: plainTextKey };
+  }
+
+  async last_used_apiKey(id: string) {
+    // check redis first
+    const redis_record = await this.redis.hget(LAST_USED_HASH, id);
+    if (redis_record) {
+      return new Date(Number(redis_record));
+    }
+
+    // check db
+    const db_record = await this.db.query.api_key.findFirst({
+      where: eq(api_key.id, id),
+      columns: {
+        last_used_at: true,
+      },
+    });
+
+    if (!db_record) {
+      throw new Error('API key not found');
+    }
+
+    return db_record?.last_used_at ?? 'Never used';
   }
 }
