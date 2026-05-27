@@ -5,7 +5,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { LRUCache } from 'lru-cache/raw';
 import { verifyToken } from '@clerk/backend';
 import { REDIS_CLIENT } from '../infra/redis.module';
 import Redis from 'ioredis';
@@ -16,6 +15,14 @@ import { extractApiKey } from 'src/utils/apiKeyVerifier';
 import { generateKeyDigest } from 'src/utils/keyDigest';
 import { and, eq, isNull } from 'drizzle-orm';
 import * as argon2 from 'argon2';
+import {
+  LAST_USED_DEBOUNCE,
+  LAST_USED_HASH,
+  localCache,
+  LRU_SOFT_TTL,
+  REDIS_HARD_TTL,
+  VERSION,
+} from 'src/configs';
 
 interface AuthenticatedRequest {
   headers: Record<string, string | string[] | undefined>;
@@ -31,21 +38,12 @@ function getHeaderValue(
   return Array.isArray(header) ? header[0] : header;
 }
 
-interface CachedKey {
-  user_id: string;
-  apiKeyDigest: string;
-  expiredAt: number;
-}
-
-const VERSION = 'v1';
-const REDIS_HARD_TTL = 10 * 60 * 1000;
-const LRU_SOFT_TTL = 5 * 60 * 1000;
-const localCache = new LRUCache<string, CachedKey>({ max: 100_000 });
-
 const retainedGuardSymbols = [
   VERSION,
   REDIS_HARD_TTL,
   LRU_SOFT_TTL,
+  LAST_USED_DEBOUNCE,
+  LAST_USED_HASH,
   localCache,
 ];
 void retainedGuardSymbols;
@@ -58,6 +56,23 @@ export class ClerkAuthGuard implements CanActivate {
     @Inject(DRIZZLE_DB)
     private readonly db: NeonHttpDatabase<typeof schema>,
   ) {}
+
+  private async trackApiKeyLastUsed(keyId: string) {
+    const lock_key = `cyph:api_key:last_used_lock:${VERSION}:${keyId}`;
+
+    const ok = await this.redis.set(
+      lock_key,
+      '1',
+      'EX',
+      LAST_USED_DEBOUNCE,
+      'NX',
+    );
+    if (!ok) {
+      return;
+    }
+
+    await this.redis.hset(LAST_USED_HASH, keyId, Date.now().toString());
+  }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest<AuthenticatedRequest>();
@@ -85,6 +100,8 @@ export class ClerkAuthGuard implements CanActivate {
             id: cachedKey.user_id,
             keyId,
           };
+
+          void this.trackApiKeyLastUsed(keyId); // don't wait for this to complete
           return true;
         }
 
@@ -108,6 +125,7 @@ export class ClerkAuthGuard implements CanActivate {
             id: redisDigest.user_id,
             keyId,
           };
+          void this.trackApiKeyLastUsed(keyId); // don't wait for this to complete
           return true;
         }
 
@@ -141,6 +159,7 @@ export class ClerkAuthGuard implements CanActivate {
           id: record.user_id,
           keyId,
         };
+        void this.trackApiKeyLastUsed(keyId);
         return true;
       } catch (error) {
         console.error('Authorization Error:', error);

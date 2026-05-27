@@ -6,12 +6,17 @@ import * as crypto from 'crypto';
 import * as argon2 from 'argon2';
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import * as schema from 'src/database/schema';
+import Redis from 'ioredis';
+import { REDIS_CLIENT } from 'src/infra/redis.module';
+import { localCache, VERSION } from 'src/configs';
 
 @Injectable()
 export class ApiKeyService {
   constructor(
     @Inject(DRIZZLE_DB)
     private readonly db: NeonHttpDatabase<typeof schema>,
+    @Inject(REDIS_CLIENT)
+    private readonly redis: Redis,
   ) {}
 
   private generateApiKey(): { plainTextKey: string; hashedKey: string } {
@@ -73,6 +78,10 @@ export class ApiKeyService {
       })
       .where(and(eq(api_key.user_id, userId), eq(api_key.id, id)));
 
+    await this.redis.del(`cyph:api_key:${VERSION}:${id}`);
+    await this.redis.del(`cyph:api_key:last_used:${VERSION}:${id}`);
+    localCache.delete(`cyph:api_key:${VERSION}:${id}`);
+
     return {
       success: true,
     };
@@ -84,7 +93,7 @@ export class ApiKeyService {
       type: argon2.argon2id,
       timeCost: 2,
       memoryCost: 65536,
-      parallelism: 1, 
+      parallelism: 1,
     });
 
     const prefix = plainTextKey.substring(0, 18) + '...';
