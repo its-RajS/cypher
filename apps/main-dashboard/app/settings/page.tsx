@@ -44,10 +44,10 @@ export default function SettingsPage() {
         },
       });
       const data = await res.json();
-      return data.keys;
+      return data
     },
     enabled: isLoaded && isSignedIn,
-  })
+  }) 
  
 
   const handleCopy = () => {
