@@ -17,6 +17,8 @@ import Link from "next/link";
 import SecuritySection from "@/components/security";
 import DeleteAccountModal from "@/components/modals/delete-account.modal";
 import { useUser } from "@clerk/nextjs";
+import { useAuth } from '@clerk/nextjs';
+import { useQuery } from "@tanstack/react-query";
 
 const tabs = ["General", "Developer Access", "Security"];
 
@@ -30,6 +32,23 @@ export default function SettingsPage() {
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [copied, setCopied] = useState(false);
   const { user, isLoaded } = useUser();
+  const { getToken, isSignedIn } = useAuth()
+
+  const {data: apiKeys, isLoading: isLoadingApiKeys} = useQuery({ 
+    queryKey: ["api-keys"],
+    queryFn: async () => {
+      const token = await getToken();
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api-keys `, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      return data.keys;
+    },
+    enabled: isLoaded && isSignedIn,
+  })
+ 
 
   const handleCopy = () => {
     navigator.clipboard.writeText(secretKey);
@@ -46,7 +65,7 @@ export default function SettingsPage() {
   };
 
   if (!isLoaded) {
-    return null;
+    return null; 
   }
 
   return (
@@ -261,7 +280,7 @@ export default function SettingsPage() {
             </div>
             {/* Key List */}
 
-            {/* <div className="bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-md px-4 py-3">
+            <div className="bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-md px-4 py-3">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs dark:text-slate-400">
@@ -277,7 +296,7 @@ export default function SettingsPage() {
                 </div>
                 <div className="flex gap-2">
                   <div className="flex gap-2">
-                    {cooldownOver ? (
+                    {true ? (
                       <button
                         className="text-xs px-2 py-1 rounded-md border border-yellow-600 dark:text-yellow-400 dark:hover:bg-yellow-700/40"
                         onClick={handleGenerateSecretKey}
@@ -292,7 +311,7 @@ export default function SettingsPage() {
                   </div>
                 </div>
               </div>
-            </div> */}
+            </div>
             <>
               <button
                 onClick={handleGenerateSecretKey}
