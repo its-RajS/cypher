@@ -18,7 +18,7 @@ import SecuritySection from "@/components/security";
 import DeleteAccountModal from "@/components/modals/delete-account.modal";
 import { useUser } from "@clerk/nextjs";
 import { useAuth } from '@clerk/nextjs';
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const tabs = ["General", "Developer Access", "Security"];
 
@@ -33,6 +33,7 @@ export default function SettingsPage() {
   const [copied, setCopied] = useState(false);
   const { user, isLoaded } = useUser();
   const { getToken, isSignedIn } = useAuth()
+  const queryClient = useQueryClient();
 
   const {data: apiKeys, isLoading: isLoadingApiKeys} = useQuery({ 
     queryKey: ["api-keys"],
@@ -61,16 +62,37 @@ export default function SettingsPage() {
   };
 
   const handleGenerateSecretKey = async () => {
+    const token = await getToken();
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api-keys`, {
+      method: "POST", 
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to generate API key: ${res.status}`);
+    }
+    const data = await res.json(); 
+    setSecretKey(data.key);
     setShowKeyModal(!showKeyModal);
+    queryClient.invalidateQueries({
+      queryKey: ['api-keys'],
+    });
   };
 
   const toggleDropdown = (key: string) => {
     setOpenDropdown((prev) => (prev === key ? null : key));
   };
 
+  const coolDownOver = apiKeys && apiKeys?.[0]?.createdAt ? 
+    (new Date().getTime() - new Date(apiKeys[0]?.createdAt).getTime()) > 5 * 60 * 1000 
+    : true;
+
   if (!isLoaded) {
     return null; 
   }
+  console.log(coolDownOver)
+  console.log(apiKeys)
 
   return (
     <div className="text-black dark:text-white">
@@ -284,47 +306,54 @@ export default function SettingsPage() {
             </div>
             {/* Key List */}
 
-            <div className="bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-md px-4 py-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs dark:text-slate-400">
-                    Key ID: dev_sk_1234...abcd
-                  </p>
-                  <p className="mt-1 font-mono dark:text-white tracking-wider">
-                    ********************
-                  </p>
-                  <p className="mt-1 text-sm dark:text-gray-200">
-                    Last used:{" "}
-                    <span className="dark:text-white">Not use yet!</span>
-                  </p>
-                </div>
-                <div className="flex gap-2">
+            {
+              apiKeys.length !== 0 && !isLoadingApiKeys ? (
+              <div className="bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-md px-4 py-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs dark:text-slate-400">
+                      Key ID: dev_sk_1234...abcd
+                    </p>
+                    <p className="mt-1 font-mono dark:text-white tracking-wider">
+                      ********************
+                    </p>
+                    <p className="mt-1 text-sm dark:text-gray-200">
+                      Last used:{" "}
+                      <span className="dark:text-white">Not use yet!</span>
+                    </p>
+                  </div>
                   <div className="flex gap-2">
-                    {true ? (
-                      <button
-                        className="text-xs px-2 py-1 rounded-md border border-yellow-600 dark:text-yellow-400 dark:hover:bg-yellow-700/40"
-                        onClick={handleGenerateSecretKey}
-                      >
-                        Regenerate Key
-                      </button>
-                    ) : (
-                      <p className="text-xs text-gray-400 italic">
-                        Please wait 5 minutes before regenerating.
-                      </p>
-                    )}
+                    <div className="flex gap-2">
+                      {coolDownOver ? (
+                        <button
+                          className="text-xs px-2 py-1 rounded-md border border-yellow-600 dark:text-yellow-400 dark:hover:bg-yellow-700/40"
+                          onClick={handleGenerateSecretKey}
+                        >
+                          Regenerate Key
+                        </button>
+                      ) : (
+                        <p className="text-xs text-gray-400 italic">
+                          Please wait 5 minutes before regenerating.
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <>
-              <button
-                onClick={handleGenerateSecretKey}
-                className="flex items-center cursor-pointer gap-2 mt-3! text-xs px-3 py-2 rounded-md border border-blue-600 bg-blue-600 text-white hover:bg-blue-700 transition-all"
-              >
-                <Plus size={16} />
-                Generate Secret Key
-              </button>
-            </>
+              ) :
+              (
+                <>
+                  <button
+                    onClick={handleGenerateSecretKey}
+                    className="flex items-center cursor-pointer gap-2 mt-3! text-xs px-3 py-2 rounded-md border border-blue-600 bg-blue-600 text-white hover:bg-blue-700 transition-all"
+                  >
+                    <Plus size={16} />
+                    Generate Secret Key
+                  </button>
+                </>
+
+              )
+            }
           </div>
         )}
 
