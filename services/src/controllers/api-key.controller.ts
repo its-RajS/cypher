@@ -6,6 +6,7 @@ import {
   Get,
   Delete,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ClerkAuthGuard } from 'src/guards/clerk.gaurds';
@@ -40,7 +41,7 @@ export class ApiKeyController {
     return this.apiKeyService.deleteApiKey(req.user!.id, id);
   }
 
-  @Post(':id/regenerate')
+  @Put(':id/regenerate')
   @ApiOperation({ summary: 'Regenerate an API key' })
   async regenerateApiKey(
     @Req() req: AuthenticatedRequest,

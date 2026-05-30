@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { and, count, eq } from 'drizzle-orm';
+import { and, count, eq, isNull } from 'drizzle-orm';
 import { DRIZZLE_DB } from 'src/database/database.module';
 import { api_key } from 'src/database/schema';
 import * as crypto from 'crypto';
@@ -27,13 +27,13 @@ export class ApiKeyService {
   }
 
   async createApiKey(userId: string) {
-    //! Deafult 5 api keys Limit
+    //! Default 5 api keys Limit
     const [result] = await this.db
       .select({
         count: count(),
       })
       .from(api_key)
-      .where(eq(api_key.user_id, userId));
+      .where(and(eq(api_key.user_id, userId), isNull(api_key.revoked_at)));
     if (result.count >= 5) {
       throw new Error('You have reached the maximum limit of 5 API keys');
     }
@@ -100,7 +100,7 @@ export class ApiKeyService {
 
     await this.db
       .update(api_key)
-      .set({ id: newKeyID, prefix, value: hash })
+      .set({ id: newKeyID, prefix, value: hash, created_at: new Date() })
       .where(and(eq(api_key.user_id, userId), eq(api_key.id, id)));
 
     return { key: plainTextKey };

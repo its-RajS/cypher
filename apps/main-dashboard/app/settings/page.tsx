@@ -80,6 +80,25 @@ export default function SettingsPage() {
     });
   };
 
+  const handleRegenerateSecretKey = async (keyId: string) => {
+    const token = await getToken();
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api-keys/${keyId}/regenerate`, {
+      method: "PUT", 
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to regenerate API key: ${res.status}`);
+    }
+    const data = await res.json(); 
+    setSecretKey(data.key);
+    setShowKeyModal(!showKeyModal);
+    queryClient.invalidateQueries({
+      queryKey: ['api-keys'],
+    });
+  }
+
   const toggleDropdown = (key: string) => {
     setOpenDropdown((prev) => (prev === key ? null : key));
   };
@@ -307,39 +326,43 @@ export default function SettingsPage() {
             {/* Key List */}
 
             {
-              apiKeys.length !== 0 && !isLoadingApiKeys ? (
-              <div className="bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-md px-4 py-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs dark:text-slate-400">
-                      Key ID: dev_sk_1234...abcd
-                    </p>
-                    <p className="mt-1 font-mono dark:text-white tracking-wider">
-                      ********************
-                    </p>
-                    <p className="mt-1 text-sm dark:text-gray-200">
-                      Last used:{" "}
-                      <span className="dark:text-white">Not use yet!</span>
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <div className="flex gap-2">
-                      {coolDownOver ? (
-                        <button
-                          className="text-xs px-2 py-1 rounded-md border border-yellow-600 dark:text-yellow-400 dark:hover:bg-yellow-700/40"
-                          onClick={handleGenerateSecretKey}
-                        >
-                          Regenerate Key
-                        </button>
-                      ) : (
-                        <p className="text-xs text-gray-400 italic">
-                          Please wait 5 minutes before regenerating.
+              apiKeys && apiKeys.length >= 1 && !isLoadingApiKeys ? (
+              <>
+                {/* {apiKeys.map((apikey:any) => ( */}
+                  <div className="bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-md px-4 py-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs dark:text-slate-400">
+                          Key ID: {apiKeys[0]?.prefix}
                         </p>
-                      )}
+                        <p className="mt-1 font-mono dark:text-white tracking-wider">
+                          {apiKeys[0]?.prefix}
+                        </p>
+                        <p className="mt-1 text-sm dark:text-gray-200">
+                          Last used:{" "}
+                          {apiKeys[0]?.lastUsedAt ? new Date(apiKeys[0]?.lastUsedAt).toLocaleDateString() : <span className="dark:text-white">Not use yet!</span>}
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <div className="flex gap-2">
+                          {coolDownOver ? (
+                            <button
+                              className="text-xs px-2 py-1 rounded-md border cursor-pointer border-yellow-600 dark:text-yellow-400 dark:hover:bg-yellow-700/40"
+                              onClick={() => handleRegenerateSecretKey(apiKeys[0]?.id)}
+                            >
+                              Regenerate Key
+                            </button>
+                          ) : (
+                            <p className="text-xs text-gray-400 italic">
+                              Please wait 5 minutes before regenerating.
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                {/* ))} */}
+              </>
               ) :
               (
                 <>
