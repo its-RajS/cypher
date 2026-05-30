@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, count, eq } from 'drizzle-orm';
 import { DRIZZLE_DB } from 'src/database/database.module';
 import { api_key } from 'src/database/schema';
@@ -122,7 +122,7 @@ export class ApiKeyService {
     });
 
     if (!db_record) {
-      throw new Error('API key not found');
+      throw new NotFoundException('API key not found');
     }
 
     return db_record?.last_used_at ?? 'Never used';

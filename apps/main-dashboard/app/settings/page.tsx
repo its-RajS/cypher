@@ -38,13 +38,17 @@ export default function SettingsPage() {
     queryKey: ["api-keys"],
     queryFn: async () => {
       const token = await getToken();
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api-keys `, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api-keys`, {
+        cache: "no-store",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      if (!res.ok) {
+        throw new Error(`Failed to fetch API keys: ${res.status}`);
+      }
       const data = await res.json();
-      return data
+      return data;
     },
     enabled: isLoaded && isSignedIn,
   }) 
