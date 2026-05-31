@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ChevronRight,
   ChevronDown,
@@ -31,6 +31,7 @@ export default function SettingsPage() {
   const [secretKey, setSecretKey] = useState("");
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [lastUsed, setLastUsed] = useState<Date | string>("Never used");
   const { user, isLoaded } = useUser();
   const { getToken, isSignedIn } = useAuth()
   const queryClient = useQueryClient();
@@ -98,6 +99,33 @@ export default function SettingsPage() {
       queryKey: ['api-keys'],
     });
   }
+
+  const handleLastUsedKey = async (keyId: string) => {
+    try {
+      const token = await getToken();
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api-keys/${keyId}`, {
+        method: "GET", 
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) {
+        throw new Error(`Failed to get last used of API key: ${res.status}`);
+      }
+      const data = await res.json();   
+      setLastUsed(data.last_used_at);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (apiKeys) {
+      apiKeys.forEach((key: { id: string; }) => {
+        handleLastUsedKey(key.id);
+      });
+    }
+  }, [apiKeys]);
 
   const toggleDropdown = (key: string) => {
     setOpenDropdown((prev) => (prev === key ? null : key));
@@ -340,7 +368,9 @@ export default function SettingsPage() {
                         </p>
                         <p className="mt-1 text-sm dark:text-gray-200">
                           Last used:{" "}
-                          {apiKeys[0]?.lastUsedAt ? new Date(apiKeys[0]?.lastUsedAt).toLocaleDateString() : <span className="dark:text-white">Not use yet!</span>}
+                          {lastUsed ? 
+                          new Date(lastUsed).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + new Date(lastUsed).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) 
+                          : <span className="dark:text-white">Not use yet!</span>}
                         </p>
                       </div>
                       <div className="flex gap-2">

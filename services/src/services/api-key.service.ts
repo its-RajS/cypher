@@ -100,24 +100,36 @@ export class ApiKeyService {
 
     await this.db
       .update(api_key)
-      .set({ id: newKeyID, prefix, value: hash, created_at: new Date() })
+      .set({
+        id: newKeyID,
+        prefix,
+        value: hash,
+        created_at: new Date(),
+        last_used_at: null,
+      })
       .where(and(eq(api_key.user_id, userId), eq(api_key.id, id)));
+
+    await this.redis.del(`cyph:api_key:${VERSION}:${id}`);
+    await this.redis.del(`cyph:api_key:last_used:${VERSION}:${id}`);
+    localCache.delete(`cyph:api_key:${VERSION}:${id}`);
 
     return { key: plainTextKey };
   }
 
   async last_used_apiKey(id: string) {
     // check redis first
-    const redis_record = await this.redis.hget(LAST_USED_HASH, id);
+    const normaliKeyId = id.replace(/-/g, '');
+    const redis_record = await this.redis.hget(LAST_USED_HASH, normaliKeyId);
     if (redis_record) {
-      return new Date(Number(redis_record));
+      return { last_used_at: new Date(Number(redis_record)) };
     }
 
     // check db
     const db_record = await this.db.query.api_key.findFirst({
-      where: eq(api_key.id, id),
+      where: eq(api_key.id, normaliKeyId),
       columns: {
         last_used_at: true,
+        id: true,
       },
     });
 
@@ -125,6 +137,6 @@ export class ApiKeyService {
       throw new NotFoundException('API key not found');
     }
 
-    return db_record?.last_used_at ?? 'Never used';
+    return { last_used_at: db_record?.last_used_at ?? null };
   }
 }
