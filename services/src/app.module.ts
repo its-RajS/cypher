@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { CacheModule } from './infra/cache.module';
 import { RedisModule } from './infra/redis.module';
@@ -20,7 +18,7 @@ import { PlaylistModule } from './modules/playlist/playlist.module';
     RedisModule,
     PlaylistModule,
   ],
-  controllers: [AppController, ApiKeyController],
-  providers: [AppService, ApiKeyLastUsedCron, ApiKeyService],
+  controllers: [ApiKeyController],
+  providers: [ApiKeyLastUsedCron, ApiKeyService],
 })
 export class AppModule {}

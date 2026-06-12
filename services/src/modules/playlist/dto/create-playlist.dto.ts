@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength, IsOptional } from 'class-validator';
 
 export class CreatePlaylistDto {
   @IsString()
@@ -7,7 +7,7 @@ export class CreatePlaylistDto {
   name: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @ApiPropertyOptional()
   @MaxLength(2000, {
     message: 'Description cannot be longer than 2000 characters',
