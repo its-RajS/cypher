@@ -1,46 +1,150 @@
 "use client";
 
+import { useAuth, useUser } from "@clerk/nextjs";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronRight, Plus, Edit3, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 
-const playlists = [
-  {
-    id: "pl001",
-    name: "Frontend Development",
-    totalVideos: 12,
-    createdAt: "2025-04-25",
-  },
-  {
-    id: "pl002",
-    name: "Backend Tips",
-    totalVideos: 8,
-    createdAt: "2025-04-21",
-  },
-];
+interface Playlist {
+  id: string;
+  name: string;
+  description?: string;
+  created_at?: string;
+  updated_at?: string;
+}
 
 const Page = () => {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setEditShowModal] = useState(false);
   const [showDeleteModal, setDeleteShowModal] = useState(false);
-  const [playlist, setPlaylist] = useState<any>({});
   const [playlistName, setPlaylistName] = useState("");
   const [description, setDescription] = useState("");
+  const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(null);
+  const [editName, setEditName] = useState('')
+  const [editDescription, setEditDescription] = useState('')
+
+  const {getToken, isSignedIn} = useAuth();
+  const {isLoaded} = useUser();
+  const queryClient = useQueryClient()
+
+  const {data: playlistData, isLoading} = useQuery({
+    queryKey: ["playlists"],
+    queryFn: async () => {
+      const token = await getToken();
+      if (!token) return [];
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/playlists`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to fetch playlists");
+      return response.json();
+    },
+    enabled: isLoaded && isSignedIn,
+  })
+
+  const createMutation = useMutation({
+    mutationFn: async ({name, description}: {name: string, description?: string}) => {
+      const token = await getToken();
+      if (!token) throw new Error("No token");
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/playlists`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          description,
+        }),
+      });
+      if (!response.ok) throw new Error("Failed to create playlist");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ["playlists"]});
+      setPlaylistName("");
+      setDescription("");
+      setShowModal(false);
+    }
+  })
+
+  const updateMutation = useMutation({
+    mutationFn: async ({id, name, description}: {id: string, name: string, description?: string}) => {
+      const token = await getToken();
+      if (!token) throw new Error("No token");
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/playlists/${id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          description,
+        }),
+      });
+      if (!response.ok) throw new Error("Failed to update playlist");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ["playlists"]});
+      setEditShowModal(false);
+      setSelectedPlaylist(null)
+      setEditName("");
+      setEditDescription("");
+    }
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const token = await getToken();
+      if (!token) throw new Error("No token");
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/playlists/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to delete playlist");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ["playlists"]});
+      setDeleteShowModal(false);
+      setSelectedPlaylist(null)
+    }
+  })
 
   const handleCreate = () => {
-    console.log("Playlist Created:", { playlistName, description });
-    setPlaylistName("");
-    setDescription("");
-    setShowModal(false);
-  };
+    if(!playlistName.trim()) return;
+    createMutation.mutate({name: playlistName, description})
+  }; 
 
   const handleSaveEdit = () => {
-    console.log("Playlist Edited:", { playlistName, description });
+    if(!editName.trim() || !selectedPlaylist) return;
+    updateMutation.mutate({id: selectedPlaylist?.id, name: editName, description: editDescription})
   };
 
   const handleConfirmDelete = () => {
-    console.log("Playlist Deleted:", { playlistName, description });
+    if(!selectedPlaylist) return;
+    deleteMutation.mutate(selectedPlaylist?.id);
   };
+
+  const openEditModal = (playlist: Playlist) => {
+    setEditName(playlist.name);
+    setEditDescription(playlist.description || '');
+    setSelectedPlaylist(playlist);
+    setEditShowModal(true);
+  };
+
+  const openDeleteModal = (playlist: Playlist) => {
+    setSelectedPlaylist(playlist);
+    setDeleteShowModal(true);
+  };
+
+  if(!isLoaded || !isSignedIn || isLoading) return <div>Loading...</div>
 
   return (
     <div className="text-black dark:text-white">
@@ -84,33 +188,30 @@ const Page = () => {
           </thead>
 
           <tbody>
-            {playlists.map((pl) => (
+            {playlistData?.map((pl: Playlist) => (
               <tr
                 key={pl.id}
                 className="border-b dark:border-[#1f1f1f] hover:bg-gray-50 dark:hover:bg-[#1a1b1f]/50 transition"
               >
                 <td className="px-4 py-4 font-medium">{pl.name}</td>
                 <td className="px-4 py-4 text-gray-600 dark:text-gray-400">
-                  {pl.totalVideos}
+                  {0}
                 </td>
                 <td className="px-4 py-4 text-gray-600 dark:text-gray-400">
-                  {pl.createdAt}
+                  {pl.created_at ? new Date(pl.created_at).toLocaleDateString() : 'N/A'}
                 </td>
                 <td className="px-4 py-4 flex gap-3">
                   <button
                     className="text-gray-400 hover:text-indigo-500 transition"
                     title="Edit"
-                    onClick={() => {
-                      setPlaylist(pl);
-                      setEditShowModal(true);
-                    }}
+                    onClick={() => openEditModal(pl)}
                   >
                     <Edit3 size={16} />
                   </button>
                   <button
                     className="text-red-500 hover:text-red-600 transition"
                     title="Delete"
-                    onClick={() => setDeleteShowModal(true)}
+                    onClick={() => openDeleteModal(pl)}
                   >
                     <Trash2 size={16} />
                   </button>
@@ -120,7 +221,7 @@ const Page = () => {
           </tbody>
         </table>
 
-        {playlists.length === 0 && (
+        {playlistData?.length === 0 && (
           <div className="text-center py-12 text-gray-500 dark:text-gray-400">
             No playlists found.
           </div>
@@ -168,6 +269,11 @@ const Page = () => {
                   rows={3}
                 />
               </div>
+              {createMutation.isError && (
+                <p className="text-red-500 text-sm">
+                  {createMutation.error.message}
+                </p>
+              )}
             </div>
 
             {/* Footer */}
@@ -204,7 +310,7 @@ const Page = () => {
             </div>
 
             {/* Body */}
-            {playlist && (
+            {selectedPlaylist && (
               <div className="px-6 py-4 space-y-4">
                 <div>
                   <label className="text-sm font-medium text-black dark:text-white">
@@ -212,7 +318,8 @@ const Page = () => {
                   </label>
                   <input
                     type="text"
-                    defaultValue={playlist?.name}
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
                     className="mt-1 w-full px-3 py-2 rounded-md dark:bg-slate-900 border dark:border-slate-800 text-sm text-black dark:text-white"
                   />
                 </div>
@@ -224,11 +331,17 @@ const Page = () => {
                     </span>
                   </label>
                   <textarea
-                    defaultValue={playlist.description}
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
                     className="mt-1 w-full px-3 py-2 rounded-md bg-gray-100 dark:bg-slate-900 border dark:border-slate-800 text-sm text-black dark:text-white"
                     rows={3}
                   />
                 </div>
+                {updateMutation.isError && (
+                <p className="text-red-500 text-sm">
+                  {updateMutation.error.message}
+                </p>
+              )}
               </div>
             )}
 
@@ -292,6 +405,11 @@ const Page = () => {
                 Confirm Delete
               </button>
             </div>
+            {deleteMutation.isError && (
+                <p className="text-red-500 text-sm">
+                  {deleteMutation.error.message}
+                </p>
+              )}
           </div>
         </div>
       )}
