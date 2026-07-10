@@ -6,12 +6,13 @@ import { useForm } from "react-hook-form";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import { z } from "zod";
+import { file, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { storage } from "@oneminutecloud/storage-bucket-next";
 
 // Define the schema using Zod
 const uploadSchema = z.object({
@@ -38,6 +39,7 @@ const Page = () => {
     register,
     handleSubmit,
     setValue,
+    trigger,
     formState: { errors },
   } = useForm<UploadFormValues>({
     resolver: zodResolver(uploadSchema),
@@ -46,6 +48,8 @@ const Page = () => {
       includeWatermark: "yes",
     },
   });
+
+  const {ref: videoRef, onChange: onChangeVideo, ...videoRegister} = register("video");
 
   const [isDragging, setIsDragging] = useState(false);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
@@ -60,7 +64,14 @@ const Page = () => {
   const onSubmit = async (data: UploadFormValues) => {
     try {
       console.log("Form Data:", data);
-      // Implement upload logic here
+      setIsUploading(true);
+      const {key} = await storage.upload(data.video[0] as File, process.env.NEXT_PUBLIC_BUCKET_ID!, {
+        onProgress: (progress) => {
+          setUploadProgress(progress.percent); 
+        },
+      });   
+      console.log(key); 
+      console.log("File uploaded successfully:", key);
     } catch (error) {
       console.error(error);
     }
@@ -98,7 +109,6 @@ const Page = () => {
     if (file) {
       const url = URL.createObjectURL(file);
       setVideoPreview(url);
-      setValue("video", e.target.files, { shouldValidate: true });
     }
   };
 
@@ -345,15 +355,20 @@ const Page = () => {
                   </div>
                 )}
                 <input
-                  {...register("video")}
+                  {...videoRegister}
                   type="file"
                   accept="video/*"
                   className="hidden"
                   ref={(e) => {
-                    register("video").ref(e);
+                    videoRef(e);
                     fileInputRef.current = e;
                   }}
-                  onChange={handleFileChange}
+                  onChange={async (e)=> {
+                    await onChangeVideo(e);
+                    handleFileChange(e);
+                    await trigger("video");
+
+                  }}
                 />
               </div>
               {errors.video && (

@@ -20,121 +20,153 @@ const Page = () => {
   const [showDeleteModal, setDeleteShowModal] = useState(false);
   const [playlistName, setPlaylistName] = useState("");
   const [description, setDescription] = useState("");
-  const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(null);
-  const [editName, setEditName] = useState('')
-  const [editDescription, setEditDescription] = useState('')
+  const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(
+    null,
+  );
+  const [editName, setEditName] = useState("");
+  const [editDescription, setEditDescription] = useState("");
 
-  const {getToken, isSignedIn} = useAuth();
-  const {isLoaded} = useUser();
-  const queryClient = useQueryClient()
+  const { getToken, isSignedIn } = useAuth();
+  const { isLoaded } = useUser();
+  const queryClient = useQueryClient();
 
-  const {data: playlistData, isLoading} = useQuery({
+  const { data: playlistData, isLoading } = useQuery({
     queryKey: ["playlists"],
     queryFn: async () => {
       const token = await getToken();
       if (!token) return [];
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/playlists`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/playlists`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       if (!response.ok) throw new Error("Failed to fetch playlists");
       return response.json();
     },
     enabled: isLoaded && isSignedIn,
-  })
+  });
 
   const createMutation = useMutation({
-    mutationFn: async ({name, description}: {name: string, description?: string}) => {
+    mutationFn: async ({
+      name,
+      description,
+    }: {
+      name: string;
+      description?: string;
+    }) => {
       const token = await getToken();
       if (!token) throw new Error("No token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/playlists`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/playlists`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            description,
+          }),
         },
-        body: JSON.stringify({
-          name,
-          description,
-        }),
-      });
+      );
       if (!response.ok) throw new Error("Failed to create playlist");
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["playlists"]});
+      queryClient.invalidateQueries({ queryKey: ["playlists"] });
       setPlaylistName("");
       setDescription("");
       setShowModal(false);
-    }
-  })
+    },
+  });
 
   const updateMutation = useMutation({
-    mutationFn: async ({id, name, description}: {id: string, name: string, description?: string}) => {
+    mutationFn: async ({
+      id,
+      name,
+      description,
+    }: {
+      id: string;
+      name: string;
+      description?: string;
+    }) => {
       const token = await getToken();
       if (!token) throw new Error("No token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/playlists/${id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/playlists/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            description,
+          }),
         },
-        body: JSON.stringify({
-          name,
-          description,
-        }),
-      });
+      );
       if (!response.ok) throw new Error("Failed to update playlist");
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["playlists"]});
+      queryClient.invalidateQueries({ queryKey: ["playlists"] });
       setEditShowModal(false);
-      setSelectedPlaylist(null)
+      setSelectedPlaylist(null);
       setEditName("");
       setEditDescription("");
-    }
-  })
+    },
+  });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       const token = await getToken();
       if (!token) throw new Error("No token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/playlists/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/playlists/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       if (!response.ok) throw new Error("Failed to delete playlist");
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["playlists"]});
+      queryClient.invalidateQueries({ queryKey: ["playlists"] });
       setDeleteShowModal(false);
-      setSelectedPlaylist(null)
-    }
-  })
+      setSelectedPlaylist(null);
+    },
+  });
 
   const handleCreate = () => {
-    if(!playlistName.trim()) return;
-    createMutation.mutate({name: playlistName, description})
-  }; 
+    if (!playlistName.trim()) return;
+    createMutation.mutate({ name: playlistName, description });
+  };
 
   const handleSaveEdit = () => {
-    if(!editName.trim() || !selectedPlaylist) return;
-    updateMutation.mutate({id: selectedPlaylist?.id, name: editName, description: editDescription})
+    if (!editName.trim() || !selectedPlaylist) return;
+    updateMutation.mutate({
+      id: selectedPlaylist?.id,
+      name: editName,
+      description: editDescription,
+    });
   };
 
   const handleConfirmDelete = () => {
-    if(!selectedPlaylist) return;
+    if (!selectedPlaylist) return;
     deleteMutation.mutate(selectedPlaylist?.id);
   };
 
   const openEditModal = (playlist: Playlist) => {
     setEditName(playlist.name);
-    setEditDescription(playlist.description || '');
+    setEditDescription(playlist.description || "");
     setSelectedPlaylist(playlist);
     setEditShowModal(true);
   };
@@ -144,7 +176,7 @@ const Page = () => {
     setDeleteShowModal(true);
   };
 
-  if(!isLoaded || !isSignedIn || isLoading) return <div>Loading...</div>
+  if (!isLoaded || !isSignedIn || isLoading) return <div>Loading...</div>;
 
   return (
     <div className="text-black dark:text-white">
@@ -198,7 +230,9 @@ const Page = () => {
                   {0}
                 </td>
                 <td className="px-4 py-4 text-gray-600 dark:text-gray-400">
-                  {pl.created_at ? new Date(pl.created_at).toLocaleDateString() : 'N/A'}
+                  {pl.created_at
+                    ? new Date(pl.created_at).toLocaleDateString()
+                    : "N/A"}
                 </td>
                 <td className="px-4 py-4 flex gap-3">
                   <button
@@ -338,10 +372,10 @@ const Page = () => {
                   />
                 </div>
                 {updateMutation.isError && (
-                <p className="text-red-500 text-sm">
-                  {updateMutation.error.message}
-                </p>
-              )}
+                  <p className="text-red-500 text-sm">
+                    {updateMutation.error.message}
+                  </p>
+                )}
               </div>
             )}
 
@@ -406,10 +440,10 @@ const Page = () => {
               </button>
             </div>
             {deleteMutation.isError && (
-                <p className="text-red-500 text-sm">
-                  {deleteMutation.error.message}
-                </p>
-              )}
+              <p className="text-red-500 text-sm">
+                {deleteMutation.error.message}
+              </p>
+            )}
           </div>
         </div>
       )}
