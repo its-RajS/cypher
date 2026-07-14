@@ -6,13 +6,15 @@ import { useForm } from "react-hook-form";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import { file, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { storage } from "@oneminutecloud/storage-bucket-next";
+
+const getNow = () => Date.now();
 
 // Define the schema using Zod
 const uploadSchema = z.object({
@@ -56,7 +58,15 @@ const Page = () => {
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [estimatedTime, setEstimatedTime] = useState<string | null>(null);
+  const uploadStartRef = useRef<number | null>(0);
 
+  const  formatTIme = (second: number): string => {
+    if(second < 60) return `${Math.round(second)}s remaining`;
+    const hours = Math.floor(second / 3600);
+    const minutes = Math.floor((second % 3600) / 60);
+    if(hours > 0) return `${hours}h ${minutes}m remaining`; 
+    return `${minutes}m ${Math.round(second % 60)}s remaining`;
+  }
   const router = useRouter();
   const { isLoaded } = useUser();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -65,15 +75,24 @@ const Page = () => {
     try {
       console.log("Form Data:", data);
       setIsUploading(true);
+      uploadStartRef.current = getNow();
       const {key} = await storage.upload(data.video[0] as File, process.env.NEXT_PUBLIC_BUCKET_ID!, {
         onProgress: (progress) => {
-          setUploadProgress(progress.percent); 
+          if(progress.percent > 0 && uploadStartRef.current){
+            const elapsed = (getNow() - uploadStartRef.current) / 1000;
+            const rate = progress.loaded / elapsed; 
+            const remaining = (progress.total - progress.loaded) / rate; 
+            setEstimatedTime(formatTIme(remaining));
+          }
+          const percent = Math.round(progress.percent);
+          setIsUploading(false)
+          setUploadProgress(percent);
         },
       });   
       console.log(key); 
       console.log("File uploaded successfully:", key);
     } catch (error) {
-      console.error(error);
+      console.error(error);  
     }
   };
 
@@ -147,7 +166,7 @@ const Page = () => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={(e) => { void handleSubmit(onSubmit)(e); }} className="space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
               {/* Left Column */}
               <div className="space-y-6">
