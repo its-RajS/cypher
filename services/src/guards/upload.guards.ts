@@ -12,8 +12,14 @@ import { DRIZZLE_DB } from 'src/database/database.module';
 import { REDIS_CLIENT } from 'src/infra/redis.module';
 import * as schema from '../database/schema';
 import { AuthenticatedRequest } from './clerk.gaurds';
-import { cachedPlan, CachedPlan, hardLockRedisKey, normalizePlanTier, PLAN_REDIS_TTL, planRedisKey } from 'src/configs';
-import { normalize } from 'path';
+import {
+  cachedPlan,
+  CachedPlan,
+  hardLockRedisKey,
+  normalizePlanTier,
+  PLAN_REDIS_TTL,
+  planRedisKey,
+} from 'src/configs';
 
 @Injectable()
 export class UploadGuard implements CanActivate {
