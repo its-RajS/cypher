@@ -6,6 +6,41 @@ export type CachedKey = {
   expiredAt: number;
 };
 
+export enum PlanTier {
+  FREE = 'free',
+  STARTER = 'starter',
+  PRO = 'pro',
+  ENTERPRISE = 'enterprise',
+}
+
+export function normalizePlanTier(raw: string | undefined | null): PlanTier {
+  if (!raw) return PlanTier.FREE;
+  const lower = raw.toLowerCase() as PlanTier;
+  if (Object.values(PlanTier).includes(lower)) {
+    return lower;
+  }
+  return PlanTier.FREE;
+}
+
+export type CachedPlan = {
+  tier: PlanTier;
+  updatedAt: number;
+};
+
+export type CachedUsage = {
+  storageUsage: number;
+  storageLimit: number;
+  minutesStreamed: number;
+  minutesStreamedLimit: number;
+  updatedAt: number;
+};
+
+export type UploadedFilePart = {
+  partNumber: number;
+  size: number;
+  eTag: string;
+};
+
 export const VERSION = 'v1';
 export const REDIS_HARD_TTL = 10 * 60 * 1000;
 export const LRU_SOFT_TTL = 5 * 60 * 1000;
@@ -21,6 +56,60 @@ export const PLAN_LRU_TTL = 5 * 60 * 1000;
 export const PLAN_REDIS_TTL = 6 * 60;
 
 export const planRedisKey = (userId: string) =>
-  `cyph::plan:${VERSION}:user:${userId}`;
+  `cyph:plan:${VERSION}:${userId}`;
 export const usageRedisKey = (userId: string) =>
-  `cyph::usage:${VERSION}:user:${userId}`;
+  `cyph:usage:${VERSION}:${userId}`;
+
+export const cachedPlan: LRUCache<string, CachedPlan> = new LRUCache<
+  string,
+  CachedPlan
+>({
+  max: 50_000,
+  ttl: PLAN_LRU_TTL,
+  updateAgeOnGet: true,
+  allowStale: false,
+});
+
+export const cachedUsage: LRUCache<string, CachedUsage> = new LRUCache<
+  string,
+  CachedUsage
+>({
+  max: 50_000,
+  ttl: PLAN_LRU_TTL,
+  updateAgeOnGet: true,
+  allowStale: false,
+});
+
+export const GB = 1024 ** 3;
+export const TB = 1024 ** 4;
+
+export const PLAN_DEFAULTS: Record<PlanTier, CachedUsage> = {
+  [PlanTier.FREE]: {
+    storageLimit: 5 * GB,
+    storageUsage: 0,
+    minutesStreamedLimit: 1_000,
+    minutesStreamed: 0,
+    updatedAt: Date.now(),
+  },
+  [PlanTier.STARTER]: {
+    storageLimit: 100 * GB,
+    storageUsage: 0,
+    minutesStreamedLimit: 15_000,
+    minutesStreamed: 0,
+    updatedAt: Date.now(),
+  },
+  [PlanTier.PRO]: {
+    storageLimit: 500 * GB,
+    storageUsage: 0,
+    minutesStreamedLimit: 50_000,
+    minutesStreamed: 0,
+    updatedAt: Date.now(),
+  },
+  [PlanTier.ENTERPRISE]: {
+    storageLimit: 2 * TB,
+    storageUsage: 0,
+    minutesStreamedLimit: 200_000,
+    minutesStreamed: 0,
+    updatedAt: Date.now(),
+  },
+};
