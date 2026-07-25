@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, EyeOff, Crown, ChevronRight } from "lucide-react";
+import { Eye, EyeOff, Crown, ChevronRight } from "@/components/common/icons";
 import React, { useState } from "react";
 import Link from "next/link";
 import Logo from "@/components/common/logo";
@@ -14,14 +14,14 @@ const Page = () => {
   const [file, setFile] = useState<File | null>(null);
 
   return (
-    <div className="text-black dark:text-white">
+    <div className="text-foreground">
       {/* Breadcrumb */}
-      <nav className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-6">
+      <nav className="flex items-center text-sm text-muted-foreground mb-6">
         <Link href="/" className="hover:underline">
           Dashboard
         </Link>
         <ChevronRight className="mx-2" size={16} />
-        <span className="text-gray-700 dark:text-gray-300 font-medium">
+        <span className="text-foreground font-medium">
           Watermark & Branding
         </span>
       </nav>
@@ -29,18 +29,18 @@ const Page = () => {
       {/* Header */}
       <div className="space-y-1 mb-8">
         <h1 className="text-2xl font-semibold">Watermark & Branding</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 max-w-125">
+        <p className="text-sm text-muted-foreground max-w-125">
           Personalize your videos by uploading a custom watermark and
           configuring its appearance.
         </p>
       </div>
 
-      <div className="bg-white dark:bg-slate-900/50 rounded-md p-6 border border-slate-200 dark:border-slate-900 max-w-3xl space-y-6">
+      <div className="bg-card dark:bg-card rounded-md p-6 border border-border max-w-3xl space-y-6">
         {/* Enable/Disable */}
         <div className="flex justify-between items-center">
           <div>
             <h3 className="text-sm font-semibold">Watermark Visibility</h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-muted-foreground">
               The Vidmox watermark will be applied by default for free users.
             </p>
           </div>
@@ -49,8 +49,8 @@ const Page = () => {
             disabled={!isProUser}
             className={`px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 ${
               enabled
-                ? "bg-green-600 text-white"
-                : "bg-slate-100 dark:bg-slate-800 text-gray-600 dark:text-gray-300"
+                ? "bg-primary text-white"
+                : "bg-muted dark:bg-muted text-muted-foreground"
             }`}
           >
             {enabled ? <Eye size={16} /> : <EyeOff size={16} />}
@@ -59,8 +59,8 @@ const Page = () => {
         </div>
 
         {/* Preview */}
-        <div className="bg-slate-100 dark:bg-slate-800/50 p-4 rounded-md flex items-center justify-between">
-          <div className="text-sm text-gray-700 dark:text-gray-300 font-medium">
+        <div className="palette-neutral border p-4 rounded-md flex items-center justify-between">
+          <div className="text-sm text-foreground font-medium">
             {isProUser
               ? "Current Watermark Preview"
               : "Vidmox Watermark (Default)"}
@@ -88,7 +88,7 @@ const Page = () => {
               type="file"
               accept="image/png,image/svg+xml"
               onChange={(e) => setFile(e.target.files?.[0] || null)}
-              className="block text-sm text-gray-600 dark:text-gray-400"
+              className="block text-sm text-muted-foreground"
             />
           </div>
 
@@ -100,7 +100,7 @@ const Page = () => {
             <select
               value={position}
               onChange={(e) => setPosition(e.target.value)}
-              className="w-full bg-slate-100 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-2 text-sm"
+              className="w-full bg-muted dark:bg-muted border border-border rounded-md px-3 py-2 text-sm"
             >
               <option value="top-left">Top Left</option>
               <option value="top-right">Top Right</option>
@@ -128,12 +128,12 @@ const Page = () => {
 
         {/* Pro Prompt */}
         {!isProUser && (
-          <div className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 p-4 rounded-md flex items-center justify-between">
+          <div className="palette-live border p-4 rounded-md flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm font-medium">
               <Crown size={16} />
               Upgrade to Pro to customize your watermark and branding.
             </div>
-            <button className="text-sm font-semibold text-blue-500 cursor-pointer hover:underline">
+            <button className="text-sm font-semibold text-[var(--brand-primary-readable)] cursor-pointer hover:underline">
               Upgrade
             </button>
           </div>
@@ -142,7 +142,7 @@ const Page = () => {
         {/* Save Button */}
         {isProUser && (
           <div className="flex justify-end">
-            <button className="px-5 py-2 text-sm rounded-md bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition">
+            <button className="px-5 py-2 text-sm rounded-md bg-primary hover:bg-primary/90 text-white font-medium transition">
               Save Changes
             </button>
           </div>

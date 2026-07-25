@@ -38,8 +38,15 @@ export default function RootLayout({
             <QueryProvider>
               <div className="flex min-h-screen">
                 <Sidebar />
-                <main className="flex-1 overflow-y-auto p-6 min-w-0 bg-white dark:bg-[#0A0C10] text-black dark:text-white">
-                  {children}
+                <main className="flex-1 min-w-0 overflow-y-auto bg-background px-4 pb-6 pt-16 text-foreground md:p-6">
+                  <div aria-hidden="true" className="mb-6 grid h-1.5 w-full grid-cols-5 overflow-hidden rounded-full">
+                    <span className="bg-[var(--brand-primary)]" />
+                    <span className="bg-[var(--brand-secondary)]" />
+                    <span className="bg-[var(--brand-highlight)]" />
+                    <span className="bg-[var(--brand-tertiary)]" />
+                    <span className="bg-[var(--brand-neutral)]" />
+                  </div>
+                  <div className="dashboard-surface">{children}</div>
                 </main>
               </div>
               <Toaster
@@ -47,7 +54,7 @@ export default function RootLayout({
                 theme="system"
                 toastOptions={{
                   className:
-                    "bg-[#0A0C10] text-white border border-[#23262e]",
+                    "bg-card text-foreground border-border",
                   closeButton: true,
                 }}
               />

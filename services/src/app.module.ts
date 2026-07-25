@@ -8,6 +8,7 @@ import { ApiKeyLastUsedCron } from './schedule/api-key-last-used.cron';
 import { ApiKeyService } from './services/api-key.service';
 import { ApiKeyController } from './controllers/api-key.controller';
 import { PlaylistModule } from './modules/playlist/playlist.module';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PlaylistModule } from './modules/playlist/playlist.module';
     CacheModule,
     RedisModule,
     PlaylistModule,
+    UploadModule,
   ],
   controllers: [ApiKeyController],
   providers: [ApiKeyLastUsedCron, ApiKeyService],

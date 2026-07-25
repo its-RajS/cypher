@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { BookText, GraduationCap } from "lucide-react";
+import { BookText, GraduationCap } from "@/components/common/icons";
 import GeographicalMap from "../components/charts/geoMap";
 import { useUser } from "@clerk/nextjs";
 
@@ -27,7 +27,7 @@ const Page = () => {
   }
 
   return (
-    <div className="text-black dark:text-white">
+    <div className="text-foreground">
       {/* Greeting */}
       <div className="mb-8">
         <h1 className="text-2xl font-semibold">
@@ -37,61 +37,61 @@ const Page = () => {
             "User"}{" "}
           👋
         </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           Here&apos;s what&apos;s happening with your video infrastructure
           today.
         </p>
 
         {/* Onboarding Panel - Only shown when stats are zero */}
-        {/* <div className="mt-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-linear-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-950 p-6 shadow-sm">
-          <h3 className="text-base font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+        {/* <div className="mt-6 rounded-2xl border border-border bg-linear-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-950 p-6 shadow-sm">
+          <h3 className="text-base font-semibold text-muted-foreground dark:text-foreground mb-2 flex items-center gap-2">
             🚀 Getting Started
           </h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
+          <p className="text-sm text-muted-foreground mb-6">
             Complete these steps to get started with vidmox.
           </p>
           <div className="space-y-4">
             <div className="flex items-center gap-4 group cursor-pointer">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-blue-200 bg-blue-50 text-blue-600 dark:border-blue-900/50 dark:bg-blue-900/20 dark:text-blue-400 font-semibold text-sm transition-colors group-hover:border-blue-500 group-hover:text-blue-500">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-primary bg-secondary text-[var(--brand-primary-readable)] dark:border-primary/50 dark:bg-secondary/20 dark:text-[var(--brand-primary-readable)] font-semibold text-sm transition-colors group-hover:border-primary group-hover:text-[var(--brand-primary-readable)]">
                 1
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-medium text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                <span className="text-sm font-medium text-muted-foreground dark:text-foreground group-hover:text-[var(--brand-primary-readable)] dark:group-hover:text-[var(--brand-primary-readable)] transition-colors">
                   Upload your first video
                 </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400">
+                <span className="text-xs text-muted-foreground">
                   Drag and drop a video file to get started
                 </span>
               </div>
             </div>
 
-            <div className="h-px w-full bg-slate-100 dark:bg-slate-800 ml-4 hidden md:block" />
+            <div className="h-px w-full bg-muted dark:bg-muted ml-4 hidden md:block" />
 
             <div className="flex items-center gap-4 group cursor-pointer">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 font-semibold text-sm transition-colors group-hover:border-purple-500 group-hover:text-purple-500">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-muted text-muted-foreground dark:border-border dark:bg-card dark:text-muted-foreground font-semibold text-sm transition-colors group-hover:border-secondary group-hover:text-[var(--brand-primary-readable)]">
                 2
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-medium text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                <span className="text-sm font-medium text-muted-foreground dark:text-foreground group-hover:text-[var(--brand-primary-readable)] dark:group-hover:text-[var(--brand-primary-readable)] transition-colors">
                   Copy embed code
                 </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400">
+                <span className="text-xs text-muted-foreground">
                   Paste the snippet into your application
                 </span>
               </div>
             </div>
 
-            <div className="h-px w-full bg-slate-100 dark:bg-slate-800 ml-4 hidden md:block" />
+            <div className="h-px w-full bg-muted dark:bg-muted ml-4 hidden md:block" />
 
             <div className="flex items-center gap-4 group cursor-pointer">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 font-semibold text-sm transition-colors group-hover:border-green-500 group-hover:text-green-500">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-muted text-muted-foreground dark:border-border dark:bg-card dark:text-muted-foreground font-semibold text-sm transition-colors group-hover:border-tertiary group-hover:text-[var(--brand-primary-readable)]">
                 3
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-medium text-slate-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                <span className="text-sm font-medium text-muted-foreground dark:text-foreground group-hover:text-[var(--brand-primary-readable)] dark:group-hover:text-[var(--brand-primary-readable)] transition-colors">
                   Watch analytics update in real-time
                 </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400">
+                <span className="text-xs text-muted-foreground">
                   Monitor views and engagement instantly
                 </span>
               </div>
@@ -103,67 +103,67 @@ const Page = () => {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
         {/* Bandwidth Card */}
-        <div className="rounded-xl bg-white dark:bg-[#101217] border border-gray-200 dark:border-[#1f2023] shadow-sm p-5 flex flex-col justify-between gap-3">
+        <div className="metric-card-violet rounded-xl bg-card border border-border p-5 flex flex-col justify-between gap-3">
           <div>
             <div className="flex items-center justify-between mb-1">
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-medium text-muted-foreground">
                 Minutes Streamed
               </p>
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-[#276a8f] text-white">
                 Monthly
               </span>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-3xl font-bold text-foreground">
               129{" "}
-              <span className="text-lg text-gray-400 font-normal">/ 1K</span>
+              <span className="text-lg text-muted-foreground font-normal">/ 1K</span>
             </h2>
           </div>
           <div>
-            <div className="flex justify-between text-xs text-gray-500 dark:text-gray-500 mb-2">
+            <div className="flex justify-between text-xs text-muted-foreground mb-2">
               <span>Usage</span>
               <span>12.9%</span>
             </div>
-            <div className="w-full h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden mb-2">
+            <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden mb-2">
               <div
-                className="h-full bg-blue-500 rounded-full"
+                className="h-full bg-primary rounded-full"
                 style={{ width: "12.9%" }}
               />
             </div>
-            <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
               <span>• 871 mins remaining</span>
             </div>
           </div>
         </div>
 
         {/* Requests Card */}
-        <div className="rounded-xl bg-white dark:bg-[#101217] border border-gray-200 dark:border-[#1f2023] shadow-sm p-5 flex flex-col justify-between gap-3">
+        <div className="metric-card-yellow rounded-xl bg-card border border-border p-5 flex flex-col justify-between gap-3">
           <div>
             <div className="flex items-center justify-between mb-1">
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-medium text-muted-foreground">
                 Total Requests
               </p>
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400">
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-[#ff7444] text-[#3d170c]">
                 Real-time
               </span>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-3xl font-bold text-foreground">
               129
             </h2>
           </div>
           <div className="space-y-2">
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-muted-foreground">
               Total times your videos were requested or played across all
               regions.
             </p>
-            <div className="border-t border-gray-100 dark:border-gray-800 pt-2 flex gap-6 text-xs text-gray-500 dark:text-gray-400">
+            <div className="border-t border-border pt-2 flex gap-6 text-xs text-muted-foreground">
               <div className="flex flex-col">
-                <span className="font-semibold text-gray-700 dark:text-gray-300">
+                <span className="font-semibold text-foreground">
                   96
                 </span>
                 <span>Avg / Day</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-semibold text-green-500">+12%</span>
+                <span className="font-semibold text-tertiary">+12%</span>
                 <span>Growth</span>
               </div>
             </div>
@@ -171,32 +171,32 @@ const Page = () => {
         </div>
 
         {/* Storage Card */}
-        <div className="rounded-xl bg-white dark:bg-[#101217] border border-gray-200 dark:border-[#1f2023] shadow-sm p-5 flex flex-col justify-between gap-3">
+        <div className="metric-card-silver rounded-xl bg-card border border-border p-5 flex flex-col justify-between gap-3">
           <div>
             <div className="flex items-center justify-between mb-1">
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-medium text-muted-foreground">
                 Storage Used
               </p>
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400">
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-[#b7bdf7] text-[#252b55]">
                 Allocated
               </span>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-              3.2 <span className="text-lg text-gray-400 font-normal">GB</span>
+            <h2 className="text-3xl font-bold text-foreground">
+              3.2 <span className="text-lg text-muted-foreground font-normal">GB</span>
             </h2>
           </div>
           <div>
-            <div className="flex justify-between text-xs text-gray-500 dark:text-gray-500 mb-2">
+            <div className="flex justify-between text-xs text-muted-foreground mb-2">
               <span>64% Used</span>
               <span>5 GB Total</span>
             </div>
-            <div className="w-full h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden mb-2">
+            <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden mb-2">
               <div
-                className="h-full bg-purple-500 rounded-full"
+                className="h-full bg-tertiary rounded-full"
                 style={{ width: "64%" }}
               />
             </div>
-            <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
               <span>• 2 Videos</span>
               <span>• 1.8 GB Free</span>
             </div>
@@ -208,7 +208,7 @@ const Page = () => {
       <div className="mt-10 w-full flex items-center justify-between flex-wrap">
         <div className="md:w-[60%]">
           <h2 className="text-lg font-semibold mb-1">Top Visitor Countries</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          <p className="text-sm text-muted-foreground mb-4">
             Based on requests served in the last 28 days.
           </p>
           <div className="w-full max-w-full overflow-hidden p-4">
@@ -219,21 +219,21 @@ const Page = () => {
         {/* Top URLs Table */}
         <div className="md:w-[40%]">
           <h2 className="text-lg font-semibold mb-1">Top Requested URLs</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          <p className="text-sm text-muted-foreground mb-4">
             Pathnames where your videos were most frequently requested in the
             last 28 days.
           </p>
-          <div className="rounded! border border-gray-200 dark:border-[#1f2023] bg-white dark:bg-[#101217] shadow-sm">
+          <div className="rounded! border border-border bg-card shadow-sm">
             <table className="min-w-full min-h-75 divide-y divide-gray-100 dark:divide-gray-800">
               <thead>
                 <tr>
-                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wide uppercase">
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-muted-foreground tracking-wide uppercase">
                     #
                   </th>
-                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wide uppercase">
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-muted-foreground tracking-wide uppercase">
                     Pathname
                   </th>
-                  <th className="px-5 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wide uppercase">
+                  <th className="px-5 py-3 text-right text-xs font-semibold text-muted-foreground tracking-wide uppercase">
                     Requests
                   </th>
                 </tr>
@@ -250,23 +250,23 @@ const Page = () => {
                 {topURLs?.map((row, index) => (
                   <tr
                     key={index}
-                    className="group hover:bg-blue-50 dark:hover:bg-[#1c1f23] transition-colors"
+                    className="group hover:bg-primary/10 transition-colors"
                   >
                     {/* Rank */}
-                    <td className="px-5 py-3 text-sm font-bold text-gray-400 dark:text-gray-500">
+                    <td className="px-5 py-3 text-sm font-bold text-muted-foreground">
                       {["🥇", "🥈", "🥉"][index] || `${index + 1}`}
                     </td>
 
                     {/* Path with icon */}
-                    <td className="px-5 py-3 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-2">
-                      <div className="w-5 h-5 rounded bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300">
+                    <td className="px-5 py-3 font-medium text-foreground flex items-center gap-2">
+                      <div className="w-5 h-5 rounded bg-secondary dark:bg-muted flex items-center justify-center text-xs font-bold text-muted-foreground">
                         {row.pathname.charAt(1).toUpperCase() || "/"}
                       </div>
                       <span className="truncate">{row.pathname}</span>
                     </td>
 
                     {/* Requests */}
-                    <td className="px-5 py-3 text-right font-semibold text-blue-600 dark:text-blue-400">
+                    <td className="px-5 py-3 text-right font-semibold text-[var(--brand-primary-readable)]">
                       {row.requests.toLocaleString()}
                     </td>
                   </tr>
@@ -280,14 +280,14 @@ const Page = () => {
       {/* Learn Cards Section */}
       <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Docs Card */}
-        <div className="rounded-xl bg-white dark:bg-[#101217] border border-gray-200 dark:border-[#1f2023] p-6 flex flex-col justify-between gap-4">
-          <div className="flex items-center gap-3 text-orange-500">
+        <div className="rounded-xl bg-card border border-border p-6 flex flex-col justify-between gap-4">
+          <div className="flex items-center gap-3 text-[var(--brand-primary-readable)]">
             <BookText size={20} />
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+            <h3 className="text-lg font-semibold text-foreground">
               Documentation
             </h3>
           </div>
-          <ul className="mt-2 text-sm text-gray-600 dark:text-gray-400 space-y-1">
+          <ul className="mt-2 text-sm text-muted-foreground space-y-1">
             <li>
               <a href="/docs" className="hover:underline">
                 Documentation ↗
@@ -312,14 +312,14 @@ const Page = () => {
         </div>
 
         {/* Tutorials Card */}
-        <div className="rounded-xl bg-white dark:bg-[#101217] border border-gray-200 dark:border-[#1f2023] p-6 flex flex-col justify-between gap-4">
-          <div className="flex items-center gap-3 text-red-500">
+        <div className="rounded-xl bg-card border border-border p-6 flex flex-col justify-between gap-4">
+          <div className="flex items-center gap-3 text-destructive">
             <GraduationCap size={20} />
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+            <h3 className="text-lg font-semibold text-foreground">
               Tutorials / Guides
             </h3>
           </div>
-          <ul className="mt-2 text-sm text-gray-600 dark:text-gray-400 space-y-1">
+          <ul className="mt-2 text-sm text-muted-foreground space-y-1">
             <li>
               <a href="/tutorials/first-upload" className="hover:underline">
                 How to upload your first video ↗

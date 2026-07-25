@@ -27,7 +27,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   LayoutDashboard,
-} from "lucide-react";
+} from "@/components/common/icons";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -62,7 +62,7 @@ function SidebarTooltip({
       {visible &&
         createPortal(
           <div
-            className="fixed px-2.5 py-1.5 rounded-md bg-gray-900 text-white text-xs font-medium whitespace-nowrap z-9999 shadow-lg pointer-events-none"
+            className="fixed px-2.5 py-1.5 rounded-md bg-card text-foreground text-xs font-medium whitespace-nowrap z-50 shadow-md pointer-events-none"
             style={{
               top: pos.top,
               left: pos.left,
@@ -136,7 +136,7 @@ const Sidebar = () => {
   };
 
   const iconClasses =
-    "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors";
+    "text-muted-foreground hover:text-foreground dark:hover:text-foreground transition-colors";
 
   if (!isLoaded) return null;
 
@@ -146,7 +146,7 @@ const Sidebar = () => {
       <div className="md:hidden fixed top-3 left-3 z-50">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-2 rounded-md bg-white dark:bg-black/80 border border-gray-300 dark:border-gray-700 text-black dark:text-white"
+          className="p-2 rounded-md bg-background border border-border text-foreground"
         >
           {mobileOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -170,9 +170,9 @@ const Sidebar = () => {
           ${collapsed ? "w-15" : "w-64"}
           flex flex-col
           overflow-hidden
-          bg-white dark:bg-[#0A0C10]
-          border-r border-gray-200 dark:border-[#1a1d24]
-          text-black dark:text-white
+          bg-sidebar
+          border-r border-border
+          text-foreground
           transition-[width] duration-200 ease-in-out
           [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
         `}
@@ -211,7 +211,7 @@ const Sidebar = () => {
             {/* Collapse toggle — desktop only */}
             <button
               onClick={() => setCollapsed(!collapsed)}
-              className="hidden md:flex items-center justify-center text-gray-400 hover:text-black dark:hover:text-white transition-colors"
+              className="hidden md:flex items-center justify-center text-muted-foreground hover:text-foreground dark:hover:text-foreground transition-colors"
               title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
               {collapsed ? (
@@ -231,7 +231,7 @@ const Sidebar = () => {
               alt="avatar"
               width={36}
               height={36}
-              className="w-9 h-9 rounded-full border border-gray-300 dark:border-gray-600 shrink-0"
+              className="w-9 h-9 rounded-full border border-border shrink-0"
             />
             <div className="text-[13px] leading-4 min-w-0">
               <p className="font-semibold flex items-center gap-1">
@@ -240,11 +240,11 @@ const Sidebar = () => {
                     user?.emailAddresses[0]?.emailAddress?.split("@")[0] ||
                     "User"}
                 </span>
-                <span className="px-1.5 py-0.5 text-[10px] bg-blue-600 text-white rounded-full font-semibold shrink-0">
+                <span className="px-1.5 py-0.5 text-[10px] bg-primary text-primary-foreground rounded-full font-semibold shrink-0">
                   Free
                 </span>
               </p>
-              <p className="text-gray-500 dark:text-gray-400 text-xs truncate">
+              <p className="text-muted-foreground text-xs truncate">
                 {user?.emailAddresses[0]?.emailAddress}
               </p>
             </div>
@@ -256,31 +256,31 @@ const Sidebar = () => {
               width={32}
               height={32}
               alt="avatar"
-              className="w-8 h-8 rounded-full border border-gray-300 dark:border-gray-600"
+              className="w-8 h-8 rounded-full border border-border"
             />
           </div>
         )}
 
         {/* Usage card */}
         {!collapsed && (
-          <div className="mx-3 mb-4 px-3 py-3 rounded-xl bg-gray-100 dark:bg-[#101217]/70 border border-gray-200 dark:border-[#1f2023] shadow-inner space-y-2">
-            <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
+          <div className="mx-3 mb-4 px-3 py-3 rounded-xl bg-muted border border-border shadow-inner space-y-2">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span className="flex items-center gap-1">
                 <PieChart size={13} /> Usage
               </span>
-              <span className="text-[11px] font-semibold text-gray-700 dark:text-gray-300">
+              <span className="text-[11px] font-semibold text-foreground">
                 5%
               </span>
             </div>
-            <div className="w-full h-1.5 bg-gray-300 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div className="w-full h-1.5 bg-border rounded-full overflow-hidden">
               <div
-                className="h-full bg-linear-to-r from-blue-500 to-purple-500"
+                className="h-full bg-linear-to-r from-[var(--brand-primary)] to-[var(--brand-primary)]"
                 style={{ width: "5%" }}
               />
             </div>
             <Link
               href={"/billing"}
-              className="mt-1 cursor-pointer w-full text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:underline"
+              className="mt-1 cursor-pointer w-full text-[11px] font-medium text-[var(--brand-primary-readable)] hover:underline"
             >
               Manage Plan & Usage
             </Link>
@@ -292,12 +292,12 @@ const Sidebar = () => {
           {navSections.map((section) => (
             <div key={section.title}>
               {!collapsed && (
-                <p className="text-[11px] uppercase tracking-wide text-gray-500 dark:text-gray-400 px-3 mb-1">
+                <p className="text-[11px] uppercase tracking-wide text-muted-foreground px-3 mb-1">
                   {section.title}
                 </p>
               )}
               {collapsed && (
-                <div className="border-t border-gray-200 dark:border-gray-800 my-1 mx-1" />
+                <div className="border-t border-border my-1 mx-1" />
               )}
               <div className="flex flex-col gap-0.5">
                 {section.links.map(({ title, href, icon: Icon }) => {
@@ -314,8 +314,8 @@ const Sidebar = () => {
                       }}
                       className={`flex items-center ${collapsed ? "justify-center" : "gap-3"} text-[14px] font-medium ${collapsed ? "px-2 py-2.5 mx-auto" : "px-4 py-2"} rounded-md transition-colors ${
                         path === href
-                          ? "bg-blue-600 text-white"
-                          : "text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-[#1c1f23]"
+                          ? "bg-primary text-primary-foreground"
+                          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                       }`}
                     >
                       <Icon size={18} className="shrink-0" />
@@ -340,7 +340,7 @@ const Sidebar = () => {
 
         {/* Bottom actions — collapsed mode */}
         {collapsed && (
-          <div className="flex flex-col items-center gap-2 pb-4 pt-2 border-t border-gray-200 dark:border-gray-800 mt-auto mx-2">
+          <div className="flex flex-col items-center gap-2 pb-4 pt-2 border-t border-border mt-auto mx-2">
             <SidebarTooltip label={isDark ? "Light mode" : "Dark mode"}>
               <button onClick={() => toggleTheme()} className={iconClasses}>
                 {!isDark ? <Moon size={18} /> : <Sun size={18} />}

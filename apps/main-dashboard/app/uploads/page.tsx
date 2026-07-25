@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, RefreshCcw, UploadCloud, X } from "lucide-react";
+import { ChevronRight, RefreshCcw, UploadCloud, X } from "@/components/common/icons";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useRef, useState } from "react";
@@ -143,17 +143,17 @@ const Page = () => {
       {!isLoaded ? (
         <div></div>
       ) : (
-        <div className="text-slate-900 dark:text-slate-50 relative min-h-screen">
+        <div className="text-muted-foreground relative min-h-screen">
           {/* Breadcrumb */}
-          <nav className="flex items-center text-sm text-slate-500 dark:text-slate-400 mb-6">
+          <nav className="flex items-center text-sm text-muted-foreground mb-6">
             <Link
               href="/"
-              className="hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
+              className="hover:text-muted-foreground dark:hover:text-muted-foreground transition-colors"
             >
               Dashboard
             </Link>
             <ChevronRight size={16} className="mx-2" />
-            <span className="text-slate-900 dark:text-slate-200 font-medium">
+            <span className="text-muted-foreground font-medium">
               Upload Video
             </span>
           </nav>
@@ -161,7 +161,7 @@ const Page = () => {
           {/* Title & Subtitle */}
           <div className="space-y-1 mb-8">
             <h1 className="text-2xl font-bold tracking-tight">Upload Video</h1>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
+            <p className="text-sm text-muted-foreground">
               Easily upload and manage your video content.
             </p>
           </div>
@@ -172,16 +172,16 @@ const Page = () => {
               <div className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="title">
-                    Video Title <span className="text-red-500">*</span>
+                    Video Title <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="title"
                     {...register("title")}
                     placeholder="Enter video title"
-                    className="bg-slate-50 border dark:border-gray-800/50 dark:bg-slate-900/50"
+                    className="bg-muted border border-border/50 dark:bg-card"
                   />
                   {errors.title && (
-                    <p className="text-xs text-red-500 font-medium">
+                    <p className="text-xs text-destructive font-medium">
                       {errors.title.message as string}
                     </p>
                   )}
@@ -189,14 +189,14 @@ const Page = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="slug">
-                    Slug <span className="text-red-500">*</span>
+                    Slug <span className="text-destructive">*</span>
                   </Label>
                   <div className="flex gap-2">
                     <Input
                       id="slug"
                       {...register("slug")}
                       placeholder="Auto-generated slug"
-                      className="bg-slate-50 border dark:border-gray-800/50 dark:bg-slate-900/50"
+                      className="bg-muted border border-border/50 dark:bg-card"
                     />
                     <Button
                       type="button"
@@ -204,13 +204,13 @@ const Page = () => {
                       size="icon"
                       onClick={generateSlug}
                       title="Generate Slug"
-                      className="shrink-0 border dark:border-gray-800/50 dark:bg-slate-900 dark:hover:bg-slate-800!"
+                      className="shrink-0 border border-border/50 dark:bg-card dark:hover:bg-secondary!"
                     >
-                      <RefreshCcw size={16} className="dark:text-white text-black" />
+                      <RefreshCcw size={16} className="dark:text-foreground text-foreground" />
                     </Button>
                   </div>
                   {errors.slug && (
-                    <p className="text-xs text-red-500 font-medium">
+                    <p className="text-xs text-destructive font-medium">
                       {errors.slug.message as string}
                     </p>
                   )}
@@ -223,7 +223,7 @@ const Page = () => {
                     {...register("description")}
                     rows={5}
                     placeholder="Enter a description about the video"
-                    className="bg-slate-50 border dark:border-gray-800/50 dark:bg-slate-900/50 resize-none"
+                    className="bg-muted border border-border/50 dark:bg-card resize-none"
                   />
                 </div>
 
@@ -233,7 +233,7 @@ const Page = () => {
                     id="tags"
                     {...register("tags")}
                     placeholder="e.g. tutorial, react, programming"
-                    className="bg-slate-50 border dark:border-gray-800/50 dark:bg-slate-900/50"
+                    className="bg-muted border border-border/50 dark:bg-card"
                   />
                 </div>
               </div>
@@ -242,17 +242,17 @@ const Page = () => {
               <div className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="thumbnail">
-                    Thumbnail Image <span className="text-red-500">*</span>
+                    Thumbnail Image <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="thumbnail"
                     type="file"
                     accept="image/*"
                     {...register("thumbnail")}
-                    className="bg-slate-50 border dark:border-gray-800/50 dark:bg-slate-900/50 cursor-pointer file:cursor-pointer file:text-slate-700 dark:file:text-slate-300"
+                    className="bg-muted border border-border/50 dark:bg-card cursor-pointer file:cursor-pointer file:text-muted-foreground dark:file:text-muted-foreground"
                   />
                   {errors.thumbnail && (
-                    <p className="text-xs text-red-500 font-medium">
+                    <p className="text-xs text-destructive font-medium">
                       {errors.thumbnail.message as string}
                     </p>
                   )}
@@ -267,7 +267,7 @@ const Page = () => {
                     placeholder={
                       "00:00 Introduction\n01:30 Main Topic\n05:00 Conclusion"
                     }
-                    className="bg-slate-50 border dark:border-gray-800/50 dark:bg-slate-900/50 resize-none font-mono text-xs"
+                    className="bg-muted border border-border/50 dark:bg-card resize-none font-mono text-xs"
                   />
                 </div>
 
@@ -276,7 +276,7 @@ const Page = () => {
                     <Label htmlFor="playlist">Playlist</Label>
                     <select
                       {...register("playlist")}
-                      className="flex h-10 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800/50 dark:bg-slate-900/50 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
+                      className="flex h-10 w-full rounded-md border border-border bg-muted px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50 dark:border-border dark:bg-card dark:ring-offset-slate-950 dark:placeholder:text-muted-foreground dark:focus-visible:ring-slate-300"
                     >
                       <option value="">Select a playlist</option>
                       <option value="frontend">Frontend Development</option>
@@ -291,7 +291,7 @@ const Page = () => {
                     </Label>
                     <select
                       {...register("generateSubtitles")}
-                      className="flex h-10 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800/50 dark:bg-slate-900/50 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
+                      className="flex h-10 w-full rounded-md border border-border bg-muted px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50 dark:border-border dark:bg-card dark:ring-offset-slate-950 dark:placeholder:text-muted-foreground dark:focus-visible:ring-slate-300"
                     >
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
@@ -306,7 +306,7 @@ const Page = () => {
                     </Label>
                     <select
                       {...register("generateSubtitles")}
-                      className="flex h-10 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800/50 dark:bg-slate-900/50 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
+                      className="flex h-10 w-full rounded-md border border-border bg-muted px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50 dark:border-border dark:bg-card dark:ring-offset-slate-950 dark:placeholder:text-muted-foreground dark:focus-visible:ring-slate-300"
                     >
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
@@ -316,12 +316,12 @@ const Page = () => {
               </div>
             </div>
 
-            <div className="h-px bg-slate-200 dark:bg-slate-800/50 my-8" />
+            <div className="h-px bg-muted dark:bg-muted my-8" />
 
             {/* Video Upload Area */}
             <div className="space-y-2">
               <Label>
-                Video File <span className="text-red-500">*</span>
+                Video File <span className="text-destructive">*</span>
               </Label>
               <div
                 onDrop={handleDrop}
@@ -332,8 +332,8 @@ const Page = () => {
               relative flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-10 cursor-pointer transition-all duration-200
               ${
                 isDragging
-                  ? "border-blue-500 bg-blue-50 dark:bg-blue-950/30 ring-4 ring-blue-500/10"
-                  : "border-slate-300 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-900/50"
+                  ? "palette-info ring-4 ring-primary/10"
+                  : "border-border hover:border-border dark:hover:border-border hover:bg-muted dark:hover:bg-secondary/50"
               }
               ${videoPreview ? "p-4" : "p-10"}
             `}
@@ -360,14 +360,14 @@ const Page = () => {
                   </div>
                 ) : (
                   <div className="text-center space-y-4">
-                    <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto">
-                      <UploadCloud size={32} className="text-slate-400" />
+                    <div className="w-16 h-16 rounded-full bg-muted dark:bg-muted flex items-center justify-center mx-auto">
+                      <UploadCloud size={32} className="text-muted-foreground" />
                     </div>
                     <div className="space-y-1">
-                      <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                      <p className="text-sm font-medium text-muted-foreground">
                         Click to upload or drag and drop
                       </p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                      <p className="text-xs text-muted-foreground">
                         MP4, WebM or Ogg (Max. 2GB)
                       </p>
                     </div>
@@ -391,7 +391,7 @@ const Page = () => {
                 />
               </div>
               {errors.video && (
-                <p className="text-xs text-red-500 font-medium mt-2">
+                <p className="text-xs text-destructive font-medium mt-2">
                   {errors.video.message as string}
                 </p>
               )}
@@ -402,14 +402,14 @@ const Page = () => {
               <Button
                 type="button"
                 variant="secondary"
-                className="dark:bg-slate-800 dark:text-white cursor-pointer"
+                className="dark:bg-muted dark:text-foreground cursor-pointer"
                 onClick={() => router.back()}
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white min-w-30 cursor-pointer"
+                className="bg-primary hover:bg-primary/90 text-white min-w-30 cursor-pointer"
               >
                 Upload Video
               </Button>
@@ -418,24 +418,24 @@ const Page = () => {
             {/* Upload Overlay */}
             {isUploading && (
               <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
-                <div className="bg-white dark:bg-slate-950 rounded-2xl shadow-2xl p-8 max-w-md w-full space-y-6 border border-slate-200 dark:border-slate-800">
+                <div className="bg-card dark:bg-background rounded-2xl shadow-2xl p-8 max-w-md w-full space-y-6 border border-border">
                   <div className="space-y-2 text-center">
                     <h3 className="text-xl font-semibold">
                       Uploading Video...
                     </h3>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                    <p className="text-sm text-muted-foreground">
                       Please do not close this window
                     </p>
                   </div>
 
                   <div className="space-y-2">
-                    <div className="h-4 bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
+                    <div className="h-4 bg-muted dark:bg-card rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-blue-600 rounded-full transition-all duration-300 ease-out"
+                        className="h-full bg-primary rounded-full transition-all duration-300 ease-out"
                         style={{ width: `${uploadProgress}%` }}
                       />
                     </div>
-                    <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 font-medium">
+                    <div className="flex justify-between text-xs text-muted-foreground font-medium">
                       <span>{uploadProgress}% Complete</span>
                       <span>{estimatedTime || "Calculating..."}</span>
                     </div>

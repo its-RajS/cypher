@@ -26,7 +26,7 @@ const countryData = [
 
 const getColor = (countryName: string) => {
   const country = countryData.find((c) => c.name === countryName);
-  if (!country) return "#1e293b";
+  if (!country) return "var(--chart-5)";
   return "oklch(62.3% 0.214 259.815)";
 };
 
@@ -79,18 +79,18 @@ const GeographicalMap = () => {
                   }}
                   onMouseLeave={() => setHovered(null)}
                   fill={baseColor}
-                  stroke="#334155"
+                  stroke="var(--border)"
                   style={{
                     default: {
                       outline: "none",
                       transition: "fill 0.3s ease-in-out",
                     },
                     hover: {
-                      fill: match ? baseColor : "#facc15",
+                      fill: match ? baseColor : "var(--highlight)",
                       outline: "none",
                       transition: "fill 0.3s ease-in-out",
                     },
-                    pressed: { fill: "#ef4444", outline: "none" },
+                    pressed: { fill: "var(--tertiary)", outline: "none" },
                   }}
                 />
               );
@@ -108,7 +108,7 @@ const GeographicalMap = () => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="fixed bg-gray-800 text-white text-xs p-2 rounded! shadow-lg pointer-events-none z-9999"
+            className="fixed bg-card text-card-foreground text-xs p-2 rounded! shadow-lg pointer-events-none z-9999"
             style={{
               top: tooltipPosition.y,
               left: tooltipPosition.x,
@@ -116,7 +116,7 @@ const GeographicalMap = () => {
           >
             <strong>{hovered.name}</strong>
             <br />
-            Visitors: <span className="text-green-400">{hovered.visitors}</span>
+            Visitors: <span className="text-[var(--brand-primary-readable)]">{hovered.visitors}</span>
           </motion.div>
         )}
       </AnimatePresence>

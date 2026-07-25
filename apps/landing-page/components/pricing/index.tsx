@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Check, Info } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CheckIcon, InformationCircleIcon } from "@hugeicons/core-free-icons";
 import {
   Tooltip,
   TooltipContent,
@@ -86,18 +87,18 @@ const PricingSection = () => {
   return (
     <section
       id="pricing"
-      className="py-16 sm:py-24 overflow-hidden border-y border-slate-800/50"
+      className="py-16 sm:py-24 overflow-hidden border-y border-border bg-secondary/45"
     >
       <div className="mx-auto max-w-7xl px-6">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <div className="text-sm font-semibold tracking-widest text-sky-400 uppercase mb-3">
+          <div className="text-sm font-semibold text-[var(--brand-primary-readable)] mb-3">
             Pricing
           </div>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white mb-3">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground mb-3">
             Simple. Predictable. Transparent.
           </h2>
-          <p className="text-sm sm:text-base text-slate-400">
+          <p className="text-sm sm:text-base text-muted-foreground">
             Storage stays. Playback minutes reset every billing cycle.
           </p>
         </div>
@@ -108,13 +109,13 @@ const PricingSection = () => {
             <div
               key={plan.name}
               className={`relative rounded-xl p-6 flex flex-col transition-colors ${plan.highlighted
-                ? "border border-blue-500/30 bg-blue-950/10 shadow-[0_0_24px_-6px_rgba(59,130,246,0.15)]"
-                : "border border-slate-800/60 bg-slate-900/20 hover:border-slate-700/80"
+                ? "border-2 border-[var(--brand-tertiary)] bg-card"
+                : "border border-primary bg-card hover:border-primary"
                 }`}
             >
               {plan.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="bg-blue-600 text-white text-[11px] font-semibold px-3 py-1 rounded-full">
+                  <span className="bg-[var(--brand-tertiary)] text-[#3d170c] text-[11px] font-semibold px-3 py-1 rounded-full shadow-sm">
                     {plan.badge}
                   </span>
                 </div>
@@ -122,19 +123,19 @@ const PricingSection = () => {
 
               <div className="mb-5">
                 <div
-                  className={`text-xs font-medium tracking-wide uppercase mb-2 ${plan.highlighted ? "text-blue-400" : "text-slate-500"
+                  className={`text-xs font-medium tracking-wide uppercase mb-2 ${plan.highlighted ? "text-foreground" : "text-muted-foreground"
                     }`}
                 >
                   {plan.name}
                 </div>
-                <div className="text-3xl font-semibold text-white tracking-tight">
+                <div className="text-3xl font-semibold text-foreground tracking-tight">
                   {plan.price}
-                  <span className="text-sm text-slate-500 font-normal">
+                  <span className="text-sm text-muted-foreground font-normal">
                     {" "}
                     / month
                   </span>
                 </div>
-                <p className="text-sm text-slate-400 mt-1.5">{plan.desc}</p>
+                <p className="text-sm text-muted-foreground mt-1.5">{plan.desc}</p>
               </div>
 
               <ul className="space-y-2.5 mb-6 flex-1">
@@ -146,36 +147,32 @@ const PricingSection = () => {
                   return (
                     <li
                       key={feature}
-                      className="flex items-start gap-2 text-sm text-slate-400 group"
+                      className="flex items-start gap-2 text-sm text-muted-foreground group"
                     >
-                      <Check
-                        className={`h-4 w-4 shrink-0 mt-0.5 ${plan.highlighted ? "text-blue-400" : "text-slate-600"
-                          }`}
-                        strokeWidth={2}
-                      />
+                      <HugeiconsIcon icon={CheckIcon} size={16} color={plan.highlighted ? "var(--foreground)" : "var(--brand-primary)"} strokeWidth={1.8} className="shrink-0 mt-0.5" />
                       <span className="flex-1 flex items-center gap-1.5 flex-wrap">
                         {feature}
                         {storageMatch && (
                           <Tooltip delayDuration={0}>
                             <TooltipTrigger asChild>
-                              <Info className="h-4 w-4 text-slate-500 hover:text-slate-300 transition-colors cursor-pointer opacity-70 hover:opacity-100" />
+                              <HugeiconsIcon icon={InformationCircleIcon} size={16} color="var(--foreground)" className="opacity-70 hover:opacity-100 transition-colors cursor-pointer" />
                             </TooltipTrigger>
                             <TooltipContent
                               side="right"
-                              className="max-w-70 p-4 bg-slate-900 border border-slate-700 shadow-xl"
+                              className="max-w-70 p-4 bg-card border border-primary shadow-xl"
                             >
                               <div className="space-y-2">
-                                <p className="font-semibold text-white text-sm">
+                                <p className="font-semibold text-foreground text-sm">
                                   Estimated Capacity
                                 </p>
-                                <p className="text-slate-300 text-xs leading-relaxed">
+                                <p className="text-foreground/75 text-xs leading-relaxed">
                                   Based on this{" "}
-                                  <span className="text-white font-medium">
+                                  <span className="text-foreground font-medium">
                                     {storageMatch[0]}
                                   </span>{" "}
                                   limit, you can upload and process
                                   approximately{" "}
-                                  <span className="text-sky-400 font-medium">
+                                  <span className="text-foreground font-medium">
                                     {plan.name === "Free"
                                       ? "30"
                                       : Math.round(
@@ -191,7 +188,7 @@ const PricingSection = () => {
                                   of HD video content.
                                 </p>
                                 {plan.name !== "Free" && (
-                                  <p className="text-slate-400 text-[10px] leading-relaxed italic border-t border-slate-800 pt-2 mt-2">
+                                  <p className="text-muted-foreground text-[10px] leading-relaxed italic border-t border-primary pt-2 mt-2">
                                     This is an estimated capacity based on
                                     adaptive streaming (master file + 360p,
                                     480p, 720p, and 1080p renditions). Actual
@@ -200,7 +197,7 @@ const PricingSection = () => {
                                   </p>
                                 )}
                                 {plan.name === "Free" && (
-                                  <p className="text-slate-400 text-[10px] leading-relaxed italic border-t border-slate-800 pt-2 mt-2">
+                                  <p className="text-muted-foreground text-[10px] leading-relaxed italic border-t border-primary pt-2 mt-2">
                                     This is an estimated capacity based on
                                     adaptive streaming (master file + 720p
                                     encoding). Actual capacity may vary
@@ -220,8 +217,8 @@ const PricingSection = () => {
               <Link
                 href="#get-started"
                 className={`w-full py-2.5 rounded-lg text-sm font-medium text-center transition-colors ${plan.highlighted
-                  ? "bg-blue-600 text-white hover:bg-blue-700"
-                  : "border border-slate-800 bg-slate-900/50 text-slate-300 hover:bg-slate-800"
+                  ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                  : "border border-primary bg-card text-foreground/75 hover:bg-[var(--popover)]"
                   }`}
               >
                 {plan.cta}
@@ -231,7 +228,7 @@ const PricingSection = () => {
         </div>
 
         {/* Microcopy */}
-        <p className="text-center text-xs text-slate-500 font-semibold">
+        <p className="text-center text-xs text-muted-foreground font-semibold">
           Storage is persistent and does not reset. Playback minutes reset
           monthly with your billing cycle.
         </p>

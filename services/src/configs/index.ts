@@ -13,3 +13,14 @@ export const LAST_USED_DEBOUNCE = 60;
 export const LAST_USED_HASH = `cyph:api_key:last_used:${VERSION}`;
 export const localCache = new LRUCache<string, CachedKey>({ max: 100_000 });
 export const DEFAULT_PLAYLIST_LIMIT = 10;
+
+export const hardLockRedisKey = (userId: string) =>
+  `cyph:user:${userId}:hard_locked`;
+
+export const PLAN_LRU_TTL = 5 * 60 * 1000;
+export const PLAN_REDIS_TTL = 6 * 60;
+
+export const planRedisKey = (userId: string) =>
+  `cyph::plan:${VERSION}:user:${userId}`;
+export const usageRedisKey = (userId: string) =>
+  `cyph::usage:${VERSION}:user:${userId}`;

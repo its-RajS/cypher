@@ -11,7 +11,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-white/5 bg-[#08090e]">
+    <footer className="border-t border-primary/35 bg-secondary/35">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div className="lg:col-span-1">
@@ -23,32 +23,32 @@ export default function Footer() {
             </p>
           </div>
 
-          <div className="flex gap-8 text-xs text-slate-500">
+          <div className="flex gap-8 text-xs text-muted-foreground">
             <Link
               href="/docs"
               target="_blank"
-              className="hover:text-slate-300 transition-colors"
+              className="hover:text-primary transition-colors"
             >
               Docs
             </Link>
             <Link
               href="https://x.com/oneminutestack"
               target="_blank"
-              className="hover:text-slate-300 transition-colors"
+              className="hover:text-primary transition-colors"
             >
               Twitter
             </Link>
             <Link
               href="https://github.com/one-minute-stack"
               target="_blank"
-              className="hover:text-slate-300 transition-colors"
+              className="hover:text-primary transition-colors"
             >
               GitHub
             </Link>
             <Link
               href="https://status.vidmox.com"
               target="_blank"
-              className="hover:text-slate-300 transition-colors"
+              className="hover:text-primary transition-colors"
             >
               Status
             </Link>
@@ -62,8 +62,8 @@ export default function Footer() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div className="relative flex h-2 w-2 cursor-pointer">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-foreground"></span>
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -71,26 +71,26 @@ export default function Footer() {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <span className="text-xs text-slate-500">
+            <span className="text-xs text-muted-foreground">
               All systems are operational now
             </span>
           </Link>
         </div>
 
-        <div className="mt-8 border-t border-slate-900 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[0.7rem] text-slate-600">
+        <div className="mt-8 border-t border-primary pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[0.7rem] text-muted-foreground/70">
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
             <div>© {currentYear} OneMinute Stack Inc.</div>
-            <div className="hidden sm:block text-slate-800">•</div>
+            <div className="hidden sm:block text-muted-foreground/40">•</div>
             <div className="flex items-center gap-1">
-              Built with <span className="text-red-500 mx-1">❤️</span> for
+              Built with <span className="text-primary mx-1">❤️</span> for
               developers
             </div>
           </div>
           <div className="flex gap-4">
-            <Link href="/privacy" className="hover:text-slate-400">
+            <Link href="/privacy" className="hover:text-primary">
               Privacy
             </Link>
-            <Link href="/terms" className="hover:text-slate-400">
+            <Link href="/terms" className="hover:text-primary">
               Terms
             </Link>
           </div>

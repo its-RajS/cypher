@@ -12,7 +12,7 @@ import {
   X,
   Check,
   Copy,
-} from "lucide-react";
+} from "@/components/common/icons";
 import Link from "next/link";
 import SecuritySection from "@/components/security";
 import DeleteAccountModal from "@/components/modals/delete-account.modal";
@@ -142,14 +142,14 @@ export default function SettingsPage() {
   console.log(apiKeys)
 
   return (
-    <div className="text-black dark:text-white">
+    <div className="text-foreground">
       {/* Breadcrumb */}
-      <nav className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-6">
+      <nav className="flex items-center text-sm text-muted-foreground mb-6">
         <Link href="/" className="hover:underline">
           Dashboard
         </Link>
         <ChevronRight size={16} className="mx-2" />
-        <span className="text-gray-700 dark:text-gray-300 font-medium">
+        <span className="text-foreground font-medium">
           Settings
         </span>
       </nav>
@@ -157,13 +157,13 @@ export default function SettingsPage() {
       {/* Title */}
       <div className="space-y-1 mb-6">
         <h1 className="text-2xl font-semibold">Settings</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md">
+        <p className="text-sm text-muted-foreground max-w-md">
           Manage your account preferences, access control, and security options.
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-slate-300 dark:border-slate-700 mb-6">
+      <div className="border-b border-border mb-6">
         <div className="flex gap-6 text-sm font-medium">
           {tabs.map((tab) => (
             <button
@@ -171,8 +171,8 @@ export default function SettingsPage() {
               onClick={() => setActiveTab(tab)}
               className={`pb-2 transition ${
                 activeTab === tab
-                  ? "border-b-2 border-blue-500 text-blue-500"
-                  : "text-gray-500 dark:text-gray-400 hover:text-blue-400"
+                  ? "border-b-2 border-[var(--brand-tertiary)] text-[var(--brand-primary-readable)]"
+                  : "text-muted-foreground hover:text-[var(--brand-primary-readable)]"
               }`}
             >
               {tab}
@@ -189,12 +189,12 @@ export default function SettingsPage() {
             <div className="md:w-[60%]">
               <div className="flex items-center justify-between px-3 pb-1">
                 <div className="flex items-start gap-3">
-                  <Activity size={22} className="text-purple-500 mt-1" />
+                  <Activity size={22} className="text-[var(--brand-primary-readable)] mt-1" />
                   <div>
                     <div className="text-base font-medium">
                       Plan Usage Alert
                     </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                    <p className="text-sm text-muted-foreground mt-0.5">
                       Get notified when usage exceeds your set threshold
                       (default: 80%).
                     </p>
@@ -202,7 +202,7 @@ export default function SettingsPage() {
                 </div>
                 <button
                   onClick={() => toggleDropdown("usage")}
-                  className="w-7 h-7 flex items-center justify-center rounded-full border border-gray-400 dark:border-gray-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+                  className="w-7 h-7 flex items-center justify-center rounded-full border border-border hover:bg-muted dark:hover:bg-secondary transition cursor-pointer"
                 >
                   {openDropdown === "usage" ? (
                     <ChevronDown size={16} />
@@ -225,9 +225,9 @@ export default function SettingsPage() {
                     onChange={(e) =>
                       setUsageThreshold(parseInt(e.target.value))
                     }
-                    className="w-24 px-2 py-1 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-800 text-sm"
+                    className="w-24 px-2 py-1 rounded border border-border bg-card dark:bg-muted text-sm"
                   />
-                  <p className="text-xs text-gray-400 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     Must be between 20% and 80%.
                   </p>
                 </div>
@@ -238,14 +238,14 @@ export default function SettingsPage() {
             <div className="md:w-[60%]">
               <div className="flex items-center justify-between px-3 pb-1">
                 <div className="flex items-start gap-3">
-                  <Mail size={22} className="text-green-500 mt-1" />
+                  <Mail size={22} className="text-[var(--brand-primary-readable)] mt-1" />
                   <div>
                     <div className="text-base font-medium">
                       Upload Completion Email
                     </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                    <p className="text-sm text-muted-foreground mt-0.5">
                       Email{" "}
-                      <span className="font-medium text-indigo-500">
+                      <span className="font-medium text-[var(--brand-primary-readable)]">
                         {user?.emailAddresses[0]?.emailAddress}
                       </span>{" "}
                       when a video processing is completed.
@@ -254,7 +254,7 @@ export default function SettingsPage() {
                 </div>
                 <button
                   onClick={() => toggleDropdown("upload")}
-                  className="w-7 h-7 flex items-center justify-center rounded-full border border-gray-400 dark:border-gray-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+                  className="w-7 h-7 flex items-center justify-center rounded-full border border-border hover:bg-muted dark:hover:bg-secondary transition cursor-pointer"
                 >
                   {openDropdown === "upload" ? (
                     <ChevronDown size={16} />
@@ -266,19 +266,19 @@ export default function SettingsPage() {
 
               {openDropdown === "upload" && (
                 <div className="px-5 py-3 flex items-center justify-between">
-                  <span className="text-sm text-gray-500 dark:text-gray-300">
+                  <span className="text-sm text-muted-foreground">
                     Email notifications:
                   </span>
                   <button
                     onClick={() => setEmailAlertsEnabled(!emailAlertsEnabled)}
                     className={`w-10 h-5 rounded-full relative transition ${
                       emailAlertsEnabled
-                        ? "bg-green-500"
-                        : "bg-gray-400 dark:bg-gray-600"
+                        ? "bg-primary"
+                        : "bg-muted dark:bg-muted"
                     }`}
                   >
                     <span
-                      className={`absolute w-4 h-4 bg-white rounded-full top-0.5 transition ${
+                      className={`absolute w-4 h-4 bg-card rounded-full top-0.5 transition ${
                         emailAlertsEnabled ? "left-5" : "left-1"
                       }`}
                     />
@@ -288,9 +288,9 @@ export default function SettingsPage() {
             </div>
 
             {/* Danger Zone */}
-            <div className="pt-4 md:w-[60%] border-t border-slate-200 dark:border-slate-800">
-              <h3 className="text-xl text-red-500 font-semibold mb-3 flex items-center gap-2">
-                <AlertTriangle size={22} className="text-red-500" />
+            <div className="pt-4 md:w-[60%] border-t border-border">
+              <h3 className="text-xl text-destructive font-semibold mb-3 flex items-center gap-2">
+                <AlertTriangle size={22} className="text-destructive" />
                 Danger Zone
               </h3>
               <div
@@ -301,14 +301,14 @@ export default function SettingsPage() {
                   <Trash2 size={22} className="mt-1" />
                   <div>
                     <div className="text-base font-medium">Delete Account</div>
-                    <p className="text-sm text-red-400 mt-0.5">
+                    <p className="text-sm text-destructive mt-0.5">
                       Permanently delete your Vidmox account. This action cannot
                       be undone.
                     </p>
                   </div>
                 </div>
-                <button className="w-7 h-7 flex items-center justify-center rounded-full border border-red-400 hover:bg-red-100 dark:hover:bg-red-900 transition cursor-pointer">
-                  <ChevronRight size={16} className="text-red-400" />
+                <button className="w-7 h-7 flex items-center justify-center rounded-full border border-destructive hover:bg-destructive/10 dark:hover:bg-destructive/20 transition cursor-pointer">
+                  <ChevronRight size={16} className="text-destructive" />
                 </button>
               </div>
             </div>
@@ -318,11 +318,11 @@ export default function SettingsPage() {
         {activeTab === "Developer Access" && (
           <div className="md:w-[60%] space-y-6">
             {/* Guidelines */}
-            <div className="text-base text-gray-400 leading-relaxed space-y-3">
+            <div className="text-base text-muted-foreground leading-relaxed space-y-3">
               <p>
                 Developer secret keys are used to programmatically access the
                 Vidmox API and embed secured videos. Do{" "}
-                <span className="text-white font-medium">not share</span> your
+                <span className="text-foreground font-medium">not share</span> your
                 secret key publicly or with third parties.
               </p>
               <p>
@@ -332,12 +332,12 @@ export default function SettingsPage() {
               </p>
               <p>
                 If you suspect your key is compromised, you can immediately{" "}
-                <span className="text-yellow-400 font-medium">regenerate</span>{" "}
+                <span className="text-accent-foreground font-medium">regenerate</span>{" "}
                 it below.
               </p>
               <p>
                 To further protect your content, you can configure{" "}
-                <span className="text-white font-medium">
+                <span className="text-foreground font-medium">
                   whitelisted domains
                 </span>{" "}
                 that are allowed to access your embedded videos. Requests from
@@ -347,7 +347,7 @@ export default function SettingsPage() {
 
             {/* Header */}
             <div className="flex justify-between items-center">
-              <h2 className="text-base font-semibold text-slate-600 dark:text-white">
+              <h2 className="text-base font-semibold text-muted-foreground dark:text-foreground">
                 Developer Secret Keys
               </h2>
             </div>
@@ -357,33 +357,33 @@ export default function SettingsPage() {
               apiKeys && apiKeys.length >= 1 && !isLoadingApiKeys ? (
               <>
                 {/* {apiKeys.map((apikey:any) => ( */}
-                  <div className="bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-md px-4 py-3">
+                  <div className="bg-muted dark:bg-muted border border-border rounded-md px-4 py-3">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-xs dark:text-slate-400">
+                        <p className="text-xs dark:text-muted-foreground">
                           Key ID: {apiKeys[0]?.prefix}
                         </p>
-                        <p className="mt-1 font-mono dark:text-white tracking-wider">
+                        <p className="mt-1 font-mono dark:text-foreground tracking-wider">
                           {apiKeys[0]?.prefix}
                         </p>
-                        <p className="mt-1 text-sm dark:text-gray-200">
+                        <p className="mt-1 text-sm dark:text-muted-foreground">
                           Last used:{" "}
                           {lastUsed ? 
                           new Date(lastUsed).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + new Date(lastUsed).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) 
-                          : <span className="dark:text-white">Not use yet!</span>}
+                          : <span className="dark:text-foreground">Not use yet!</span>}
                         </p>
                       </div>
                       <div className="flex gap-2">
                         <div className="flex gap-2">
                           {coolDownOver ? (
                             <button
-                              className="text-xs px-2 py-1 rounded-md border cursor-pointer border-yellow-600 dark:text-yellow-400 dark:hover:bg-yellow-700/40"
+                              className="text-xs px-2 py-1 rounded-md border cursor-pointer border-[var(--brand-tertiary)] dark:text-accent-foreground dark:hover:bg-accent/40"
                               onClick={() => handleRegenerateSecretKey(apiKeys[0]?.id)}
                             >
                               Regenerate Key
                             </button>
                           ) : (
-                            <p className="text-xs text-gray-400 italic">
+                            <p className="text-xs text-muted-foreground italic">
                               Please wait 5 minutes before regenerating.
                             </p>
                           )}
@@ -398,7 +398,7 @@ export default function SettingsPage() {
                 <>
                   <button
                     onClick={handleGenerateSecretKey}
-                    className="flex items-center cursor-pointer gap-2 mt-3! text-xs px-3 py-2 rounded-md border border-blue-600 bg-blue-600 text-white hover:bg-blue-700 transition-all"
+                    className="flex items-center cursor-pointer gap-2 mt-3! text-xs px-3 py-2 rounded-md border border-primary bg-primary text-white hover:bg-primary/90 transition-all"
                   >
                     <Plus size={16} />
                     Generate Secret Key
@@ -420,11 +420,11 @@ export default function SettingsPage() {
 
       {showKeyModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4">
-          <div className="relative w-full max-w-md bg-[#0E1525] text-white rounded-md p-6 shadow-xl border border-blue-700/30">
+          <div className="relative w-full max-w-md bg-card text-card-foreground rounded-md p-6 shadow-xl border border-primary/30">
             {/* Close */}
             <button
               onClick={() => setShowKeyModal(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white"
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"
             >
               <X size={18} />
             </button>
@@ -432,8 +432,8 @@ export default function SettingsPage() {
             {/* Glowing Lock Icon */}
             <div className="flex justify-center mb-4">
               <div className="relative">
-                <div className="absolute inset-0 blur-xl opacity-30 bg-blue-600 rounded-full w-14 h-14 z-0" />
-                <div className="relative z-10 p-3 bg-blue-600/10 border border-blue-600 rounded-full text-blue-400">
+                <div className="absolute inset-0 blur-xl opacity-30 bg-primary rounded-full w-14 h-14 z-0" />
+                <div className="relative z-10 p-3 bg-primary/10 border border-primary rounded-full text-[var(--brand-primary-readable)]">
                   <svg
                     className="w-6 h-6"
                     fill="none"
@@ -455,12 +455,12 @@ export default function SettingsPage() {
             <h2 className="text-xl font-semibold text-center mb-2">
               Your new secret key
             </h2>
-            <div className="text-sm text-slate-400 space-y-3 text-center mb-6">
+            <div className="text-sm text-muted-foreground space-y-3 text-center mb-6">
               <p>
                 Use this key to access Vidmox APIs, authenticate your app, and
                 embed secured videos across your platform.
               </p>
-              <p className="text-yellow-400 font-medium">
+              <p className="text-accent-foreground font-medium">
                 This key is visible only once. Please store it securely — it
                 cannot be retrieved again.
               </p>
@@ -468,22 +468,22 @@ export default function SettingsPage() {
                 If it’s ever compromised, you can regenerate it from this
                 dashboard. The previous key will be immediately revoked.
               </p>
-              <p className="text-xs text-gray-400 italic">
+              <p className="text-xs text-muted-foreground italic">
                 For security reasons, a new key can only be generated once every
                 5 minutes.
               </p>
             </div>
 
             {/* Key Box */}
-            <div className="relative bg-slate-800 border border-slate-700 px-4 py-3 rounded-lg font-mono text-sm mb-6 text-white">
+            <div className="relative bg-muted border border-border px-4 py-3 rounded-lg font-mono text-sm mb-6 text-foreground">
               {secretKey.slice(0, 24)}********
               <button
                 onClick={handleCopy}
                 title={copied ? "Copied!" : "Copy to clipboard"}
-                className="absolute right-3 top-3 text-xs text-blue-400 hover:text-blue-500 transition"
+                className="absolute right-3 top-3 text-xs text-[var(--brand-primary-readable)] hover:text-[var(--brand-primary-readable)] transition"
               >
                 {copied ? (
-                  <Check size={16} className="text-green-500 scale-110" />
+                  <Check size={16} className="text-[var(--brand-primary-readable)] scale-110" />
                 ) : (
                   <Copy size={16} />
                 )}
@@ -491,7 +491,7 @@ export default function SettingsPage() {
             </div>
 
             {copied && (
-              <p className="text-green-500 text-center -mt-2! mb-3">
+              <p className="text-[var(--brand-primary-readable)] text-center -mt-2! mb-3">
                 Copied Successfully!
               </p>
             )}
@@ -500,7 +500,7 @@ export default function SettingsPage() {
             <div className="flex justify-center">
               <button
                 onClick={() => setShowKeyModal(false)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 text-sm rounded-md transition"
+                className="bg-primary hover:bg-primary/90 text-white px-5 py-2 text-sm rounded-md transition"
               >
                 Got it
               </button>

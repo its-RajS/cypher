@@ -4,11 +4,11 @@ import { DASHBOARD_URL } from "@/lib/routes";
 
 export default function Page() {
   return (
-    <div className="relative w-full h-screen flex items-center justify-center bg-[#020202] overflow-hidden">
+    <div className="relative w-full h-screen flex items-center justify-center bg-background overflow-hidden">
       {/* Background Grid */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20" />
-        <div className="absolute top-0 left-0 right-0 h-125 bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute inset-0 bg-primary/5" />
+        <div className="absolute top-0 left-0 right-0 h-125 bg-primary/15 blur-[120px] rounded-full pointer-events-none" />
       </div>
 
       <div className="relative z-10 flex flex-col items-center gap-6 w-full max-w-100">
@@ -19,35 +19,35 @@ export default function Page() {
           appearance={{
             baseTheme: dark,
             variables: {
-              colorPrimary: "#2DF2A6",
-              colorBackground: "#0A0A0A",
-              colorText: "#ededed",
-              colorTextSecondary: "#a3a3a3",
-              colorInputBackground: "#171717",
-              colorInputText: "#ededed",
+              colorPrimary: "var(--primary)",
+              colorBackground: "var(--card)",
+              colorText: "var(--foreground)",
+              colorTextSecondary: "var(--muted-foreground)",
+              colorInputBackground: "var(--muted)",
+              colorInputText: "var(--foreground)",
               borderRadius: "0.75rem",
             },
             elements: {
               rootBox: "w-full",
-              card: "bg-[#0A0A0A/50] backdrop-blur-xl border border-white/5 shadow-2xl p-8 rounded-3xl",
-              headerTitle: "text-xl font-bold tracking-tight text-white",
-              headerSubtitle: "text-sm text-neutral-400",
+              card: "bg-card/90 backdrop-blur-xl border border-primary shadow-2xl p-8 rounded-xl",
+              headerTitle: "text-xl font-bold tracking-tight text-foreground",
+              headerSubtitle: "text-sm text-muted-foreground",
               formFieldLabel:
-                "text-xs font-medium text-neutral-400 uppercase tracking-wide",
+                "text-xs font-medium text-muted-foreground uppercase tracking-wide",
               formFieldInput:
-                "bg-white/5 border-white/5 text-white focus:border-[#2DF2A6]/50 focus:ring-[#2DF2A6]/20 transition-all duration-200 h-10",
+                "bg-[var(--foreground)]/5 border-primary text-foreground focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 h-10",
               socialButtonsBlockButton:
-                "bg-white/5 border-white/5 text-neutral-300 hover:bg-white/10 hover:text-white transition-all duration-200 h-10",
+                "bg-[var(--foreground)]/5 border-primary text-foreground/80 hover:bg-primary/90/10 hover:text-foreground transition-all duration-200 h-10",
               socialButtonsBlockButtonText: "font-medium text-sm",
-              dividerLine: "bg-white/10",
+              dividerLine: "bg-border",
               dividerText:
-                "text-neutral-500 text-xs font-medium uppercase tracking-wider bg-[#0A0A0A]",
+                "text-muted-foreground text-xs font-medium uppercase tracking-wider bg-card",
               formButtonPrimary:
-                "bg-[#2DF2A6] hover:bg-[#22c55e] text-black font-bold shadow-[0_0_20px_rgba(45,242,166,0.15)] hover:shadow-[0_0_30px_rgba(45,242,166,0.3)] transition-all duration-200 h-10",
+                "bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-sm transition-all duration-200 h-10",
               footerActionLink:
-                "text-[#2DF2A6] hover:text-[#22c55e] font-medium",
+                "text-primary hover:text-primary/80 font-medium",
               formFieldAction:
-                "text-[#2DF2A6] hover:text-[#22c55e] font-medium text-xs",
+                "text-primary hover:text-primary/80 font-medium text-xs",
             },
             layout: {
               socialButtonsPlacement: "top",

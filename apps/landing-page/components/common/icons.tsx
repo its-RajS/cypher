@@ -1,0 +1,28 @@
+"use client";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowLeft01Icon, ArrowRight01Icon, Cancel01Icon, CheckmarkCircle03Icon, ChevronDownIcon as ChevronDownGlyph, ChevronRightIcon as ChevronRightGlyph, ChevronUpIcon as ChevronUpGlyph, CircleIcon as CircleGlyph, Loading03Icon, MinusSignIcon, MoreHorizontalIcon as MoreHorizontalGlyph, PanelLeftIcon as PanelLeftGlyph, Search01Icon } from "@hugeicons/core-free-icons";
+import type * as React from "react";
+type IconProps = Omit<React.SVGProps<SVGSVGElement>, "color" | "strokeWidth"> & { size?: number | string; color?: string; strokeWidth?: number | string };
+type IconDefinition = React.ComponentProps<typeof HugeiconsIcon>["icon"];
+function createIcon(icon: IconDefinition) { return function LandingIcon({ size = 18, color, strokeWidth, ...props }: IconProps) { return <HugeiconsIcon icon={icon} size={size} color={color} strokeWidth={typeof strokeWidth === "string" ? Number(strokeWidth) : strokeWidth} {...props} />; }; }
+export const ArrowLeft=createIcon(ArrowLeft01Icon);
+export const ArrowRight=createIcon(ArrowRight01Icon);
+export const CheckIcon=createIcon(CheckmarkCircle03Icon);
+export const Check=createIcon(CheckmarkCircle03Icon);
+export const ChevronDownIcon=createIcon(ChevronDownGlyph);
+export const ChevronRightIcon=createIcon(ChevronRightGlyph);
+export const ChevronUpIcon=createIcon(ChevronUpGlyph);
+export const ChevronLeftIcon=createIcon(ArrowLeft01Icon);
+export const ChevronRight=createIcon(ChevronRightGlyph);
+export const CircleIcon=createIcon(CircleGlyph);
+export const CircleCheckIcon=createIcon(CheckmarkCircle03Icon);
+export const InfoIcon=createIcon(CircleGlyph);
+export const Loader2Icon=createIcon(Loading03Icon);
+export const MinusIcon=createIcon(MinusSignIcon);
+export const MoreHorizontal=createIcon(MoreHorizontalGlyph);
+export const MoreHorizontalIcon=createIcon(MoreHorizontalGlyph);
+export const OctagonXIcon=createIcon(Cancel01Icon);
+export const PanelLeftIcon=createIcon(PanelLeftGlyph);
+export const SearchIcon=createIcon(Search01Icon);
+export const TriangleAlertIcon=createIcon(Cancel01Icon);
+export const XIcon=createIcon(Cancel01Icon);

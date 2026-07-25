@@ -1,10 +1,27 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon, CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
 
 const Hero = () => {
   return (
     <div className="relative">
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-16 z-20 grid h-1 grid-cols-5"
+      >
+        <span className="bg-[var(--brand-primary)]" />
+        <span className="bg-[var(--brand-secondary)]" />
+        <span className="bg-[var(--brand-highlight)]" />
+        <span className="bg-[var(--brand-tertiary)]" />
+        <span className="bg-[var(--brand-neutral)]" />
+      </div>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
+        <div className="absolute -left-24 top-28 h-72 w-72 rounded-full bg-[var(--brand-secondary)] opacity-35 blur-3xl" />
+        <div className="absolute left-[38%] top-12 h-48 w-48 rounded-full bg-[var(--brand-highlight)] opacity-45 blur-3xl" />
+        <div className="absolute right-0 top-40 h-80 w-80 rounded-full bg-[var(--brand-tertiary)] opacity-20 blur-3xl" />
+      </div>
       <div className="hidden md:block pointer-events-none min-h-[60vh] sm:min-h-[85vh] absolute inset-0 -z-10">
         <div
           className="absolute inset-0"
@@ -30,97 +47,49 @@ const Hero = () => {
             {/* Version Badge */}
             <Badge
               variant="outline"
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/50 border border-slate-800 text-xs font-medium text-sky-400 mb-2 sm:mb-6"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-highlight)] border border-[var(--brand-tertiary)] text-[#443a13] text-xs font-medium mb-2 sm:mb-6"
             >
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-tertiary)] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-tertiary)]"></span>
               </span>
               v1.0.0 is now live
             </Badge>
 
-            {/* Headline with selective gradient */}
+            {/* Headline with the brand palette in the key phrase */}
             <h1 className="text-3xl leading-[1.15] tracking-tight font-light sm:text-5xl lg:text-6xl">
               Developer-first{" "}
-              <span className="bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent font-normal">
+              <span className="font-semibold text-foreground underline decoration-[var(--brand-tertiary)] decoration-4 underline-offset-8">
                 video infrastructure
               </span>
               .
             </h1>
 
             {/* Description */}
-            <p className="text-sm sm:text-base leading-relaxed text-white/70 max-w-lg">
+            <p className="text-sm sm:text-base leading-relaxed text-foreground/70 max-w-lg">
               Video hosting built for SaaS teams and startups. Upload,
               transcode, and stream with a lightweight SDK — with transparent
               pricing and no hidden playback or transcoding surprises.
             </p>
 
             {/* Capability Bullets */}
-            <ul className="space-y-2.5 sm:space-y-3 text-sm text-white/60">
+            <ul className="space-y-2.5 sm:space-y-3 text-sm text-foreground/60">
               <li className="flex items-center gap-3">
-                <svg
-                  className="h-4 w-4 text-blue-400 shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+                <HugeiconsIcon icon={CheckmarkCircle02Icon} size={16} color="var(--brand-tertiary)" strokeWidth={1.8} className="shrink-0" />
 
                 <span>One SDK to upload, encode, and stream globally</span>
               </li>
               <li className="flex items-center gap-3">
-                <svg
-                  className="h-4 w-4 text-blue-400 shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+                <HugeiconsIcon icon={CheckmarkCircle02Icon} size={16} color="var(--brand-primary)" strokeWidth={1.8} className="shrink-0" />
                 <span>Adaptive HLS playback optimized for performance</span>
               </li>
               <li className="flex items-center gap-3">
-                <svg
-                  className="h-4 w-4 text-blue-400 shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+                <HugeiconsIcon icon={CheckmarkCircle02Icon} size={16} color="var(--brand-secondary)" strokeWidth={1.8} className="shrink-0" />
                 <span>Built-in analytics, watermarking, and protection </span>
               </li>
 
               <li className="flex items-center gap-3">
-                <svg
-                  className="h-4 w-4 text-blue-400 shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+                <HugeiconsIcon icon={CheckmarkCircle02Icon} size={16} color="var(--brand-neutral)" strokeWidth={1.8} className="shrink-0" />
                 <span>
                   Transparent pricing — storage is yours, playback resets
                   monthly
@@ -133,7 +102,7 @@ const Hero = () => {
               {/* Primary CTA - Solid, minimal */}
               <Link
                 href="#get-started"
-                className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white shadow-sm transition-all hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#0b0d12]"
+                className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
               >
                 Start Free
               </Link>
@@ -141,22 +110,10 @@ const Hero = () => {
               {/* Secondary CTA - Ghost style */}
               <Link
                 href="#docs"
-                className="inline-flex justify-center md:justify-start items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-white"
+                className="inline-flex justify-center md:justify-start items-center gap-2 text-sm font-medium text-foreground/70 transition-colors hover:text-primary"
               >
                 View API docs
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
+                <HugeiconsIcon icon={ArrowRight01Icon} size={16} color="currentColor" strokeWidth={1.8} />
               </Link>
             </div>
           </div>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { ChevronRight, Eye, Clock, Users, TrendingUp } from "lucide-react";
+import { ChevronRight, Eye, Clock, Users, TrendingUp } from "@/components/common/icons";
 import {
   AreaChart,
   Area,
@@ -76,9 +76,9 @@ const topVideos = [
 ];
 
 const deviceData = [
-  { name: "Desktop", value: 58, color: "#3b82f6" },
-  { name: "Mobile", value: 31, color: "#10b981" },
-  { name: "Tablet", value: 11, color: "#a855f7" },
+  { name: "Desktop", value: 58, color: "var(--chart-1)" },
+  { name: "Mobile", value: 31, color: "var(--chart-3)" },
+  { name: "Tablet", value: 11, color: "var(--chart-2)" },
 ];
 
 const browserData = [
@@ -124,10 +124,9 @@ const overviewStats = [
 ];
 
 const badgeClasses: Record<string, string> = {
-  blue: "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400",
-  green: "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400",
-  purple:
-    "bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400",
+  blue: "bg-[#276a8f] text-white",
+  green: "palette-live",
+  purple: "palette-info",
 };
 
 const rangeLabels = {
@@ -144,23 +143,23 @@ export default function AnalyticsPage() {
   const [range, setRange] = useState<"7d" | "30d" | "90d">("30d");
   const { isLoaded } = useUser();
 
-  const axisColor = isDark ? "#6b7280" : "#9ca3af";
-  const gridColor = isDark ? "#1f2023" : "#e5e7eb";
-  const tooltipBg = isDark ? "#101217" : "#ffffff";
-  const tooltipBorder = isDark ? "#1f2023" : "#e5e7eb";
-  const tooltipText = isDark ? "#ffffff" : "#111827";
+  const axisColor = "var(--muted-foreground)";
+  const gridColor = "var(--border)";
+  const tooltipBg = "var(--popover)";
+  const tooltipBorder = "var(--border)";
+  const tooltipText = "var(--popover-foreground)";
 
   if (!isLoaded) return null;
 
   return (
-    <div className="text-black dark:text-white">
+    <div className="text-foreground">
       {/* Breadcrumb */}
-      <nav className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-6">
+      <nav className="flex items-center text-sm text-muted-foreground mb-6">
         <Link href="/" className="hover:underline">
           Dashboard
         </Link>
         <ChevronRight size={16} className="mx-2" />
-        <span className="text-gray-700 dark:text-gray-300 font-medium">
+        <span className="text-foreground font-medium">
           Analytics
         </span>
       </nav>
@@ -168,7 +167,7 @@ export default function AnalyticsPage() {
       {/* Title */}
       <div className="space-y-1 mb-6">
         <h1 className="text-2xl font-semibold">Analytics</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-sm text-muted-foreground">
           Track views, engagement, and audience insights across your video
           library.
         </p>
@@ -182,8 +181,8 @@ export default function AnalyticsPage() {
             onClick={() => setRange(r)}
             className={`cursor-pointer px-3 py-1.5 text-sm font-medium rounded-lg border transition-colors ${
               range === r
-                ? "bg-blue-600 border-blue-600 text-white"
-                : "bg-white dark:bg-[#101217] border-gray-200 dark:border-[#1f2023] text-gray-600 dark:text-gray-400 hover:border-blue-400 dark:hover:border-blue-600"
+                ? "bg-primary border-primary text-white"
+                : "bg-card border-border text-muted-foreground hover:border-primary dark:hover:border-primary"
             }`}
           >
             {rangeLabels[r]}
@@ -197,10 +196,10 @@ export default function AnalyticsPage() {
           ({ label, value, change, positive, icon: Icon, badge }) => (
             <div
               key={label}
-              className="rounded-xl bg-white dark:bg-[#101217] border border-gray-200 dark:border-[#1f2023] shadow-sm p-5 flex flex-col gap-3"
+              className="rounded-xl bg-card border border-border shadow-sm p-5 flex flex-col gap-3"
             >
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                <p className="text-sm font-medium text-muted-foreground">
                   {label}
                 </p>
                 <span
@@ -210,11 +209,11 @@ export default function AnalyticsPage() {
                   {label.split(" ")[0]}
                 </span>
               </div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-3xl font-bold text-foreground">
                 {value}
               </h2>
               <p
-                className={`text-xs font-medium ${positive ? "text-green-500" : "text-red-400"}`}
+                className={`text-xs font-medium ${positive ? "text-[var(--brand-tertiary-readable)]" : "text-destructive"}`}
               >
                 {change} vs last period
               </p>
@@ -224,10 +223,10 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Views Over Time — Area Chart */}
-      <div className="mt-10 rounded-xl bg-white dark:bg-[#101217] border border-gray-200 dark:border-[#1f2023] shadow-sm p-5">
+      <div className="mt-10 rounded-xl bg-card border border-border shadow-sm p-5">
         <div className="mb-4">
           <h2 className="text-lg font-semibold">Views Over Time</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-muted-foreground">
             Daily views for the {rangeLabels[range].toLowerCase()}
           </p>
         </div>
@@ -238,8 +237,8 @@ export default function AnalyticsPage() {
           >
             <defs>
               <linearGradient id="viewsGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.25} />
-                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                <stop offset="5%" stopColor="var(--chart-1)" stopOpacity={0.25} />
+                <stop offset="95%" stopColor="var(--chart-1)" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid
@@ -272,11 +271,11 @@ export default function AnalyticsPage() {
             <Area
               type="monotone"
               dataKey="views"
-              stroke="#3b82f6"
+              stroke="var(--chart-1)"
               strokeWidth={2}
               fill="url(#viewsGradient)"
               dot={false}
-              activeDot={{ r: 4, fill: "#3b82f6", stroke: "none" }}
+              activeDot={{ r: 4, fill: "var(--chart-1)", stroke: "none" }}
             />
           </AreaChart>
         </ResponsiveContainer>
@@ -285,26 +284,26 @@ export default function AnalyticsPage() {
       {/* Top Videos Table */}
       <div className="mt-10">
         <h2 className="text-lg font-semibold mb-1">Top Videos</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           Best performing videos in the selected period.
         </p>
-        <div className="rounded-xl border border-gray-200 dark:border-[#1f2023] bg-white dark:bg-[#101217] shadow-sm overflow-hidden">
+        <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
           <table className="min-w-full divide-y divide-gray-100 dark:divide-gray-800">
             <thead>
               <tr>
-                <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wide uppercase">
+                <th className="px-5 py-3 text-left text-xs font-semibold text-muted-foreground tracking-wide uppercase">
                   #
                 </th>
-                <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wide uppercase">
+                <th className="px-5 py-3 text-left text-xs font-semibold text-muted-foreground tracking-wide uppercase">
                   Video Title
                 </th>
-                <th className="px-5 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wide uppercase">
+                <th className="px-5 py-3 text-right text-xs font-semibold text-muted-foreground tracking-wide uppercase">
                   Views
                 </th>
-                <th className="px-5 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wide uppercase">
+                <th className="px-5 py-3 text-right text-xs font-semibold text-muted-foreground tracking-wide uppercase">
                   Watch Time
                 </th>
-                <th className="px-5 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wide uppercase">
+                <th className="px-5 py-3 text-right text-xs font-semibold text-muted-foreground tracking-wide uppercase">
                   Avg Duration
                 </th>
               </tr>
@@ -313,21 +312,21 @@ export default function AnalyticsPage() {
               {topVideos.map((row, index) => (
                 <tr
                   key={index}
-                  className="group hover:bg-blue-50 dark:hover:bg-[#1c1f23] transition-colors"
+                  className="group hover:bg-primary/10 transition-colors"
                 >
-                  <td className="px-5 py-3 text-sm font-bold text-gray-400 dark:text-gray-500">
+                  <td className="px-5 py-3 text-sm font-bold text-muted-foreground">
                     {["🥇", "🥈", "🥉"][index] ?? index + 1}
                   </td>
-                  <td className="px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200">
+                  <td className="px-5 py-3 text-sm font-medium text-foreground">
                     {row.title}
                   </td>
-                  <td className="px-5 py-3 text-right text-sm font-semibold text-blue-600 dark:text-blue-400">
+                  <td className="px-5 py-3 text-right text-sm font-semibold text-[var(--brand-primary-readable)]">
                     {row.views.toLocaleString()}
                   </td>
-                  <td className="px-5 py-3 text-right text-sm text-gray-500 dark:text-gray-400">
+                  <td className="px-5 py-3 text-right text-sm text-muted-foreground">
                     {row.watchTime}
                   </td>
-                  <td className="px-5 py-3 text-right text-sm text-gray-500 dark:text-gray-400">
+                  <td className="px-5 py-3 text-right text-sm text-muted-foreground">
                     {row.avgDuration}
                   </td>
                 </tr>
@@ -340,9 +339,9 @@ export default function AnalyticsPage() {
       {/* Device & Browser Breakdown */}
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Device Breakdown — Donut Chart */}
-        <div className="rounded-xl bg-white dark:bg-[#101217] border border-gray-200 dark:border-[#1f2023] shadow-sm p-5">
+        <div className="rounded-xl bg-card border border-border shadow-sm p-5">
           <h2 className="text-lg font-semibold mb-1">Device Breakdown</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          <p className="text-sm text-muted-foreground mb-4">
             Share by device type
           </p>
           <div className="flex items-center gap-6">
@@ -369,8 +368,8 @@ export default function AnalyticsPage() {
                     fontSize: "12px",
                     color: tooltipText,
                   }}
-                  formatter={(value: number | undefined) => [
-                    `${value ?? 0}%`,
+                  formatter={(value) => [
+                    `${Number(value ?? 0)}%`,
                     "",
                   ]}
                 />
@@ -383,10 +382,10 @@ export default function AnalyticsPage() {
                     className="w-2.5 h-2.5 rounded-full shrink-0"
                     style={{ backgroundColor: color }}
                   />
-                  <span className="text-sm text-gray-600 dark:text-gray-300">
+                  <span className="text-sm text-muted-foreground">
                     {name}
                   </span>
-                  <span className="ml-auto text-sm font-semibold text-gray-800 dark:text-white pl-4">
+                  <span className="ml-auto text-sm font-semibold text-foreground pl-4">
                     {value}%
                   </span>
                 </div>
@@ -396,9 +395,9 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Browser Breakdown — Horizontal Bar */}
-        <div className="rounded-xl bg-white dark:bg-[#101217] border border-gray-200 dark:border-[#1f2023] shadow-sm p-5">
+        <div className="rounded-xl bg-card border border-border shadow-sm p-5">
           <h2 className="text-lg font-semibold mb-1">Browser Breakdown</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          <p className="text-sm text-muted-foreground mb-4">
             Share by browser
           </p>
           <ResponsiveContainer width="100%" height={180}>
@@ -436,15 +435,15 @@ export default function AnalyticsPage() {
                   fontSize: "12px",
                   color: tooltipText,
                 }}
-                formatter={(value: number | undefined) => [
-                  `${value ?? 0}%`,
+                formatter={(value) => [
+                  `${Number(value ?? 0)}%`,
                   "Share",
                 ]}
-                cursor={{ fill: isDark ? "#1c1f23" : "#f0f7ff" }}
+                cursor={{ fill: "var(--muted)" }}
               />
               <Bar
                 dataKey="share"
-                fill="#3b82f6"
+                fill="var(--brand-primary)"
                 radius={[0, 4, 4, 0]}
                 maxBarSize={20}
               />
@@ -456,10 +455,10 @@ export default function AnalyticsPage() {
       {/* Geographic Distribution */}
       <div className="mt-10">
         <h2 className="text-lg font-semibold mb-1">Geographic Distribution</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           Viewer locations based on the last 28 days of data.
         </p>
-        <div className="rounded-xl bg-white dark:bg-[#101217] border border-gray-200 dark:border-[#1f2023] shadow-sm p-5 overflow-hidden">
+        <div className="rounded-xl bg-card border border-border shadow-sm p-5 overflow-hidden">
           <GeographicalMap />
         </div>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { ChevronRight, CreditCard, Download, ExternalLink } from "lucide-react";
+import { ChevronRight, CreditCard, Download, ExternalLink } from "@/components/common/icons";
 import Link from "next/link";
 import PaymentCard from "../../components/cards/payment.card";
 import AddOnCard from "../../components/cards/addon.card";
@@ -35,14 +35,14 @@ const Page = () => {
   }
 
   return (
-    <div className="text-black dark:dark:text-white">
+    <div className="text-foreground dark:dark:text-foreground">
       {/* Breadcrumb */}
-      <nav className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-6">
+      <nav className="flex items-center text-sm text-muted-foreground mb-6">
         <Link href="/" className="hover:underline">
           Dashboard
         </Link>
         <ChevronRight size={16} className="mx-2" />
-        <span className="text-gray-700 dark:text-gray-300 font-medium">
+        <span className="text-foreground font-medium">
           Billing
         </span>
       </nav>
@@ -50,23 +50,23 @@ const Page = () => {
       {/* Title */}
       <div className="space-y-1 mb-6">
         <h1 className="text-2xl font-semibold">Billing Settings</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md">
+        <p className="text-sm text-muted-foreground max-w-md">
           Track your current plan and manage subscription settings.
         </p>
       </div>
 
       {/* Manage Billing Card */}
-      <div className="flex items-center justify-between rounded-md p-5 mb-6 border border-gray-200 dark:border-[#1f2023] dark:bg-[#101217]">
+      <div className="flex items-center justify-between rounded-md p-5 mb-6 border border-border bg-card">
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20">
+          <div className="palette-info flex items-center justify-center w-10 h-10 rounded-full">
             <CreditCard
               size={20}
-              className="text-blue-600 dark:text-blue-400"
+              className="text-[var(--brand-primary-readable)]"
             />
           </div>
           <div>
             <h3 className="text-sm font-semibold">Manage Billing</h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-muted-foreground">
               Manage your payment methods and billing details through Stripe.
             </p>
           </div>
@@ -75,7 +75,7 @@ const Page = () => {
           onClick={() => {
             // TODO: redirect to Stripe customer portal
           }}
-          className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md border border-gray-300 dark:border-slate-800 hover:bg-gray-100 dark:hover:bg-slate-900/50 transition-colors"
+          className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md border border-border hover:bg-muted dark:hover:bg-secondary/50 transition-colors"
         >
           <ExternalLink size={14} />
           Open Stripe Portal
@@ -83,32 +83,32 @@ const Page = () => {
       </div>
 
       {/* Current Plan */}
-      <div className="dark:bg-[#101217] rounded-md p-5 mb-6 border border-gray-200 dark:border-[#1f2023]">
+      <div className="bg-card rounded-md p-5 mb-6 border border-border">
         <div className="mb-4">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-2">
+          <h2 className="text-xl font-bold text-foreground mb-2">
             Choose the Plan That Fits Your Needs
           </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-muted-foreground">
             Upgrade to unlock more bandwidth, storage, and premium features like{" "}
             <br />
             custom watermark, ad-free player, and real-time support.
           </p>
         </div>
 
-        <div className="flex items-center gap-6 mb-8 border-b border-gray-200 dark:border-slate-700">
+        <div className="flex items-center gap-6 mb-8 border-b border-border">
           {["monthly", "yearly"].map((cycle) => (
             <button
               key={cycle}
               onClick={() => setBillingCycle(cycle as "monthly" | "yearly")}
               className={`relative pb-2 text-sm font-medium transition-all ${
                 billingCycle === cycle
-                  ? "text-indigo-500 after:absolute after:left-0 after:bottom-0 after:w-full after:h-0.5 after:bg-indigo-500"
-                  : "text-gray-500 dark:text-gray-400 hover:text-white"
+                  ? "text-[var(--brand-primary-readable)] after:absolute after:left-0 after:bottom-0 after:w-full after:h-0.5 after:bg-[var(--brand-tertiary)]"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {cycle === "monthly" ? "Monthly" : "Yearly"}
               {cycle === "yearly" && (
-                <span className="ml-1 text-xs text-green-500">(Save 10%)</span>
+                <span className="palette-live ml-2 rounded-full px-2 py-0.5 text-xs">Save 10%</span>
               )}
             </button>
           ))}
@@ -181,11 +181,11 @@ const Page = () => {
         </div>
       </div>
 
-      <div className="dark:bg-[#101217] rounded-md mb-6 p-5 border border-gray-200 dark:border-[#1f2023]">
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-1">
+      <div className="bg-card rounded-md mb-6 p-5 border border-border">
+        <h2 className="text-lg font-semibold text-foreground mb-1">
           Add-ons
         </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
+        <p className="text-sm text-muted-foreground mb-5">
           Extend your bandwidth and storage as your needs grow. Add flexibility
           with custom top-ups.
         </p>
@@ -208,11 +208,11 @@ const Page = () => {
           />
 
           {/* Custom Add-on Card */}
-          <div className="rounded-md border border-slate-300 dark:border-slate-800/50 p-4 bg-white dark:bg-slate-900">
-            <h3 className="text-sm font-semibold text-gray-800 dark:text-white mb-2">
+          <div className="rounded-md border border-border p-4 bg-card dark:bg-card">
+            <h3 className="text-sm font-semibold text-foreground mb-2">
               Extra Playback Minutes
             </h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+            <p className="text-xs text-muted-foreground mb-3">
               $5 = 2000 Minutes Playback Add as many Playback Minutes as you
               want.
             </p>
@@ -222,9 +222,9 @@ const Page = () => {
                 min={5}
                 step={5}
                 placeholder="Enter $ amount"
-                className="px-3 py-1.5 text-sm rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-200"
+                className="px-3 py-1.5 text-sm rounded-md border border-border bg-card dark:bg-muted text-foreground"
               />
-              <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
+              <button className="bg-primary hover:bg-primary/90 text-white text-sm font-medium px-4 py-2 rounded-md transition">
                 Add Playback Minutes
               </button>
             </div>
@@ -249,11 +249,11 @@ const Page = () => {
           />
 
           {/* Custom Add-on Card */}
-          <div className="rounded-md border border-slate-300 dark:border-slate-800/50 p-4 bg-white dark:bg-slate-900">
-            <h3 className="text-sm font-semibold text-gray-800 dark:text-white mb-2">
+          <div className="rounded-md border border-border p-4 bg-card dark:bg-card">
+            <h3 className="text-sm font-semibold text-foreground mb-2">
               Custom Storage
             </h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+            <p className="text-xs text-muted-foreground mb-3">
               $5 = 200GB. Add as much storage as you want.
             </p>
             <div className="flex flex-col gap-2">
@@ -262,9 +262,9 @@ const Page = () => {
                 min={5}
                 step={5}
                 placeholder="Enter $ amount"
-                className="px-3 py-1.5 text-sm rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-200"
+                className="px-3 py-1.5 text-sm rounded-md border border-border bg-card dark:bg-muted text-foreground"
               />
-              <button className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
+              <button className="cursor-pointer bg-primary hover:bg-primary/90 text-white text-sm font-medium px-4 py-2 rounded-md transition">
                 Add Storage
               </button>
             </div>
@@ -273,12 +273,12 @@ const Page = () => {
       </div>
 
       {/* Transaction History */}
-      <div className="dark:bg-[#101217] rounded-md p-5 border border-gray-200 dark:border-[#1f2023]">
-        <h3 className="text-sm font-medium dark:text-white mb-4">
+      <div className="bg-card rounded-md p-5 border border-border">
+        <h3 className="text-sm font-medium dark:text-foreground mb-4">
           Transaction History
         </h3>
         <table className="w-full text-sm text-left">
-          <thead className="text-xs uppercase text-gray-500 border-b border-gray-200 dark:border-slate-800">
+          <thead className="text-xs uppercase text-muted-foreground border-b border-border">
             <tr>
               <th className="py-2 font-medium">Date</th>
               <th className="py-2 font-medium">Plan</th>
@@ -291,7 +291,7 @@ const Page = () => {
             {transactions.map((txn, idx) => (
               <tr
                 key={idx}
-                className="border-b border-gray-100 dark:border-[#1f2023] hover:bg-gray-100 dark:hover:bg-[#0e0f13] text-gray-700 dark:text-gray-300"
+                className="border-b border-border hover:bg-muted dark:hover:bg-primary/10 text-foreground"
               >
                 <td className="py-3">{txn.date}</td>
                 <td className="py-3">{txn.plan}</td>
@@ -299,8 +299,8 @@ const Page = () => {
                 <td
                   className={`py-3 font-medium ${
                     txn.status.toLowerCase() === "paid"
-                      ? "text-green-500"
-                      : "text-red-500"
+                      ? "palette-live px-2 py-1"
+                      : "text-destructive"
                   }`}
                 >
                   {txn.status}
@@ -308,7 +308,7 @@ const Page = () => {
                 <td className="py-3">
                   <button
                     onClick={() => alert("TODO: Download invoice")}
-                    className="inline-flex cursor-pointer items-center gap-1 text-blue-500 hover:underline"
+                    className="inline-flex cursor-pointer items-center gap-1 text-[var(--brand-primary-readable)] hover:underline"
                   >
                     <Download className="w-4 h-4" />
                     Download

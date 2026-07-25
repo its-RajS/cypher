@@ -9,7 +9,7 @@ import {
   PlaySquare,
   UploadCloud,
   X,
-} from "lucide-react";
+} from "@/components/common/icons";
 import Link from "next/link";
 import React, { useState } from "react";
 
@@ -74,14 +74,14 @@ export default function PlayerSettingsPage() {
   };
 
   return (
-    <div className="text-black dark:text-white">
+    <div className="text-foreground">
       {/* Breadcrumb */}
-      <nav className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-6">
+      <nav className="flex items-center text-sm text-muted-foreground mb-6">
         <Link href="/" className="hover:underline">
           Dashboard
         </Link>
         <ChevronRight size={16} className="mx-2" />
-        <span className="text-gray-700 dark:text-gray-300 font-medium">
+        <span className="text-foreground font-medium">
           Player Settings
         </span>
       </nav>
@@ -89,7 +89,7 @@ export default function PlayerSettingsPage() {
       {/* Title */}
       <div className="space-y-1 mb-8">
         <h1 className="text-2xl font-semibold">Player Settings</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 max-w-[500px]">
+        <p className="text-sm text-muted-foreground max-w-[500px]">
           Customize your video player’s appearance and behavior for a seamless
           brand experience.
         </p>
@@ -97,17 +97,17 @@ export default function PlayerSettingsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Player Language */}
-        <div className="bg-white dark:bg-slate-900/50 rounded-md p-4 border border-slate-200 dark:border-slate-900">
+        <div className="bg-card dark:bg-card rounded-md p-4 border border-border">
           <label className="text-sm font-semibold mb-1 block">
             Player UI Language
           </label>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+          <p className="text-xs text-muted-foreground mb-2">
             Select the UI language that will be displayed in the video player.
           </p>
           <select
             value={selectedLanguage}
             onChange={(e) => setSelectedLanguage(e.target.value)}
-            className="w-full bg-slate-100 dark:bg-slate-800/50 text-sm px-3 py-2 rounded-md"
+            className="w-full bg-muted dark:bg-muted text-sm px-3 py-2 rounded-md"
           >
             {languages.map((lang) => (
               <option key={lang}>{lang}</option>
@@ -116,17 +116,17 @@ export default function PlayerSettingsPage() {
         </div>
 
         {/* Player Font */}
-        <div className="bg-white dark:bg-slate-900/50 rounded-md p-4 border border-slate-200 dark:border-slate-900">
+        <div className="bg-card dark:bg-card rounded-md p-4 border border-border">
           <label className="text-sm font-semibold mb-1 block">
             Font Family
           </label>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+          <p className="text-xs text-muted-foreground mb-2">
             Select the font family that will be used in the video player.
           </p>
           <select
             value={selectedFont}
             onChange={(e) => setSelectedFont(e.target.value)}
-            className="w-full bg-slate-100 dark:bg-slate-800/50 text-sm px-3 py-2 rounded-md"
+            className="w-full bg-muted dark:bg-muted text-sm px-3 py-2 rounded-md"
           >
             {fonts.map((font) => (
               <option key={font}>{font}</option>
@@ -135,11 +135,11 @@ export default function PlayerSettingsPage() {
         </div>
 
         {/* Primary Colors */}
-        <div className="bg-white dark:bg-slate-900/50 rounded-md p-4 border border-slate-200 dark:border-slate-900">
+        <div className="bg-card dark:bg-card rounded-md p-4 border border-border">
           <label className="text-sm font-semibold mb-1 block">
             Primary Player Colors
           </label>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+          <p className="text-xs text-muted-foreground mb-3">
             Primary color will be displayed for the controls.
           </p>
           <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -149,8 +149,8 @@ export default function PlayerSettingsPage() {
                 onClick={() => setPrimaryColor(color)}
                 className={`w-6 h-6 rounded-full ${
                   primaryColor === color
-                    ? "ring-2 ring-indigo-500"
-                    : "ring-1 ring-gray-300"
+                    ? "ring-2 ring-ring"
+                    : "ring-1 ring-border"
                 }`}
                 style={{ backgroundColor: color }}
                 aria-label={`Select ${color}`}
@@ -161,7 +161,7 @@ export default function PlayerSettingsPage() {
             {/* Custom trigger */}
             <label
               htmlFor="color-input"
-              className="w-8 h-8 rounded-full cursor-pointer border-2 border-slate-400"
+              className="w-8 h-8 rounded-full cursor-pointer border-2 border-border"
               style={{ backgroundColor: primaryColor }}
             />
 
@@ -179,17 +179,17 @@ export default function PlayerSettingsPage() {
               type="text"
               value={primaryColor}
               onChange={(e) => setPrimaryColor(e.target.value)}
-              className="w-24 text-sm px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600"
+              className="w-24 text-sm px-2 py-1 rounded-md bg-muted dark:bg-muted border border-border"
             />
           </div>
         </div>
 
         {/* Captions Appearance */}
-        <div className="bg-white dark:bg-slate-900/50 rounded-md p-4 border border-slate-200 dark:border-slate-900">
+        <div className="bg-card dark:bg-card rounded-md p-4 border border-border">
           <label className="text-sm font-semibold mb-1 block">
             Captions Appearance
           </label>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+          <p className="text-xs text-muted-foreground mb-3">
             Configure the captions appearance.
           </p>
           <div className="space-y-3">
@@ -215,7 +215,7 @@ export default function PlayerSettingsPage() {
                 type="number"
                 value={fontSize}
                 onChange={(e) => setFontSize(Number(e.target.value))}
-                className="w-20 px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-700"
+                className="w-20 px-2 py-1 rounded-md bg-muted dark:bg-muted"
               />
             </div>
           </div>
@@ -223,21 +223,21 @@ export default function PlayerSettingsPage() {
       </div>
 
       <div className="md:flex w-full justify-between flex-wrap">
-        <div className="md:w-[49%] md:h-52.5 bg-white dark:bg-slate-900/50 rounded-md p-5 border border-slate-200 dark:border-slate-900 mt-10">
+        <div className="md:w-[49%] md:h-52.5 bg-card dark:bg-card rounded-md p-5 border border-border mt-10">
           <h3 className="text-sm font-semibold mb-2">Play Button Icon</h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+          <p className="text-xs text-muted-foreground mb-4">
             Personalize your video player&apos;s play button. Use a preset or
             upload your own SVG/logo.
           </p>
 
           {/* Toggle Preset vs Upload */}
-          <div className="inline-flex rounded-md bg-slate-100 dark:bg-slate-900 p-1 mb-4">
+          <div className="inline-flex rounded-md bg-muted dark:bg-card p-1 mb-4">
             <button
               onClick={() => setUseCustomIcon(false)}
               className={`text-sm px-4 py-1.5 rounded-md transition-all ${
                 !useCustomIcon
-                  ? "bg-white dark:bg-slate-800 dark:shadow dark:text-gray-200 text-slate-800 font-semibold"
-                  : "text-gray-500 dark:text-gray-300 hover:text-indigo-500"
+                  ? "bg-card dark:bg-muted dark:shadow dark:text-muted-foreground text-muted-foreground font-semibold"
+                  : "text-muted-foreground hover:text-[var(--brand-primary-readable)]"
               }`}
             >
               Preset Icons
@@ -246,8 +246,8 @@ export default function PlayerSettingsPage() {
               onClick={() => setUseCustomIcon(true)}
               className={`text-sm px-4 py-1.5 rounded-md transition-all ${
                 useCustomIcon
-                  ? "bg-white dark:bg-slate-700 dark:shadow dark:text-gray-200 text-slate-800 font-semibold"
-                  : "text-gray-500 dark:text-gray-300 hover:text-indigo-500"
+                  ? "bg-card dark:bg-muted dark:shadow dark:text-muted-foreground text-muted-foreground font-semibold"
+                  : "text-muted-foreground hover:text-[var(--brand-primary-readable)]"
               }`}
             >
               Upload SVG/Image
@@ -267,8 +267,8 @@ export default function PlayerSettingsPage() {
                   onClick={() => setSelectedPlayIcon(label)}
                   className={`flex items-center justify-center gap-2 px-4 py-2 text-sm rounded-md border transition-all ${
                     selectedPlayIcon === label
-                      ? "bg-indigo-600 text-white border-indigo-600"
-                      : "bg-slate-100 dark:bg-slate-800/50 border-slate-300 dark:border-slate-800 text-gray-700 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-slate-800"
+                      ? "bg-primary text-white border-primary"
+                      : "bg-muted dark:bg-muted border-border text-foreground hover:bg-muted dark:hover:bg-secondary"
                   }`}
                 >
                   {icon}
@@ -281,7 +281,7 @@ export default function PlayerSettingsPage() {
           {/* Upload */}
           {useCustomIcon && (
             <div className="space-y-3">
-              <label className="text-sm font-medium text-gray-600 dark:text-gray-300 flex items-center gap-1">
+              <label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
                 <UploadCloud size={16} />
                 Upload SVG or transparent PNG
               </label>
@@ -289,18 +289,18 @@ export default function PlayerSettingsPage() {
                 type="file"
                 accept="image/svg+xml,image/png"
                 onChange={(e) => setCustomIconFile(e.target.files?.[0] || null)}
-                className="block w-full text-sm text-gray-500 dark:text-gray-400"
+                className="block w-full text-sm text-muted-foreground"
               />
               {customIconFile && (
                 <div className="mt-3 flex items-center gap-3">
                   <ImageIcon
                     size={20}
-                    className="text-gray-400 dark:text-gray-500"
+                    className="text-muted-foreground"
                   />
                   <img
                     src={URL.createObjectURL(customIconFile)}
                     alt="Custom Play Icon"
-                    className="w-10 h-10 object-contain border border-gray-300 dark:border-gray-600 rounded"
+                    className="w-10 h-10 object-contain border border-border rounded"
                   />
                 </div>
               )}
@@ -309,11 +309,11 @@ export default function PlayerSettingsPage() {
         </div>
 
         {/* Player Controls */}
-        <div className="md:w-[49%] mt-10 bg-white dark:bg-slate-900/50 rounded-md p-4 border border-slate-200 dark:border-slate-900">
+        <div className="md:w-[49%] mt-10 bg-card dark:bg-card rounded-md p-4 border border-border">
           <label className="text-sm font-semibold mb-1 block">
             Player Controls
           </label>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+          <p className="text-xs text-muted-foreground mb-4">
             Select the UI controls that will be displayed on the player.
           </p>
           <div className="flex items-center gap-4 flex-wrap">
@@ -323,14 +323,14 @@ export default function PlayerSettingsPage() {
                 onClick={() => toggleControl(control)}
                 className={`px-3 flex items-center gap-1.5 py-2 text-sm rounded-md border transition-all ${
                   enabledControls.includes(control)
-                    ? "bg-slate-800 text-white border-slate-800"
-                    : "bg-slate-100 dark:bg-slate-600 text-gray-600 dark:text-gray-300 border-slate-300 dark:border-slate-700"
+                    ? "palette-info"
+                    : "bg-muted dark:bg-muted text-muted-foreground border-border"
                 }`}
               >
                 {enabledControls.includes(control) ? (
-                  <Check size={14} className="shrink-0 text-green-500" />
+                  <Check size={14} className="shrink-0 text-[var(--brand-primary-readable)]" />
                 ) : (
-                  <X size={14} className="shrink-0 text-red-500" />
+                  <X size={14} className="shrink-0 text-destructive" />
                 )}
                 {control}
               </button>
@@ -345,7 +345,7 @@ export default function PlayerSettingsPage() {
           onClick={() => {
             console.log("Settings saved!");
           }}
-          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 transition text-white rounded-md text-sm font-semibold shadow-md"
+          className="px-5 py-2.5 bg-primary hover:bg-primary/90 transition text-white rounded-md text-sm font-semibold shadow-md"
         >
           Save Changes
         </button>

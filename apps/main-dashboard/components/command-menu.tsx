@@ -13,7 +13,7 @@ import {
   Globe,
   Server,
   Zap,
-} from "lucide-react";
+} from "@/components/common/icons";
 import { useRouter } from "next/navigation";
 
 export function CommandMenu({
@@ -48,39 +48,39 @@ export function CommandMenu({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh] bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh] bg-foreground/40 animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-2xl overflow-hidden rounded-xl border border-[#2A2A2A] bg-[#0A0A0A] shadow-2xl animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-2xl overflow-hidden rounded-xl border border-border bg-popover shadow-lg animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         <Command
-          className="flex h-full w-full flex-col overflow-hidden rounded-xl bg-transparent text-white"
+          className="flex h-full w-full flex-col overflow-hidden rounded-xl bg-transparent text-popover-foreground"
           loop
         >
           <div
-            className="flex items-center border-b border-[#1F1F1F] px-4"
+            className="flex items-center border-b border-border px-4"
             cmdk-input-wrapper=""
           >
             <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
             <Command.Input
               placeholder="Search for apps and commands..."
-              className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
               autoFocus
             />
             <div className="flex items-center gap-1">
-              <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-[#2A2A2A] bg-[#1F1F1F] px-1.5 font-mono text-[10px] font-medium text-neutral-400 opacity-100">
+              <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
                 <span className="text-xs">ESC</span>
               </kbd>
             </div>
           </div>
           <Command.List className="max-h-75 overflow-y-auto overflow-x-hidden p-2">
-            <Command.Empty className="py-6 text-center text-sm text-neutral-500">
+            <Command.Empty className="py-6 text-center text-sm text-muted-foreground">
               No results found.
             </Command.Empty>
 
             <Command.Group
               heading="Products"
-              className="text-xs font-medium text-neutral-500 px-2 py-1.5"
+              className="text-xs font-medium text-muted-foreground px-2 py-1.5"
             >
               <CommandItem
                 onSelect={() => runCommand(() => router.push("/logs"))}
@@ -120,11 +120,11 @@ export function CommandMenu({
               </CommandItem>
             </Command.Group>
 
-            <Command.Separator className="my-1 h-px bg-[#1F1F1F]" />
+            <Command.Separator className="my-1 h-px bg-accent" />
 
             <Command.Group
               heading="Platform"
-              className="text-xs font-medium text-neutral-500 px-2 py-1.5"
+              className="text-xs font-medium text-muted-foreground px-2 py-1.5"
             >
               <CommandItem onSelect={() => runCommand(() => router.push("/"))}>
                 <LayoutGrid className="mr-2 h-4 w-4" />
@@ -162,7 +162,7 @@ function CommandItem({
 }) {
   return (
     <Command.Item
-      className="relative flex cursor-pointer select-none items-center rounded-md px-2 py-2 text-sm outline-none data-[selected='true']:bg-[#1F1F1F] data-[selected='true']:text-white text-neutral-400 my-0.5 transition-colors"
+      className="relative flex cursor-pointer select-none items-center rounded-md px-2 py-2 text-sm outline-none data-[selected='true']:bg-accent data-[selected='true']:text-accent-foreground text-muted-foreground my-0.5 transition-colors"
       onSelect={onSelect}
     >
       {children}
