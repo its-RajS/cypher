@@ -15,7 +15,7 @@ const features = [
     color: "var(--brand-primary)",
     ink: "#ffffff",
     title: "Upload & Transcode",
-    desc: "Upload once. Vidmox handles encoding, adaptive HLS, and optimization for fast global playback.",
+    desc: "Upload once. Cypher handles encoding, adaptive HLS, and optimization for fast global playback.",
   },
   {
     icon: Search01Icon,

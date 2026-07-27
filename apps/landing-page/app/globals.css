@@ -145,6 +145,21 @@ body { font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSy
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @keyframes marquee-reverse { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 
+@keyframes hero-copy-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-copy-enter {
+  animation: hero-copy-in 800ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

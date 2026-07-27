@@ -1,8 +1,8 @@
 import React from "react";
-import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowRight01Icon, CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import HeroThreads from "@/components/hero/hero-threads";
 
 const Hero = () => {
   return (
@@ -17,92 +17,93 @@ const Hero = () => {
         <span className="bg-[var(--brand-tertiary)]" />
         <span className="bg-[var(--brand-neutral)]" />
       </div>
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
-        <div className="absolute -left-24 top-28 h-72 w-72 rounded-full bg-[var(--brand-secondary)] opacity-35 blur-3xl" />
-        <div className="absolute left-[38%] top-12 h-48 w-48 rounded-full bg-[var(--brand-highlight)] opacity-45 blur-3xl" />
-        <div className="absolute right-0 top-40 h-80 w-80 rounded-full bg-[var(--brand-tertiary)] opacity-20 blur-3xl" />
-      </div>
-      <div className="hidden md:block pointer-events-none min-h-[60vh] sm:min-h-[85vh] absolute inset-0 -z-10">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+      >
+        <div
+          className="absolute inset-y-0 right-0 w-full opacity-40 dark:opacity-80 sm:w-[68%]"
+          style={{
+            maskImage:
+              "linear-gradient(90deg, transparent 0%, black 28%, black 100%)",
+            WebkitMaskImage:
+              "linear-gradient(90deg, transparent 0%, black 28%, black 100%)",
+          }}
+        >
+          <HeroThreads />
+        </div>
         <div
           className="absolute inset-0"
           style={{
-            maskImage:
-              "radial-gradient(ellipse 70% 80% at 70% 50%, black 0%, black 35%, transparent 75%)",
-            WebkitMaskImage:
-              "radial-gradient(ellipse 70% 80% at 70% 50%, black 0%, black 35%, transparent 75%)",
+            background:
+              "linear-gradient(90deg, var(--background) 0%, color-mix(in srgb, var(--background) 94%, transparent) 42%, transparent 74%)",
           }}
-        >
-          <div
-            data-us-project="3eLGLP7pmQS4ozfklmrX"
-            className="absolute inset-0"
-            style={{ transform: "translateX(20%)" }}
-          ></div>
-        </div>
+        />
       </div>
 
-      <section className="relative flex min-h-[60vh] sm:min-h-[85vh] items-center overflow-hidden pt-20 pb-10 sm:pt-24">
-        <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 gap-12 px-5 sm:px-6 md:grid-cols-2 lg:gap-16">
+      <section className="relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden py-24 sm:py-28">
+        <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-14 px-5 sm:px-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(420px,0.95fr)] lg:gap-10">
           {/* Left Column - High Information Density */}
-          <div className="flex flex-col justify-center space-y-5 sm:space-y-8 animate-fadeSlideIn animation-delay-100">
+          <div className="hero-copy-enter flex max-w-2xl flex-col justify-center">
             {/* Version Badge */}
-            <Badge
-              variant="outline"
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-highlight)] border border-[var(--brand-tertiary)] text-[#443a13] text-xs font-medium mb-2 sm:mb-6"
-            >
+            <div className="inline-flex w-fit items-center gap-2.5 rounded-full border border-border/80 bg-background/80 px-3 py-1.5 text-xs backdrop-blur-sm">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-tertiary)] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-tertiary)]"></span>
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--brand-tertiary)] opacity-70" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--brand-tertiary)]" />
               </span>
-              v1.0.0 is now live
-            </Badge>
+              <span className="font-mono font-medium text-foreground">
+                Production API
+              </span>
+              <span className="text-muted-foreground">v1.0 live</span>
+            </div>
 
             {/* Headline with the brand palette in the key phrase */}
-            <h1 className="text-3xl leading-[1.15] tracking-tight font-light sm:text-5xl lg:text-6xl">
-              Developer-first{" "}
-              <span className="font-semibold text-foreground underline decoration-[var(--brand-tertiary)] decoration-4 underline-offset-8">
-                video infrastructure
+            <h1 className="mt-7 max-w-[14ch] text-[clamp(3.25rem,6vw,5.75rem)] font-light leading-[0.96] tracking-[-0.04em] [text-wrap:balance]">
+              Developer-first
+              <span className="mt-2 block font-semibold text-foreground">
+                video{" "}
+                <span className="underline decoration-[var(--brand-tertiary)] decoration-[0.08em] underline-offset-[0.12em]">
+                  infrastructure
+                </span>
+                .
               </span>
-              .
             </h1>
 
             {/* Description */}
-            <p className="text-sm sm:text-base leading-relaxed text-foreground/70 max-w-lg">
+            <p className="mt-7 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
               Video hosting built for SaaS teams and startups. Upload,
               transcode, and stream with a lightweight SDK — with transparent
               pricing and no hidden playback or transcoding surprises.
             </p>
 
             {/* Capability Bullets */}
-            <ul className="space-y-2.5 sm:space-y-3 text-sm text-foreground/60">
-              <li className="flex items-center gap-3">
-                <HugeiconsIcon icon={CheckmarkCircle02Icon} size={16} color="var(--brand-tertiary)" strokeWidth={1.8} className="shrink-0" />
-
-                <span>One SDK to upload, encode, and stream globally</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <HugeiconsIcon icon={CheckmarkCircle02Icon} size={16} color="var(--brand-primary)" strokeWidth={1.8} className="shrink-0" />
-                <span>Adaptive HLS playback optimized for performance</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <HugeiconsIcon icon={CheckmarkCircle02Icon} size={16} color="var(--brand-secondary)" strokeWidth={1.8} className="shrink-0" />
-                <span>Built-in analytics, watermarking, and protection </span>
-              </li>
-
-              <li className="flex items-center gap-3">
-                <HugeiconsIcon icon={CheckmarkCircle02Icon} size={16} color="var(--brand-neutral)" strokeWidth={1.8} className="shrink-0" />
-                <span>
-                  Transparent pricing — storage is yours, playback resets
-                  monthly
-                </span>
-              </li>
+            <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-foreground/75">
+              {["Upload once", "Adaptive HLS", "Predictable pricing"].map(
+                (item, index) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <span
+                      className="h-1.5 w-1.5 rounded-full"
+                      style={{
+                        background:
+                          index === 0
+                            ? "var(--brand-tertiary)"
+                            : index === 1
+                              ? "var(--brand-primary-readable)"
+                              : "var(--brand-secondary)",
+                      }}
+                    />
+                    {item}
+                  </li>
+                ),
+              )}
             </ul>
 
             {/* CTAs - Professional & Restrained */}
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center pt-2">
+            <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
               {/* Primary CTA - Solid, minimal */}
               <Link
                 href="#get-started"
-                className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
+                className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[var(--brand-tertiary)] px-6 text-sm font-semibold text-[#2e1108] shadow-sm transition-[transform,filter] duration-200 hover:-translate-y-0.5 hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
               >
                 Start Free
               </Link>
@@ -110,16 +111,22 @@ const Hero = () => {
               {/* Secondary CTA - Ghost style */}
               <Link
                 href="#docs"
-                className="inline-flex justify-center md:justify-start items-center gap-2 text-sm font-medium text-foreground/70 transition-colors hover:text-primary"
+                className="group inline-flex min-h-12 items-center justify-center gap-2 text-sm font-semibold text-foreground/70 transition-colors hover:text-foreground sm:justify-start"
               >
                 View API docs
-                <HugeiconsIcon icon={ArrowRight01Icon} size={16} color="currentColor" strokeWidth={1.8} />
+                <HugeiconsIcon
+                  icon={ArrowRight01Icon}
+                  size={16}
+                  color="currentColor"
+                  strokeWidth={1.8}
+                  className="transition-transform duration-200 group-hover:translate-x-1"
+                />
               </Link>
             </div>
           </div>
 
           {/* Right Column - Visual Space for Animation */}
-          <div className="relative hidden md:flex items-center justify-center animate-fadeSlideIn animation-delay-200"></div>
+          <div aria-hidden="true" className="hidden min-h-[520px] lg:block" />
         </div>
       </section>
     </div>

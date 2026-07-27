@@ -22,7 +22,7 @@ const faqs = [
   {
     question: "What video formats are supported?",
     answer:
-      "Vidmox supports MP4, WebM, and Ogg formats. Videos are automatically transcoded into multiple resolutions (360p, 480p, 720p, 1080p) for adaptive streaming.",
+      "Cypher supports MP4, WebM, and Ogg formats. Videos are automatically transcoded into multiple resolutions (360p, 480p, 720p, 1080p) for adaptive streaming.",
   },
   {
     question: "How do I embed videos on my website?",
@@ -37,12 +37,12 @@ const faqs = [
   {
     question: "How does billing work?",
     answer:
-      "Vidmox offers Free, Pro, Business, and Enterprise plans. You can manage your subscription and payment methods through the Billing page. All payments are processed securely via Stripe.",
+      "Cypher offers Free, Pro, Business, and Enterprise plans. You can manage your subscription and payment methods through the Billing page. All payments are processed securely via Stripe.",
   },
   {
     question: "How do I generate subtitles?",
     answer:
-      "When uploading a video, enable the 'Generate Subtitles' option. Vidmox uses AI to automatically generate accurate subtitles in multiple languages.",
+      "When uploading a video, enable the 'Generate Subtitles' option. Cypher uses AI to automatically generate accurate subtitles in multiple languages.",
   },
 ];
 
@@ -166,11 +166,11 @@ export default function SupportPage() {
             Send us a detailed message and we&apos;ll get back to you.
           </p>
           <a
-            href="mailto:support@vidmox.com"
+            href="mailto:support@Cypher.com"
             className="cursor-pointer w-full inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md border border-border hover:bg-muted dark:hover:bg-secondary transition-colors"
           >
             <Mail size={14} />
-            support@vidmox.com
+            support@Cypher.com
           </a>
         </div>
 

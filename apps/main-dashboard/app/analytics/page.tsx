@@ -44,7 +44,7 @@ const viewsData = [
 
 const topVideos = [
   {
-    title: "Getting Started with Vidmox",
+    title: "Getting Started with Cypher",
     views: 12840,
     watchTime: "4h 32m",
     avgDuration: "3:14",
@@ -62,7 +62,7 @@ const topVideos = [
     avgDuration: "5:01",
   },
   {
-    title: "Live Streaming with Vidmox",
+    title: "Live Streaming with Cypher",
     views: 6100,
     watchTime: "2h 48m",
     avgDuration: "4:22",

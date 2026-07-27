@@ -302,7 +302,7 @@ export default function SettingsPage() {
                   <div>
                     <div className="text-base font-medium">Delete Account</div>
                     <p className="text-sm text-destructive mt-0.5">
-                      Permanently delete your Vidmox account. This action cannot
+                      Permanently delete your Cypher account. This action cannot
                       be undone.
                     </p>
                   </div>
@@ -321,7 +321,7 @@ export default function SettingsPage() {
             <div className="text-base text-muted-foreground leading-relaxed space-y-3">
               <p>
                 Developer secret keys are used to programmatically access the
-                Vidmox API and embed secured videos. Do{" "}
+                Cypher API and embed secured videos. Do{" "}
                 <span className="text-foreground font-medium">not share</span> your
                 secret key publicly or with third parties.
               </p>
@@ -457,7 +457,7 @@ export default function SettingsPage() {
             </h2>
             <div className="text-sm text-muted-foreground space-y-3 text-center mb-6">
               <p>
-                Use this key to access Vidmox APIs, authenticate your app, and
+                Use this key to access Cypher APIs, authenticate your app, and
                 embed secured videos across your platform.
               </p>
               <p className="text-accent-foreground font-medium">

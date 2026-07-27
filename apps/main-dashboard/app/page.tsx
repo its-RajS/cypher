@@ -48,7 +48,7 @@ const Page = () => {
             🚀 Getting Started
           </h3>
           <p className="text-sm text-muted-foreground mb-6">
-            Complete these steps to get started with vidmox.
+            Complete these steps to get started with Cypher.
           </p>
           <div className="space-y-4">
             <div className="flex items-center gap-4 group cursor-pointer">

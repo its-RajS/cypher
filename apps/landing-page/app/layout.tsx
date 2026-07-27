@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vidmox — Developer-first Video Infrastructure",
+  title: "Cypher — Developer-first Video Infrastructure",
   description:
     "Modern APIs for ingesting, transcoding, and streaming video at scale. Ship upload flows, on-demand playback, and live pipelines without building your own media stack.",
 };
@@ -40,13 +40,6 @@ export default function RootLayout({
             src="https://code.iconify.design/3/3.1.0/iconify.min.js"
             strategy="lazyOnload"
           />
-
-          {/* UnicornStudio for animated background */}
-          <Script id="unicorn-studio" strategy="lazyOnload">
-            {`
-            !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head||document.body).appendChild(i)}}();
-          `}
-          </Script>
 
           {/* Scroll animation observer */}
           <Script id="scroll-observer" strategy="lazyOnload">

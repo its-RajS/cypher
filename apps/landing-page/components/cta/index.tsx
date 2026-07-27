@@ -15,7 +15,7 @@ export default function CTASection() {
                 </h2>
                 <p className="mx-auto max-w-2xl text-lg leading-8 text-[#5d5120] mb-10">
                     Join thousands of developers building the next generation of video
-                    applications with Vidmox. Start for free, upgrade as you grow.
+                    applications with Cypher. Start for free, upgrade as you grow.
                 </p>
 
                 <div className="flex items-center justify-center gap-x-6">

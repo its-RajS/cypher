@@ -26,7 +26,7 @@ export default function DeleteAccountModal({
         {/* Body */}
         <div className="px-5 py-4 space-y-4 text-sm text-muted-foreground">
           <p>
-            Deleting your Vidmox account is a{" "}
+            Deleting your Cypher account is a{" "}
             <strong className="text-foreground">permanent action</strong>. However,
             you will have <strong className="text-foreground">28 days</strong> to
             recover your account before it&apos;s permanently deleted.

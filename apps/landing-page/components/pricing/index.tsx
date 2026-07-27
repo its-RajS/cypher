@@ -20,7 +20,7 @@ const plans = [
       "720p resolution encoding",
       "API access",
       "Advanced analytics",
-      "Vidmox watermark",
+      "Cypher watermark",
       "Email support",
     ],
     cta: "Start Free",

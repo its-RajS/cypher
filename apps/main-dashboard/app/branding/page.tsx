@@ -41,7 +41,7 @@ const Page = () => {
           <div>
             <h3 className="text-sm font-semibold">Watermark Visibility</h3>
             <p className="text-xs text-muted-foreground">
-              The Vidmox watermark will be applied by default for free users.
+              The Cypher watermark will be applied by default for free users.
             </p>
           </div>
           <button
@@ -63,7 +63,7 @@ const Page = () => {
           <div className="text-sm text-foreground font-medium">
             {isProUser
               ? "Current Watermark Preview"
-              : "Vidmox Watermark (Default)"}
+              : "Cypher Watermark (Default)"}
           </div>
           <div className="dark:hidden md:w-25 opacity-[.50] inline-block">
             <LogoLight />

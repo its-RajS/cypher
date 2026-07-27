@@ -46,7 +46,7 @@ export default function Footer() {
               GitHub
             </Link>
             <Link
-              href="https://status.vidmox.com"
+              href="https://status.Cypher.com"
               target="_blank"
               className="hover:text-primary transition-colors"
             >
@@ -54,7 +54,7 @@ export default function Footer() {
             </Link>
           </div>
           <Link
-            href={"https://status.vidmox.com"}
+            href={"https://status.Cypher.com"}
             target="_blank"
             className="flex items-center gap-2"
           >

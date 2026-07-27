@@ -38,12 +38,12 @@ import { useUser } from "@clerk/nextjs";
 
 const mockVideo = {
   id: "vid123",
-  title: "Getting Started with Vidmox",
+  title: "Getting Started with Cypher",
   description:
-    "A comprehensive guide to uploading, managing, and embedding videos using Vidmox. Covers transcoding, adaptive streaming, analytics, and player customization.",
-  slug: "getting-started-with-vidmox",
+    "A comprehensive guide to uploading, managing, and embedding videos using Cypher. Covers transcoding, adaptive streaming, analytics, and player customization.",
+  slug: "getting-started-with-Cypher",
   playlist: "Frontend Development",
-  tags: ["tutorial", "vidmox", "video hosting", "streaming"],
+  tags: ["tutorial", "Cypher", "video hosting", "streaming"],
   status: "Published",
   uploadedAt: "Jun 12, 2025",
   duration: "12:34",
@@ -136,7 +136,7 @@ export default function VideoDetailsPage() {
   const tooltipBorder = "var(--border)";
   const tooltipText = "var(--popover-foreground)";
 
-  const embedCode = `<iframe src="https://player.vidmox.com/embed/${videoId}" width="640" height="360" frameborder="0" allowfullscreen></iframe>`;
+  const embedCode = `<iframe src="https://player.Cypher.com/embed/${videoId}" width="640" height="360" frameborder="0" allowfullscreen></iframe>`;
 
   const handleCopyEmbed = () => {
     navigator.clipboard.writeText(embedCode);

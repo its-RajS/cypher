@@ -5,7 +5,7 @@ const StorySection = () => {
     <section id="story" className="border-y border-[var(--brand-neutral)] bg-[var(--brand-neutral)]/25">
       <div className="mx-auto max-w-5xl px-6 py-12">
         <div className="inline-flex rounded-full bg-[var(--brand-secondary)] px-3 py-1 text-sm font-semibold text-[#252b55] mb-4">
-          Why Vidmox Exists
+          Why Cypher Exists
         </div>
 
         <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground leading-snug mb-6">
@@ -50,7 +50,7 @@ const StorySection = () => {
           </ul>
 
           <p className="text-foreground font-medium pt-2">
-            Vidmox is built to make video hosting simple, smart, and
+            Cypher is built to make video hosting simple, smart, and
             predictable.
           </p>
         </div>

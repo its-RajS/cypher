@@ -104,7 +104,7 @@ const SecuritySection = () => {
                 </button>
               </div>
               <div className="flex justify-between items-center border border-border px-3 py-2 rounded">
-                <span className="text-foreground">vidmox.dev</span>
+                <span className="text-foreground">Cypher.dev</span>
                 <button className="text-destructive hover:underline cursor-pointer text-xs">
                   Remove
                 </button>
