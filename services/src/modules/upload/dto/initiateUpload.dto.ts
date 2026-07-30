@@ -8,7 +8,7 @@ import {
   IsBoolean,
 } from 'class-validator';
 
-export class InitialUploadDTO {
+export class InitiateUploadDTO {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -40,7 +40,7 @@ export class InitialUploadDTO {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  thumbnailFIleName: string;
+  thumbnailFileName: string;
 
   @ApiProperty()
   @IsString()
