@@ -7,6 +7,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { ApiKeyLastUsedCron } from './schedule/api-key-last-used.cron';
 import { ApiKeyService } from './services/api-key.service';
 import { ApiKeyController } from './controllers/api-key.controller';
+import { HealthController } from './controllers/health.controller';
 import { PlaylistModule } from './modules/playlist/playlist.module';
 import { UploadModule } from './modules/upload/upload.module';
 
@@ -20,7 +21,7 @@ import { UploadModule } from './modules/upload/upload.module';
     PlaylistModule,
     UploadModule,
   ],
-  controllers: [ApiKeyController],
+  controllers: [ApiKeyController, HealthController],
   providers: [ApiKeyLastUsedCron, ApiKeyService],
 })
 export class AppModule {}
