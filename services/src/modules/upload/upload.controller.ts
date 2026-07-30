@@ -3,9 +3,11 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UploadService } from './upload.service';
 import { HttpCode, Post } from '@nestjs/common';
 import { UploadGuard } from 'src/guards/upload.guards';
-import { ClerkAuthGuard } from 'src/guards/clerk.gaurds';
+import {
+  ClerkAuthGuard,
+  type AuthenticatedRequest,
+} from 'src/guards/clerk.gaurds';
 import { InitiateUploadDTO } from './dto/initiateUpload.dto';
-import * as clerkGaurds from 'src/guards/clerk.gaurds';
 
 @Controller('upload')
 @ApiTags('upload')
@@ -17,7 +19,7 @@ export class UploadController {
   @UseGuards(ClerkAuthGuard, UploadGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Initial video upload' })
-  create(@Req() req: any, @Body() dto: InitiateUploadDTO) {
+  create(@Req() req: AuthenticatedRequest, @Body() dto: InitiateUploadDTO) {
     return this.uploadService.initiateUpload(req.user!.id, dto);
   }
 }
