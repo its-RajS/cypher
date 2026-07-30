@@ -24,7 +24,9 @@ export class UploadService {
 
   onModuleInit() {
     this.bucket = createStorageBucket({
-      apiKey: process.env.ONEMINUTE_CLOUD_API_KEY!,
+      apiKey:
+        process.env.ONEMINUTECLOUD_API_KEY ??
+        process.env.ONEMINUTE_CLOUD_API_KEY!,
     });
   }
 
@@ -33,7 +35,8 @@ export class UploadService {
 
     try {
       uploadData = await this.bucket.initiateUpload({
-        bucketId: process.env.BUCKET_ID!,
+        bucketId:
+          process.env.ONEMINUTECLOUD_BUCKET_ID ?? process.env.BUCKET_ID!,
         filename: dto.videoFileName,
         contentType: dto.videoContentType,
         size: dto.videoSize,

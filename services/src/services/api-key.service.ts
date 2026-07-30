@@ -8,7 +8,13 @@ import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import * as schema from 'src/database/schema';
 import Redis from 'ioredis';
 import { REDIS_CLIENT } from 'src/infra/redis.module';
-import { LAST_USED_HASH, localCache, VERSION } from 'src/configs';
+import {
+  LAST_USED_HASH,
+  localCache,
+  normalizePlanTier,
+  PLAN_CATALOG,
+  VERSION,
+} from 'src/configs';
 
 @Injectable()
 export class ApiKeyService {
@@ -27,15 +33,22 @@ export class ApiKeyService {
   }
 
   async createApiKey(userId: string) {
-    //! Default 5 api keys Limit
+    const record = await this.db.query.plan.findFirst({
+      where: (p) => eq(p.user_id, userId),
+      columns: { tier: true },
+    });
+    const maxApiKeys = PLAN_CATALOG[normalizePlanTier(record?.tier)].maxApiKeys;
+
     const [result] = await this.db
       .select({
         count: count(),
       })
       .from(api_key)
       .where(and(eq(api_key.user_id, userId), isNull(api_key.revoked_at)));
-    if (result.count >= 5) {
-      throw new Error('You have reached the maximum limit of 5 API keys');
+    if (result.count >= maxApiKeys) {
+      throw new Error(
+        `You have reached the maximum limit of ${maxApiKeys} API keys`,
+      );
     }
     const { plainTextKey, hashedKey } = this.generateApiKey();
     const hash = await argon2.hash(plainTextKey, {

@@ -10,7 +10,7 @@ import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { and, eq } from 'drizzle-orm';
-import { DEFAULT_PLAYLIST_LIMIT } from 'src/configs';
+import { normalizePlanTier, PLAN_CATALOG } from 'src/configs';
 
 @Injectable()
 export class PlaylistService {
@@ -20,6 +20,13 @@ export class PlaylistService {
   ) {}
 
   async createPlaylist(userId: string, dto: CreatePlaylistDto) {
+    const planRecord = await this.db.query.plan.findFirst({
+      where: (p) => eq(p.user_id, userId),
+      columns: { tier: true },
+    });
+    const effectiveLimit =
+      PLAN_CATALOG[normalizePlanTier(planRecord?.tier)].maxPlaylists;
+
     const playlists = await this.db
       .select({
         id: schema.playlist.id,
@@ -27,9 +34,6 @@ export class PlaylistService {
       })
       .from(schema.playlist)
       .where(eq(schema.playlist.user_id, userId));
-
-    const effectiveLimit =
-      playlists?.[0]?.playlist_limit ?? DEFAULT_PLAYLIST_LIMIT;
 
     if (playlists.length >= effectiveLimit) {
       throw new BadRequestException(

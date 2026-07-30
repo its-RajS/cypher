@@ -5,6 +5,7 @@ import { HttpCode, Post } from '@nestjs/common';
 import { UploadGuard } from 'src/guards/upload.guards';
 import { ClerkAuthGuard } from 'src/guards/clerk.gaurds';
 import { InitiateUploadDTO } from './dto/initiateUpload.dto';
+import * as clerkGaurds from 'src/guards/clerk.gaurds';
 
 @Controller('upload')
 @ApiTags('upload')

@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { ChevronRight, CreditCard, Download, ExternalLink } from "@/components/common/icons";
+import {
+  ChevronRight,
+  CreditCard,
+  Download,
+  ExternalLink,
+} from "@/components/common/icons";
 import Link from "next/link";
 import PaymentCard from "../../components/cards/payment.card";
 import AddOnCard from "../../components/cards/addon.card";
@@ -42,9 +47,7 @@ const Page = () => {
           Dashboard
         </Link>
         <ChevronRight size={16} className="mx-2" />
-        <span className="text-foreground font-medium">
-          Billing
-        </span>
+        <span className="text-foreground font-medium">Billing</span>
       </nav>
 
       {/* Title */}
@@ -108,7 +111,9 @@ const Page = () => {
             >
               {cycle === "monthly" ? "Monthly" : "Yearly"}
               {cycle === "yearly" && (
-                <span className="palette-live ml-2 rounded-full px-2 py-0.5 text-xs">Save 10%</span>
+                <span className="palette-live ml-2 rounded-full px-2 py-0.5 text-xs">
+                  Save 10%
+                </span>
               )}
             </button>
           ))}
@@ -122,13 +127,15 @@ const Page = () => {
             isFree
             features={[
               "5GB storage",
-              "only HD (720p) streaming",
+              "Streaming up to 720p",
               "1,000 playback minutes / month",
-              "Advanced analytics",
-              "API Access",
-              "720p resolution encoding",
+              "1 API key",
+              "Core dashboard analytics",
               { label: "Custom watermark", available: false },
-              { label: "Automatic Subtitle Generations", available: false },
+              {
+                label: "Caption credits available as an add-on",
+                available: false,
+              },
               {
                 label: "Multi-bitrate adaptive streaming (360p–1080p)",
                 available: false,
@@ -137,54 +144,52 @@ const Page = () => {
             ]}
           />
           <PaymentCard
-            name="Pro Plan"
-            price={billingCycle === "monthly" ? "$14.99" : "$12.99"}
+            name="Starter Plan"
+            price={billingCycle === "monthly" ? "$15" : "$13.50"}
             features={[
               "250GB storage",
               "10,000 playback minutes / month",
-              "Advanced analytics",
-              "API Access",
+              "Core dashboard analytics",
+              "3 API keys and 10 playlists",
               "Multi-bitrate adaptive streaming (360p–1080p)",
-              "Custom watermark",
-              "Automatic Subtitle Generations",
-              "Full branding",
+              "Private embeds and domain controls",
+              "Caption credits available as an add-on",
+              "Email support",
+            ]}
+          />
+          <PaymentCard
+            name="Pro Plan"
+            price={billingCycle === "monthly" ? "$39" : "$35.10"}
+            features={[
+              "600GB storage",
+              "30,000 playback minutes / month",
+              "Per-video analytics",
+              "10 API keys and 50 playlists",
+              "Multi-bitrate adaptive streaming (360p–1080p)",
+              "Custom watermark and player branding",
+              "Caption credits available as an add-on",
+              "Priority email support",
             ]}
           />
           <PaymentCard
             name="Business Plan"
-            price={billingCycle === "monthly" ? "$29.99" : "$27.99"}
+            price={billingCycle === "monthly" ? "$99" : "$89.10"}
             features={[
-              "600GB storage",
-              "22,000 playback minutes / month",
-              "Advanced analytics",
-              "API Access",
+              "1TB storage",
+              "75,000 playback minutes / month",
+              "Analytics exports",
+              "20 API keys and 100 playlists",
               "Multi-bitrate adaptive streaming (360p–1080p)",
-              "Custom watermark",
-              "Automatic Subtitle Generations",
-              "Full branding",
-            ]}
-          />
-          <PaymentCard
-            name="Enterprise Plan"
-            price={billingCycle === "monthly" ? "$64.99" : "$60.99"}
-            features={[
-              "2TB storage",
-              "50,000 playback minutes / month",
-              "Advanced analytics",
-              "API Access",
-              "Multi-bitrate adaptive streaming (360p–1080p)",
-              "Custom watermark",
-              "Automatic Subtitle Generations",
-              "Full branding",
+              "Custom branding and private playback",
+              "Caption credits available as an add-on",
+              "Priority support",
             ]}
           />
         </div>
       </div>
 
       <div className="bg-card rounded-md mb-6 p-5 border border-border">
-        <h2 className="text-lg font-semibold text-foreground mb-1">
-          Add-ons
-        </h2>
+        <h2 className="text-lg font-semibold text-foreground mb-1">Add-ons</h2>
         <p className="text-sm text-muted-foreground mb-5">
           Extend your bandwidth and storage as your needs grow. Add flexibility
           with custom top-ups.
@@ -213,7 +218,7 @@ const Page = () => {
               Extra Playback Minutes
             </h3>
             <p className="text-xs text-muted-foreground mb-3">
-              $5 = 2000 Minutes Playback Add as many Playback Minutes as you
+              $5 = 10,000 Minutes Playback Add as many Playback Minutes as you
               want.
             </p>
             <div className="flex flex-col gap-2">
@@ -254,7 +259,7 @@ const Page = () => {
               Custom Storage
             </h3>
             <p className="text-xs text-muted-foreground mb-3">
-              $5 = 200GB. Add as much storage as you want.
+              $5 = 100GB. Add as much storage as you want.
             </p>
             <div className="flex flex-col gap-2">
               <input

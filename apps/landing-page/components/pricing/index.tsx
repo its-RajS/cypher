@@ -15,30 +15,28 @@ const plans = [
     desc: "For side projects and experiments.",
     features: [
       "5GB storage",
-      "only HD (720p) streaming",
+      "Streaming up to 720p",
       "1,000 playback minutes / month",
-      "720p resolution encoding",
-      "API access",
-      "Advanced analytics",
+      "1 API key",
+      "Core dashboard analytics",
       "Cypher watermark",
-      "Email support",
+      "Community support",
     ],
     cta: "Start Free",
     highlighted: false,
   },
   {
     name: "Starter",
-    price: "$14.99",
+    price: "$15",
     desc: "For growing apps that need room.",
     features: [
       "250GB storage",
       "10,000 playback minutes / month",
       "Multi-bitrate adaptive streaming (360p–1080p)",
-      "API access",
-      "Advanced analytics",
-      "Custom watermark",
-      "Automatic Subtitle Generations",
-      "Piracy protection",
+      "3 API keys and 10 playlists",
+      "Private embeds and domain controls",
+      "Core dashboard analytics",
+      "Caption credits available as an add-on",
       "Email support",
     ],
     cta: "Get Started",
@@ -46,37 +44,33 @@ const plans = [
   },
   {
     name: "Pro",
-    price: "$29.99",
+    price: "$39",
     desc: "For growing SaaS products.",
     badge: "Most Popular",
     features: [
       "600GB storage",
-      "22,000 playback minutes / month",
+      "30,000 playback minutes / month",
       "Multi-bitrate adaptive streaming (360p–1080p)",
-      "API access",
-      "Advanced analytics",
-      "Custom watermark",
-      "Automatic Subtitle Generations",
-      "Piracy protection",
-      "Email support",
+      "10 API keys and 50 playlists",
+      "Custom watermark and player branding",
+      "Per-video analytics",
+      "Priority email support",
     ],
     cta: "Get Started",
     highlighted: true,
   },
   {
     name: "Business",
-    price: "$69.99",
+    price: "$99",
     desc: "For high-volume video platforms.",
     features: [
-      "2TB storage",
-      "50,000 playback minutes / month",
+      "1TB storage",
+      "75,000 playback minutes / month",
       "Multi-bitrate adaptive streaming (360p–1080p)",
-      "API access",
-      "Advanced analytics",
-      "Custom watermark",
-      "Automatic Subtitle Generations",
-      "Piracy protection",
-      "Email support",
+      "20 API keys and 100 playlists",
+      "Custom branding and private playback",
+      "Analytics exports",
+      "Priority support",
     ],
     cta: "Get Started",
     highlighted: false,
@@ -108,10 +102,11 @@ const PricingSection = () => {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative rounded-xl p-6 flex flex-col transition-colors ${plan.highlighted
-                ? "border-2 border-[var(--brand-tertiary)] bg-card"
-                : "border border-primary bg-card hover:border-primary"
-                }`}
+              className={`relative rounded-xl p-6 flex flex-col transition-colors ${
+                plan.highlighted
+                  ? "border-2 border-[var(--brand-tertiary)] bg-card"
+                  : "border border-primary bg-card hover:border-primary"
+              }`}
             >
               {plan.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
@@ -123,8 +118,11 @@ const PricingSection = () => {
 
               <div className="mb-5">
                 <div
-                  className={`text-xs font-medium tracking-wide uppercase mb-2 ${plan.highlighted ? "text-foreground" : "text-muted-foreground"
-                    }`}
+                  className={`text-xs font-medium tracking-wide uppercase mb-2 ${
+                    plan.highlighted
+                      ? "text-foreground"
+                      : "text-muted-foreground"
+                  }`}
                 >
                   {plan.name}
                 </div>
@@ -135,7 +133,9 @@ const PricingSection = () => {
                     / month
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground mt-1.5">{plan.desc}</p>
+                <p className="text-sm text-muted-foreground mt-1.5">
+                  {plan.desc}
+                </p>
               </div>
 
               <ul className="space-y-2.5 mb-6 flex-1">
@@ -149,13 +149,28 @@ const PricingSection = () => {
                       key={feature}
                       className="flex items-start gap-2 text-sm text-muted-foreground group"
                     >
-                      <HugeiconsIcon icon={CheckIcon} size={16} color={plan.highlighted ? "var(--foreground)" : "var(--brand-primary)"} strokeWidth={1.8} className="shrink-0 mt-0.5" />
+                      <HugeiconsIcon
+                        icon={CheckIcon}
+                        size={16}
+                        color={
+                          plan.highlighted
+                            ? "var(--foreground)"
+                            : "var(--brand-primary)"
+                        }
+                        strokeWidth={1.8}
+                        className="shrink-0 mt-0.5"
+                      />
                       <span className="flex-1 flex items-center gap-1.5 flex-wrap">
                         {feature}
                         {storageMatch && (
                           <Tooltip delayDuration={0}>
                             <TooltipTrigger asChild>
-                              <HugeiconsIcon icon={InformationCircleIcon} size={16} color="var(--foreground)" className="opacity-70 hover:opacity-100 transition-colors cursor-pointer" />
+                              <HugeiconsIcon
+                                icon={InformationCircleIcon}
+                                size={16}
+                                color="var(--foreground)"
+                                className="opacity-70 hover:opacity-100 transition-colors cursor-pointer"
+                              />
                             </TooltipTrigger>
                             <TooltipContent
                               side="right"
@@ -176,13 +191,13 @@ const PricingSection = () => {
                                     {plan.name === "Free"
                                       ? "30"
                                       : Math.round(
-                                        parseFloat(storageMatch[1]) *
-                                        (storageMatch[2].toUpperCase() ===
-                                          "TB"
-                                          ? 1024
-                                          : 1) *
-                                        3,
-                                      ).toLocaleString()}{" "}
+                                          parseFloat(storageMatch[1]) *
+                                            (storageMatch[2].toUpperCase() ===
+                                            "TB"
+                                              ? 1024
+                                              : 1) *
+                                            3,
+                                        ).toLocaleString()}{" "}
                                     minutes
                                   </span>{" "}
                                   of HD video content.
@@ -216,10 +231,11 @@ const PricingSection = () => {
 
               <Link
                 href="#get-started"
-                className={`w-full py-2.5 rounded-lg text-sm font-medium text-center transition-colors ${plan.highlighted
-                  ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                  : "border border-primary bg-card text-foreground/75 hover:bg-[var(--popover)]"
-                  }`}
+                className={`w-full py-2.5 rounded-lg text-sm font-medium text-center transition-colors ${
+                  plan.highlighted
+                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                    : "border border-primary bg-card text-foreground/75 hover:bg-[var(--popover)]"
+                }`}
               >
                 {plan.cta}
               </Link>

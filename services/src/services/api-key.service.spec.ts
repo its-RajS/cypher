@@ -31,6 +31,9 @@ describe('ApiKeyService', () => {
       api_key: {
         findFirst: jest.fn(),
       },
+      plan: {
+        findFirst: jest.fn(),
+      },
     },
   };
 
@@ -100,7 +103,7 @@ describe('ApiKeyService', () => {
       });
 
       await expect(service.createApiKey('user-123')).rejects.toThrow(
-        'You have reached the maximum limit of 5 API keys',
+        'You have reached the maximum limit of 1 API keys',
       );
     });
   });

@@ -32,14 +32,14 @@ export default function Footer() {
               Docs
             </Link>
             <Link
-              href="https://x.com/oneminutestack"
+              href=""
               target="_blank"
               className="hover:text-primary transition-colors"
             >
               Twitter
             </Link>
             <Link
-              href="https://github.com/one-minute-stack"
+              href=""
               target="_blank"
               className="hover:text-primary transition-colors"
             >

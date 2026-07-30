@@ -36,36 +36,37 @@ export const playlist = pgTable('playlist', {
   updated_at: timestamp('updated_at').defaultNow(),
 });
 
-export const plan = pgTable('plan', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  user_id: text('user_id').notNull(),
-  tier: text('tier').notNull(),
-  price: integer('price').notNull(),
-  currency: text('currency').notNull(),
-  created_at: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow(),
-});
-
-export const plan_constraint = uniqueIndex('plan_user_id_tier_idx').on(
-  plan.user_id,
-  plan.tier,
+export const plan = pgTable(
+  'plan',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    user_id: text('user_id').notNull(),
+    tier: text('tier').notNull(),
+    price: integer('price').notNull(),
+    currency: text('currency').notNull(),
+    created_at: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('plan_user_id_tier_idx').on(table.user_id, table.tier),
+  ],
 );
 
-export const usage = pgTable('usage', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  user_id: text('user_id').notNull(),
-  storage_usage: bigint('storage_usage', { mode: 'number' }).default(0),
-  storage_limit: bigint('storage_limit', { mode: 'number' }).default(0),
-  minutes_streamed: bigint('minutes_streamed', { mode: 'number' }).default(0),
-  minutes_streamed_limit: bigint('minutes_streamed_limit', {
-    mode: 'number',
-  }).default(0),
-  created_at: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow(),
-});
-
-export const usage_constraint = uniqueIndex('usage_user_id_idx').on(
-  usage.user_id,
+export const usage = pgTable(
+  'usage',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    user_id: text('user_id').notNull(),
+    storage_usage: bigint('storage_usage', { mode: 'number' }).default(0),
+    storage_limit: bigint('storage_limit', { mode: 'number' }).default(0),
+    minutes_streamed: bigint('minutes_streamed', { mode: 'number' }).default(0),
+    minutes_streamed_limit: bigint('minutes_streamed_limit', {
+      mode: 'number',
+    }).default(0),
+    created_at: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow(),
+  },
+  (table) => [uniqueIndex('usage_user_id_idx').on(table.user_id)],
 );
 
 export const video_metadata = pgTable('video_metadata', {

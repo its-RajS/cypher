@@ -83,33 +83,73 @@ export const cachedUsage: LRUCache<string, CachedUsage> = new LRUCache<
 export const GB = 1024 ** 3;
 export const TB = 1024 ** 4;
 
-export const PLAN_DEFAULTS: Record<PlanTier, CachedUsage> = {
+export type PlanDefinition = CachedUsage & {
+  displayName: string;
+  monthlyPriceUsd: number;
+  maxApiKeys: number;
+  maxPlaylists: number;
+  maxResolution: '720p' | '1080p';
+  customBranding: boolean;
+  privatePlayback: boolean;
+};
+
+export const PLAN_CATALOG: Record<PlanTier, PlanDefinition> = {
   [PlanTier.FREE]: {
+    displayName: 'Free',
+    monthlyPriceUsd: 0,
     storageLimit: 5 * GB,
     storageUsage: 0,
     minutesStreamedLimit: 1_000,
     minutesStreamed: 0,
     updatedAt: Date.now(),
+    maxApiKeys: 2,
+    maxPlaylists: 3,
+    maxResolution: '720p',
+    customBranding: false,
+    privatePlayback: false,
   },
   [PlanTier.STARTER]: {
-    storageLimit: 100 * GB,
+    displayName: 'Starter',
+    monthlyPriceUsd: 15,
+    storageLimit: 250 * GB,
     storageUsage: 0,
-    minutesStreamedLimit: 15_000,
+    minutesStreamedLimit: 10_000,
     minutesStreamed: 0,
     updatedAt: Date.now(),
+    maxApiKeys: 5,
+    maxPlaylists: 10,
+    maxResolution: '1080p',
+    customBranding: false,
+    privatePlayback: true,
   },
   [PlanTier.PRO]: {
-    storageLimit: 500 * GB,
+    displayName: 'Pro',
+    monthlyPriceUsd: 39,
+    storageLimit: 600 * GB,
     storageUsage: 0,
-    minutesStreamedLimit: 50_000,
+    minutesStreamedLimit: 30_000,
     minutesStreamed: 0,
     updatedAt: Date.now(),
+    maxApiKeys: 10,
+    maxPlaylists: 50,
+    maxResolution: '1080p',
+    customBranding: true,
+    privatePlayback: true,
   },
   [PlanTier.ENTERPRISE]: {
-    storageLimit: 2 * TB,
+    displayName: 'Business',
+    monthlyPriceUsd: 99,
+    storageLimit: 1 * TB,
     storageUsage: 0,
-    minutesStreamedLimit: 200_000,
+    minutesStreamedLimit: 75_000,
     minutesStreamed: 0,
     updatedAt: Date.now(),
+    maxApiKeys: 20,
+    maxPlaylists: 100,
+    maxResolution: '1080p',
+    customBranding: true,
+    privatePlayback: true,
   },
 };
+
+export const PLAN_DEFAULTS: Record<PlanTier, CachedUsage> = PLAN_CATALOG;
