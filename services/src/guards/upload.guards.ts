@@ -192,12 +192,36 @@ export class UploadGuard implements CanActivate {
       );
     }
 
-    const tierDefault = PLAN_DEFAULTS[tier.tier];
+    const tierDefault =
+      PLAN_DEFAULTS[tier.tier] ?? PLAN_DEFAULTS[PlanTier.FREE];
 
     const usage = await this.userCachedUsage(userId, tierDefault);
 
     const effectiveStorageLimit =
       usage.storageLimit > 0 ? usage.storageLimit : tierDefault.storageLimit;
+
+    if (usage.storageUsage >= effectiveStorageLimit) {
+      throw new ForbiddenException(
+        'You have exceeded your storage quota. Please upgrade to a higher plan to continue uploading.',
+      );
+    }
+
+    const incomingBytes: number =
+      Number(request?.body?.videoSize ?? 0) +
+      Number(request?.body?.thumbnailSize ?? 0);
+
+    if (
+      incomingBytes > 0 &&
+      usage.storageUsage + incomingBytes > effectiveStorageLimit
+    ) {
+      const remainingMB = Math.floor(
+        (effectiveStorageLimit - usage.storageUsage) / 1024 ** 2,
+      );
+      const incomingMB = Math.ceil(incomingBytes / 1024 ** 2);
+      throw new ForbiddenException(
+        `You cannot upload this file. It requires ${incomingMB} MB of storage, but you only have ${remainingMB} MB remaining. Please upgrade to a higher plan to continue uploading.`,
+      );
+    }
 
     return true;
   }

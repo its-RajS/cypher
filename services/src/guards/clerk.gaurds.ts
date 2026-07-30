@@ -30,6 +30,11 @@ export interface AuthenticatedRequest {
     id: string;
     [key: string]: unknown;
   };
+  body?: {
+    videoSize?: number | string;
+    thumbnailSize?: number | string;
+    [key: string]: unknown;
+  };
 }
 
 function getHeaderValue(
