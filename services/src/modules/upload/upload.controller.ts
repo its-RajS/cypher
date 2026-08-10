@@ -35,7 +35,7 @@ export class UploadController {
   @Post('create')
   @HttpCode(200)
   @UseGuards(ClerkAuthGuard, UploadGuard)
-  @ApiBearerAuth() 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Initial video upload' })
   create(@Req() req: AuthenticatedRequest, @Body() dto: InitiateUploadDTO) {
     return this.uploadService.initiateUpload(req.user!.id, dto);
