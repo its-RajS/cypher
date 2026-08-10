@@ -35,6 +35,7 @@ export interface AuthenticatedRequest {
     thumbnailSize?: number | string;
     [key: string]: unknown;
   };
+  tier?: string;
 }
 
 function getHeaderValue(

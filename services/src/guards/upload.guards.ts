@@ -223,6 +223,7 @@ export class UploadGuard implements CanActivate {
       );
     }
 
+    request.tier = tier.tier;
     return true;
   }
 }

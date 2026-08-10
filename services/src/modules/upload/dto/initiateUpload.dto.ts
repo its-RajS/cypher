@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { UploadFilePart } from '@oneminutecloud/storage-bucket';
 import {
   IsString,
   IsNotEmpty,
@@ -76,4 +77,52 @@ export class InitiateUploadDTO {
   @IsOptional()
   @IsBoolean()
   includeWatermark?: boolean;
+}
+
+export class CompleteUploadDTO {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  objectId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  uploadId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  key: string;
+
+  @ApiProperty()
+  @IsArray()
+  @IsNotEmpty()
+  parts: UploadFilePart[];
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  videoId: string;
+}
+
+export class ThumbnailUploadDTO {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  videoId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  thumbnailFileName: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  thumbnailContentType: string;
+
+  @ApiProperty()
+  @IsNumber()
+  thumbnailSize: number;
 }

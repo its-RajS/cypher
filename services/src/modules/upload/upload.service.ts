@@ -300,8 +300,16 @@ export class UploadService {
         });
         void this.redis.expire(redis_key, PLAN_REDIS_TTL);
       }
+
+      return { message: 'Webhook processed successfully' };
     } catch (err: unknown) {
       console.error('Error in webhook:', err as Record<string, unknown>);
+      if (
+        err instanceof UnauthorizedException ||
+        err instanceof BadGatewayException
+      ) {
+        throw err;
+      }
       throw new InternalServerErrorException('Failed to handle webhook');
     }
   }
