@@ -1,4 +1,9 @@
-import { BadGatewayException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadGatewayException,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import Redis from 'ioredis';
 import { DRIZZLE_DB } from 'src/database/database.module';
 import { REDIS_CLIENT } from 'src/infra/redis.module';
@@ -13,6 +18,7 @@ import * as schema from 'src/database/schema';
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import { PLAN_REDIS_TTL, usageRedisKey } from 'src/configs';
 import { eq } from 'drizzle-orm';
+import type { Request } from 'express';
 
 @Injectable()
 export class UploadService {
@@ -132,5 +138,99 @@ export class UploadService {
       .where(eq(schema.video_metadata.id, videoId));
 
     return completeUpload;
+  }
+
+  async uploadThumbnail(
+    videoId: string,
+    thumbnailFileName: string,
+    thumbnailContentType: string,
+    thumbnail: Express.Multer.File,
+    thumbnailSize: number,
+  ) {
+    try {
+      const thumbnailUpload = await this.bucket.uploadFile({
+        bucketId: process.env.BUCKET_ID!,
+        file: thumbnail,
+        filename: thumbnailFileName,
+        contentType: thumbnailContentType,
+        size: thumbnailSize,
+      });
+
+      await this.db
+        .update(schema.video_metadata)
+        .set({
+          thumbnailTracking_id: thumbnailUpload.thumbnailKey,
+          updated_at: new Date(),
+        })
+        .where(eq(schema.video_metadata.id, videoId));
+
+      return thumbnailUpload;
+    } catch (error: unknown) {
+      throw new Error(
+        (error as { message?: string })?.message ??
+          'Failed to upload thumbnail. Please try again.',
+      );
+    }
+  }
+
+  async handleWebhook(req: Request) {
+    const apiKey = process.env.ONEMINUTECLOUD_API_KEY!;
+    if (!apiKey) throw new UnauthorizedException('API key not found');
+
+    const headers = req.headers as Record<string, string>;
+    const body = (req.body ?? {}) as Record<string, unknown>;
+
+    const valid = await media.verifyWebhook({
+      apiKey,
+      headers,
+      body,
+    });
+
+    if (!valid) throw new UnauthorizedException('Invalid webhook');
+
+    const trackingId =
+      typeof body.jobId === 'string'
+        ? body.jobId
+        : typeof body.trackingId === 'string'
+          ? body.trackingId
+          : undefined;
+    const event = typeof body.event === 'string' ? body.event : undefined;
+
+    if (!trackingId) throw new BadGatewayException('Invalid payload');
+
+    const metaData = await media.getMetadata({ apiKey, trackingId });
+
+    await this.db
+      .update(schema.video_metadata)
+      .set({
+        status: event === 'job.completed' ? 'SUCCESS' : 'FAILED',
+        updated_at: new Date(),
+      })
+      .where(eq(schema.video_metadata.videoTracking_id, trackingId));
+
+    const [videoRow] = await this.db
+      .select({
+        id: schema.video_metadata.id,
+        userId: schema.video_metadata.user_id,
+        videoSize: schema.video_metadata.videoSize,
+        thumbnailSize: schema.video_metadata.thumbnailSize,
+      })
+      .from(schema.video_metadata)
+      .where(eq(schema.video_metadata.videoTracking_id, trackingId));
+
+    if (!videoRow) {
+      throw new Error(`No video found for the trackingID: ${trackingId}`);
+    }
+
+    await this.db.insert(schema.transcoding_metadata).values({
+      id: randomUUID(),
+      video_id: videoRow.id,
+      fileCount: metaData.fileCount ?? 0,
+      resolution: metaData.resolution ?? [],
+      totalSizeBytes: metaData.totalSizeBytes ?? 0,
+      status: event === 'job.completed' ? 'SUCCESS' : 'FAILED',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
   }
 }

@@ -8,6 +8,7 @@ import {
   type AuthenticatedRequest,
 } from 'src/guards/clerk.gaurds';
 import { InitiateUploadDTO } from './dto/initiateUpload.dto';
+import type { Request } from 'express';
 
 @Controller('upload')
 @ApiTags('upload')

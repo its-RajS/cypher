@@ -179,7 +179,7 @@ describe('ApiKeyService', () => {
       const result = await service.last_used_apiKey(id);
 
       expect(result).toBeInstanceOf(Date);
-      expect((result as Date).getTime()).toBe(now);
+      expect((result as unknown as Date).getTime()).toBe(now);
       expect(redis.hget).toHaveBeenCalled();
     });
 
