@@ -1,0 +1,57 @@
+{
+    "name": "@cypher/sdk",
+    "version": "1.0.0",
+    "description": "Cypher SDK",
+    "author": "Cypher",
+    "license": "ISC",
+    "type": "module",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.cjs",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "exports": {
+        ".": {
+            "import": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.cjs"
+            },
+            "require": {
+                "types": "./dist/index.d.cts",
+                "default": "./dist/index.cjs"
+            }
+        }
+    },
+    "sideEffects": false,
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "clean": "rm -rf dist",
+        "prepublishOnly": "npm run clean && npm run build"
+    },
+    "keywords": [
+        "video-hosting",
+        "Cypher",
+        "storage"
+    ],
+    "homepage": "https://github.com/its-RajS/cypher-sdk#readme",
+    "bugs": {
+        "url": "https://github.com/its-RajS/cypher-sdk/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/its-RajS/cypher-sdk.git"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "devDependencies": {
+        "@types/node": "^22.20.1",
+        "tsup": "^8.3.5",
+        "typescript": "^5.8.3"
+    }
+}
