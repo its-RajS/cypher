@@ -1,3 +1,4 @@
+import { uploadFile } from "../services/uploadFile.js";
 import { UploadVideoFields, UploadVideoRespose } from "../types/index.js";
 import { handleApiError } from "../utils/handleApiError.js";
 
@@ -97,6 +98,55 @@ class Cypher {
 
         const {uploadData} = await  initiateRes.json()
         
+        const {objectId, uploadId, key, completedParts} = await uploadFile(
+            options.video,
+            uploadData,
+            onProgress
+        )
+
+        const completedRes = await fetch(`${reqForwardUrl}complete`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                type: "complete",
+                objectId,
+                uploadId,
+                key,
+                parts: completedParts,
+                videoId: uploadData?.videoId
+            })
+        })
+
+        if(!completedRes.ok){
+            await handleApiError(completedRes, 'complete');
+        }
+
+        await completedRes.json()
+
+        const thumbnailFormData = new FormData()
+        thumbnailFormData.append("type", "upload-thumbnail")
+        thumbnailFormData.append("videoId", uploadData?.videoId)
+        thumbnailFormData.append("thumbnail", options.thumbnail)
+        thumbnailFormData.append("thumbnailFileName", thumbnailFileName)
+        thumbnailFormData.append("thumbnailContentType", thumbnailContentType)
+        thumbnailFormData.append("thumbnailSize", String(thumbnailSize))
+        
+        const uploadThumbnailRes = await fetch(`${reqForwardUrl}thumbnail`, {
+            method: "POST",
+            body: thumbnailFormData
+        })
+
+        if(!uploadThumbnailRes.ok){
+            await handleApiError(uploadThumbnailRes, 'complete');
+        }
+
+        await uploadThumbnailRes.json()
+        
+        return {
+            key
+        }
     } 
 }
 
