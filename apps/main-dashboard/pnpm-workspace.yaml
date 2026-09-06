@@ -1,0 +1,2 @@
+overrides:
+  sdk: link:../../../../../.local/share/pnpm/global/5/node_modules/@cypher/sdk

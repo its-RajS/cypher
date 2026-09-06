@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  sdk: link:../../../../../.local/share/pnpm/global/5/node_modules/@cypher/sdk
+
 importers:
 
   .:
@@ -14,6 +17,9 @@ importers:
       '@clerk/themes':
         specifier: ^2.4.52
         version: 2.4.57(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@cypher/sdk':
+        specifier: file:../../sdks/cypher-sdk
+        version: file:../../sdks/cypher-sdk
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.4.0(react-hook-form@7.80.0(react@19.2.3))
@@ -65,12 +71,12 @@ importers:
       react-hook-form:
         specifier: ^7.71.1
         version: 7.80.0(react@19.2.3)
-      react-simple-maps:
-        specifier: ^1.0.0
-        version: 1.0.0(prop-types@15.8.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       recharts:
         specifier: ^3.7.0
         version: 3.8.1(@types/react@19.2.17)(react-dom@19.2.3(react@19.2.3))(react-is@16.13.1)(react@19.2.3)(redux@5.0.1)
+      sdk:
+        specifier: link:../../../../../.local/share/pnpm/global/5/node_modules/@cypher/sdk
+        version: link:../../../../../.local/share/pnpm/global/5/node_modules/@cypher/sdk
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -295,6 +301,10 @@ packages:
   '@clerk/types@4.101.25':
     resolution: {integrity: sha512-gPxm3hlBkP7B9EfKyp3/UDonNOjg7Z0UvqfrMj5u8gA8nyzvC1UFYtSTTmTfgSY82+5Yo38YV0DYu9vNf6t9CQ==}
     engines: {node: '>=18.17.0'}
+
+  '@cypher/sdk@file:../../sdks/cypher-sdk':
+    resolution: {directory: ../../sdks/cypher-sdk, type: directory}
+    engines: {node: '>=18'}
 
   '@dotenvx/dotenvx@1.75.1':
     resolution: {integrity: sha512-/BITOC9dmS/edY2zQwZNicQ059O6RKabtQfyEafV0nGtfYRNHYy1DIPiYVcov40+tob9hfmBnbR963dS+EQ1DQ==}
@@ -2030,9 +2040,6 @@ packages:
     resolution: {integrity: sha512-H+y0Jo/T1RZ9qPP4Eh1pkcQcLRglraJaSLoyOtHxu6AapkjWVCy2Sit1QQ4x3Dng8qDlSsZEet7g5Pq06MvTgw==}
     engines: {node: '>=20'}
 
-  commander@2.20.3:
-    resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
-
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
@@ -2095,9 +2102,6 @@ packages:
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
-  d3-array@1.2.4:
-    resolution: {integrity: sha512-KHW6M86R+FUPYGb3R5XiYjXPq7VzwxZ22buHhAEVG5ztoEcZZMLov530mmccaqA1GghZArjQV46fuc8kUqhhHw==}
-
   d3-array@3.2.4:
     resolution: {integrity: sha512-tdQAmyA18i4J7wprpYq8ClcxZy3SC31QMeByyCFyRt7BVHdREQZ5lpzoe5mFEYZUWe+oq8HBvk9JjpibyEV4Jg==}
     engines: {node: '>=12'}
@@ -2113,9 +2117,6 @@ packages:
   d3-format@3.1.2:
     resolution: {integrity: sha512-AJDdYOdnyRDV5b6ArilzCPPwc1ejkHcoyFarqlPqT7zRYjhavcT3uSrqcMvsgh2CgoPbK3RCwyHaVyxYcP2Arg==}
     engines: {node: '>=12'}
-
-  d3-geo@1.12.1:
-    resolution: {integrity: sha512-XG4d1c/UJSEX9NfU02KwBL6BYPj8YKHxgBEw5om2ZnTRSbIcego6dhHwcxuSR3clxh0EpE38os1DVPOmnYtTPg==}
 
   d3-interpolate@3.0.1:
     resolution: {integrity: sha512-3bYs1rOD33uo8aqJfKP3JWPAibgw8Zm2+L9vBKEHJ2Rg+viTR7o5Mmv5mZcieN+FRYaAOWX5SJATX6k1PWz72g==}
@@ -3614,13 +3615,6 @@ packages:
       '@types/react':
         optional: true
 
-  react-simple-maps@1.0.0:
-    resolution: {integrity: sha512-2A/yRZdMRr5VFwR4SFqIfZggSsPQ/ABvx7wyOFnvYqtbpxP5XEXPsFt/NH055lcrOj4qeUtHgPsDocAl86GmnA==}
-    peerDependencies:
-      prop-types: ^15.7.2
-      react: ^16.8.0
-      react-dom: ^16.8.0
-
   react-style-singleton@2.2.3:
     resolution: {integrity: sha512-b6jSvxvVnyptAiLjbkWLE/lOnR4lfTtDAl+eUC7RZy+QQWc6wRzIV2CE6xBuMmDxc2qIihtDCZD5NPOFl7fRBQ==}
     engines: {node: '>=10'}
@@ -3993,10 +3987,6 @@ packages:
   toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
     engines: {node: '>=0.6'}
-
-  topojson-client@3.1.0:
-    resolution: {integrity: sha512-605uxS6bcYxGXw9qi62XyrV6Q3xwbndjachmNxu8HWTtVPxZfEJN9fd/SZS1Q54Sn2y0TMyMxFj/cJINqGHrKw==}
-    hasBin: true
 
   tough-cookie@6.0.1:
     resolution: {integrity: sha512-LktZQb3IeoUWB9lqR5EWTHgW/VTITCXg4D21M+lvybRVdylLrRMnqaIONLVb5mav8vM19m44HIcGq4qASeu2Qw==}
@@ -4482,6 +4472,8 @@ snapshots:
     transitivePeerDependencies:
       - react
       - react-dom
+
+  '@cypher/sdk@file:../../sdks/cypher-sdk': {}
 
   '@dotenvx/dotenvx@1.75.1':
     dependencies:
@@ -6225,8 +6217,6 @@ snapshots:
 
   commander@14.0.3: {}
 
-  commander@2.20.3: {}
-
   concat-map@0.0.1: {}
 
   conf@10.2.0:
@@ -6282,8 +6272,6 @@ snapshots:
 
   csstype@3.2.3: {}
 
-  d3-array@1.2.4: {}
-
   d3-array@3.2.4:
     dependencies:
       internmap: 2.0.3
@@ -6293,10 +6281,6 @@ snapshots:
   d3-ease@3.0.1: {}
 
   d3-format@3.1.2: {}
-
-  d3-geo@1.12.1:
-    dependencies:
-      d3-array: 1.2.4
 
   d3-interpolate@3.0.1:
     dependencies:
@@ -7924,14 +7908,6 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.17
 
-  react-simple-maps@1.0.0(prop-types@15.8.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
-    dependencies:
-      d3-geo: 1.12.1
-      prop-types: 15.8.1
-      react: 19.2.3
-      react-dom: 19.2.3(react@19.2.3)
-      topojson-client: 3.1.0
-
   react-style-singleton@2.2.3(@types/react@19.2.17)(react@19.2.3):
     dependencies:
       get-nonce: 1.0.1
@@ -8410,10 +8386,6 @@ snapshots:
       is-number: 7.0.0
 
   toidentifier@1.0.1: {}
-
-  topojson-client@3.1.0:
-    dependencies:
-      commander: 2.20.3
 
   tough-cookie@6.0.1:
     dependencies:

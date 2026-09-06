@@ -14,7 +14,7 @@ export type UploadVideoFields ={
     video: File,
 }
 
-export type UploadVideoTypes = {
+export type UploadVideoTypes= {
     title: string,
     description?: string,
     videoDuration: number,

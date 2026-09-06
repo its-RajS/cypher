@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@cypher/sdk": ["../../sdks/cypher-sdk/src/index.ts"]
     }
   },
   "include": [
