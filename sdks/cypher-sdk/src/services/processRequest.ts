@@ -18,7 +18,7 @@ export async function handleProcessRequest({
             )
         }
 
-        const isValidApiKey = await verifyApiKeySignature(apiKey); 
+        const isValidApiKey = verifyApiKeySignature(apiKey); 
         if(!isValidApiKey){
             return Response.json(
                 {error: "Cypher apikey is required",},

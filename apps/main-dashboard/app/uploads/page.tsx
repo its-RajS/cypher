@@ -13,28 +13,31 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { storage } from "@oneminutecloud/storage-bucket-next";
+import { cypher } from "@cypher/sdk";
 
 const getNow = () => Date.now();
 
 // Define the schema using Zod
-const uploadSchema = z.object({
+const uploadSchema = z.object({ 
   title: z.string().min(1, "Video title is required"),
   slug: z.string().min(1, "Slug is required"),
   description: z.string().optional(),
-  tags: z.string().optional(),
+  tags: z.string().optional().transform((val) => val ? val.split(',').map((tag) => tag.trim()).filter((tag) => tag.length > 0) : []),
   thumbnail: z
     .any()
     .refine((files) => files?.length === 1, "Thumbnail is required"),
-  timestamps: z.string().optional(),
+  timestamps: z.string().optional().transform((val) => val ? val.split('\n').map((time) => time.trim()).filter((time) => time.length > 0) : []),
   playlist: z.string().optional(),
-  generateSubtitles: z.string().optional(),
-  includeWatermark: z.string().optional(),
+  generateSubtitles: z.string().optional().transform((val) => val === "true"),
+  includeWatermark: z.string().optional().transform((val) => val === "true"),
   video: z
     .any()
-    .refine((files) => files?.length === 1, "Video file is required"),
-});
+    .refine((files) => files?.length === 1, "Video file is required").transform((file) => file[0] as File), 
+}); 
 
-type UploadFormValues = z.infer<typeof uploadSchema>;
+type UploadFormValues = z.input<typeof uploadSchema>;
+type UploadFormOutputValues = z.output<typeof uploadSchema>;
+
 
 const Page = () => {
   const {
@@ -43,11 +46,11 @@ const Page = () => {
     setValue,
     trigger,
     formState: { errors },
-  } = useForm<UploadFormValues>({
+  } = useForm<UploadFormValues, unknown, UploadFormOutputValues>({
     resolver: zodResolver(uploadSchema),
     defaultValues: {
-      generateSubtitles: "yes",
-      includeWatermark: "yes",
+      generateSubtitles: "true",
+      includeWatermark: "true",
     },
   });
 
@@ -58,7 +61,7 @@ const Page = () => {
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [estimatedTime, setEstimatedTime] = useState<string | null>(null);
-  const uploadStartRef = useRef<number | null>(0);
+  const uploadStartRef = useRef<number | null>(null);
 
   const  formatTIme = (second: number): string => {
     if(second < 60) return `${Math.round(second)}s remaining`;
@@ -71,26 +74,42 @@ const Page = () => {
   const { isLoaded } = useUser();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const onSubmit = async (data: UploadFormValues) => {
+  const onSubmit = async (data: UploadFormOutputValues) => {
     try {
       console.log("Form Data:", data);
       setIsUploading(true);
       uploadStartRef.current = getNow();
+      /* 
       const {key} = await storage.upload(data.video[0] as File, process.env.NEXT_PUBLIC_BUCKET_ID!, {
-        onProgress: (progress) => {
-          if(progress.percent > 0 && uploadStartRef.current){
+      //   onProgress: (progress) => {
+      //     if(progress.percent > 0 && uploadStartRef.current){
+      //       const elapsed = (getNow() - uploadStartRef.current) / 1000;
+      //       const rate = progress.loaded / elapsed; 
+      //       const remaining = (progress.total - progress.loaded) / rate; 
+      //       setEstimatedTime(formatTIme(remaining));
+      //     }
+      //     const percent = Math.round(progress.percent);
+      //     setIsUploading(false)
+      //     setUploadProgress(percent);
+      //   },
+      // });   
+      */
+      // using our SDK instead of the general call
+      try {
+        await cypher.uploadVideo(data, {
+          onProgress: (progress) => {
+          setUploadProgress(progress.precent);
+          if(progress.precent > 0 && uploadStartRef.current){
             const elapsed = (getNow() - uploadStartRef.current) / 1000;
             const rate = progress.loaded / elapsed; 
-            const remaining = (progress.total - progress.loaded) / rate; 
-            setEstimatedTime(formatTIme(remaining));
+            const remainingTime = (progress.total - progress.loaded) / rate; 
+            setEstimatedTime(formatTIme(remainingTime));
           }
-          const percent = Math.round(progress.percent);
-          setIsUploading(false)
-          setUploadProgress(percent);
         },
-      });   
-      console.log(key); 
-      console.log("File uploaded successfully:", key);
+        }) 
+      } catch (error) {
+        console.error(error);  
+      }
     } catch (error) {
       console.error(error);  
     }
@@ -293,23 +312,23 @@ const Page = () => {
                       {...register("generateSubtitles")}
                       className="flex h-10 w-full rounded-md border border-border bg-muted px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50 dark:border-border dark:bg-card dark:ring-offset-slate-950 dark:placeholder:text-muted-foreground dark:focus-visible:ring-slate-300"
                     >
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
+                      <option value="true">Yes</option>
+                      <option value="false">No</option>
                     </select>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1">
+                <div className="grid grid-cols-1"> 
                   <div className="space-y-2">
-                    <Label htmlFor="generateSubtitles">
+                    <Label htmlFor="includeWatermark">
                       Include Watermark?
                     </Label>
                     <select
-                      {...register("generateSubtitles")}
+                      {...register("includeWatermark")}
                       className="flex h-10 w-full rounded-md border border-border bg-muted px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50 dark:border-border dark:bg-card dark:ring-offset-slate-950 dark:placeholder:text-muted-foreground dark:focus-visible:ring-slate-300"
                     >
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
+                      <option value="true">Yes</option>
+                      <option value="false">No</option>
                     </select>
                   </div>
                 </div>
