@@ -65,7 +65,7 @@ class Cypher {
             throw new Error("Title is required!")
         }
 
-        const videoDuration = getVideoDuration( options.video);
+        const videoDuration = await getVideoDuration( options.video);
         const {filename: videoFileName, size: videoSize, contentType: videoContentType} = extractFileMetadata(options.video);
         
         const {filename: thumbnailFileName, size: thumbnailSize, contentType: thumbnailContentType} = extractFileMetadata(options.thumbnail);
@@ -104,7 +104,7 @@ class Cypher {
             onProgress
         )
 
-        const completedRes = await fetch(`${reqForwardUrl}complete`, {
+        const completedRes = await fetch(reqForwardUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -133,13 +133,13 @@ class Cypher {
         thumbnailFormData.append("thumbnailContentType", thumbnailContentType)
         thumbnailFormData.append("thumbnailSize", String(thumbnailSize))
         
-        const uploadThumbnailRes = await fetch(`${reqForwardUrl}thumbnail`, {
+        const uploadThumbnailRes = await fetch(reqForwardUrl, {
             method: "POST",
             body: thumbnailFormData
         })
 
         if(!uploadThumbnailRes.ok){
-            await handleApiError(uploadThumbnailRes, 'complete');
+            await handleApiError(uploadThumbnailRes, 'thumbnail');
         }
 
         await uploadThumbnailRes.json()

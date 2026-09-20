@@ -38,6 +38,7 @@
     "@oneminutecloud/media-convert": "^1.0.8",
     "@oneminutecloud/storage-bucket": "^1.0.0",
     "@types/multer": "^2.2.0",
+    "argon2": "^0.31.2",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",

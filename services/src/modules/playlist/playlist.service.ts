@@ -101,11 +101,11 @@ export class PlaylistService {
         description: schema.playlist.description,
       });
 
-    if (!record) {
+    if (record.length === 0) {
       throw new NotFoundException('Playlist not found');
     }
 
-    return record;
+    return record[0];
   }
 
   async deletePlaylist(userId: string, id: string) {
@@ -119,7 +119,7 @@ export class PlaylistService {
         name: schema.playlist.name,
         description: schema.playlist.description,
       });
-    if (!record) {
+    if (record.length === 0) {
       throw new NotFoundException('Playlist not found');
     }
     return {

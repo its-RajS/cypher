@@ -15,6 +15,20 @@
       "when": 1781260878640,
       "tag": "0001_pink_blue_blade",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789890667331,
+      "tag": "0002_supreme_rhodey",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1789894876932,
+      "tag": "0003_last_omega_sentinel",
+      "breakpoints": true
     }
   ]
 }

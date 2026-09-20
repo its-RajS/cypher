@@ -15,7 +15,6 @@ async function bootstrap() {
     origin: '*',
     methods: '*',
     allowedHeaders: '*',
-    credentials: true,
   });
 
   app.useGlobalPipes(

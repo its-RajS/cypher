@@ -16,6 +16,13 @@ import {
   VERSION,
 } from 'src/configs';
 
+const ARGON2_OPTIONS = {
+  type: 2, // argon2id
+  timeCost: 2,
+  memoryCost: 65536,
+  parallelism: 1,
+} as const;
+
 @Injectable()
 export class ApiKeyService {
   constructor(
@@ -51,12 +58,7 @@ export class ApiKeyService {
       );
     }
     const { plainTextKey, hashedKey } = this.generateApiKey();
-    const hash = await argon2.hash(plainTextKey, {
-      type: argon2.argon2id,
-      timeCost: 2,
-      memoryCost: 65536,
-      parallelism: 1,
-    });
+    const hash = await argon2.hash(plainTextKey, ARGON2_OPTIONS);
 
     const prefix = plainTextKey.substring(0, 18) + '...';
 
@@ -102,12 +104,7 @@ export class ApiKeyService {
 
   async regenerateApiKey(userId: string, id: string) {
     const { plainTextKey, hashedKey: newKeyID } = this.generateApiKey();
-    const hash = await argon2.hash(plainTextKey, {
-      type: argon2.argon2id,
-      timeCost: 2,
-      memoryCost: 65536,
-      parallelism: 1,
-    });
+    const hash = await argon2.hash(plainTextKey, ARGON2_OPTIONS);
 
     const prefix = plainTextKey.substring(0, 18) + '...';
 
@@ -129,17 +126,12 @@ export class ApiKeyService {
     return { key: plainTextKey };
   }
 
-  async last_used_apiKey(id: string) {
-    // check redis first
+  async last_used_apiKey(userId: string, id: string) {
     const normaliKeyId = id.replace(/-/g, '');
-    const redis_record = await this.redis.hget(LAST_USED_HASH, normaliKeyId);
-    if (redis_record) {
-      return { last_used_at: new Date(Number(redis_record)) };
-    }
 
-    // check db
+    // ownership check must happen before trusting any cache
     const db_record = await this.db.query.api_key.findFirst({
-      where: eq(api_key.id, normaliKeyId),
+      where: (ak) => and(eq(ak.id, normaliKeyId), eq(ak.user_id, userId)),
       columns: {
         last_used_at: true,
         id: true,
@@ -148,6 +140,12 @@ export class ApiKeyService {
 
     if (!db_record) {
       throw new NotFoundException('API key not found');
+    }
+
+    // check redis for a fresher timestamp than what's in the db
+    const redis_record = await this.redis.hget(LAST_USED_HASH, normaliKeyId);
+    if (redis_record) {
+      return { last_used_at: new Date(Number(redis_record)) };
     }
 
     return { last_used_at: db_record?.last_used_at ?? null };

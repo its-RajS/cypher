@@ -95,7 +95,7 @@ export async function handleProcessRequest({
             case "upload": {
                 const initiateUploadRes = await initiateUpload({body: data, apiKey});
                 return Response.json(
-                    {data: initiateUploadRes},
+                    {uploadData: initiateUploadRes},
                     {status: 200}
                 )
             }
@@ -121,7 +121,8 @@ export async function handleProcessRequest({
                 )
         }
     } catch (error) {
-        const message = error || "an unexpected error occurred"
+        console.error("Error in processRequest:", error)
+        const message = error instanceof Error ? error.message : "an unexpected error occurred"
         return Response.json(
             {error: message},
             {status: 500}

@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "sdk:rebuild": "npm run build --prefix sdks/cypher-sdk"
+  },
   "dependencies": {
     "tsup": "^8.5.1"
   }

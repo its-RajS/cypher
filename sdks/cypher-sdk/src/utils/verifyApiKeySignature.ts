@@ -9,7 +9,7 @@ export function verifyApiKeySignature(apiKey: string): string | null {
   }
 
   const keyId = parts[1];
-  if (!/^[a-f-0-9]{32}$/i.test(keyId)) return null;
+  if (!/^[a-f0-9]{32}$/i.test(keyId)) return null;
 
   return keyId;
 }

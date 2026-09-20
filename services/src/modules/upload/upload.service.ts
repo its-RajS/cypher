@@ -41,7 +41,7 @@ export class UploadService {
 
     try {
       uploadData = await this.bucket.initiateUpload({
-        bucketId: process.env.BUCKET_ID!,
+        bucketId: process.env.ONEMINUTECLOUD_BUCKET_ID!,
         filename: dto.videoFileName,
         contentType: dto.videoContentType,
         size: dto.videoSize,
@@ -59,6 +59,7 @@ export class UploadService {
       id: videoId,
       user_id: userId,
       title: dto.title,
+      slug: dto.slug,
       description: dto.description,
       videoFileName: dto.videoFileName,
       videoContentType: dto.videoContentType,
@@ -71,7 +72,7 @@ export class UploadService {
       timestamps: dto.timestamps ? JSON.stringify(dto.timestamps) : '',
       playlist_id:
         dto.playlist && dto.playlist.trim() !== '' ? dto.playlist : null,
-      generateSubtitle: dto.generateSubtitle ?? false,
+      generateSubtitles: dto.generateSubtitles ?? false,
       includeWatermark: dto.includeWatermark ?? false,
       status: 'PENDING',
     });
@@ -106,16 +107,24 @@ export class UploadService {
     tier: string,
   ) {
     const completeUpload = await this.bucket.confirmUpload({
-      bucketId: process.env.BUCKET_ID!,
+      bucketId: process.env.ONEMINUTECLOUD_BUCKET_ID!,
       objectId,
       uploadId,
       key,
-      parts,
+      parts: parts.map((part) => ({
+        PartNumber: (part as unknown as { partNumber: number }).partNumber,
+        ETag: (part as unknown as { eTag: string }).eTag,
+      })),
     });
 
     await this.db
       .delete(schema.pending_uploads)
       .where(eq(schema.pending_uploads.video_id, videoId));
+
+    const videoRecord = await this.db.query.video_metadata.findFirst({
+      where: (v) => eq(v.id, videoId),
+      columns: { generateSubtitles: true },
+    });
 
     const { trackingId } = await media.convert({
       apiKey: process.env.ONEMINUTECLOUD_API_KEY!,
@@ -123,9 +132,8 @@ export class UploadService {
       outPutBucketId: process.env
         .ONEMINUTECLOUD_TRANSCODING_BUCKET_ID as string,
       outputs: tier === 'free' ? ['720p'] : ['360p', '480p', '720p', '1080p'],
-      generateSubtitles: true,
-      webhookUrl:
-        'https://herbicide-senate-unethical.ngrok-free.dev/api/v1/upload/webhook',
+      generateSubtitles: videoRecord?.generateSubtitles ?? false,
+      webhookUrl: process.env.WEBHOOK_BASE_URL + '/api/v1/upload/webhook',
     });
 
     await this.db
@@ -149,7 +157,7 @@ export class UploadService {
   ) {
     try {
       const thumbnailUpload = await this.bucket.uploadFile({
-        bucketId: process.env.BUCKET_ID!,
+        bucketId: process.env.ONEMINUTECLOUD_BUCKET_ID!,
         file: thumbnail,
         filename: thumbnailFileName,
         contentType: thumbnailContentType,

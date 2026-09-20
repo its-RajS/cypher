@@ -4,11 +4,12 @@ export type UploadVideoRespose = {
 
 export type UploadVideoFields ={
     title: string,
+    slug: string,
     description?: string,
-    thumbnail?: File,
+    thumbnail: File,
     timestamps?: string[],
     playlist?:string,
-    genreateSubtitles?: boolean,
+    generateSubtitles?: boolean,
     tags?:string[],
     includeWatermark?: boolean,
     video: File,
@@ -26,7 +27,7 @@ export type UploadVideoTypes= {
     thumbnailSize:number,
     timestamps?: string[],
     playlist?:string,
-    genreateSubtitles?: boolean,
+    generateSubtitles?: boolean,
     tags?:string[],
     includeWatermark?: boolean,
     type: string

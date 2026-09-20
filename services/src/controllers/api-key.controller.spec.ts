@@ -98,14 +98,20 @@ describe('ApiKeyController', () => {
 
   describe('last_used_apiKey', () => {
     it('should call service.last_used_apiKey', async () => {
+      const mockReq = { user: { id: 'user-123' }, headers: {} };
       const id = 'key-123';
       const now = new Date();
-      mockApiKeyService.last_used_apiKey.mockResolvedValue(now);
+      mockApiKeyService.last_used_apiKey.mockResolvedValue({
+        last_used_at: now,
+      });
 
-      const result = await controller.last_used_apiKey(id);
+      const result = await controller.last_used_apiKey(mockReq, id);
 
-      expect(result).toEqual(now);
-      expect(mockApiKeyService.last_used_apiKey).toHaveBeenCalledWith(id);
+      expect(result).toEqual({ last_used_at: now });
+      expect(mockApiKeyService.last_used_apiKey).toHaveBeenCalledWith(
+        'user-123',
+        id,
+      );
     });
   });
 });

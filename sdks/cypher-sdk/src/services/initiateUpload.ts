@@ -11,10 +11,11 @@ export async function initiateUpload({ body, apiKey }: InitiateUploadType ) {
     try {
         const {baseUrl} = getEnvConfig()
                 
-        const response = await fetch(`${baseUrl}/upload/initiate`, {
+        const response = await fetch(`${baseUrl}/upload/create`, {
             method: "POST",
             headers: {
-                "x-api-key": apiKey
+                "x-api-key": apiKey,
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 ...body

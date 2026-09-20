@@ -1,4 +1,4 @@
-export const handleApiError = async (res:Response, context: "initiate" | "complete" | "preview"): Promise<never> => {
+export const handleApiError = async (res:Response, context: "initiate" | "complete" | "thumbnail" | "preview"): Promise<never> => {
     const {status} = res;
     if(status === 404){
         throw new Error(
@@ -16,6 +16,9 @@ export const handleApiError = async (res:Response, context: "initiate" | "comple
             break;
         case "complete":
             errorMessage += "Upload completion."
+            break;
+        case "thumbnail":
+            errorMessage += "Thumbnail completion."
             break;
         case "preview":
             errorMessage += "Video preview generation."

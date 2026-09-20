@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
+import { useUser, useAuth } from "@clerk/nextjs";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { storage } from "@oneminutecloud/storage-bucket-next";
 import { cypher } from "@cypher/sdk";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const getNow = () => Date.now();
 
@@ -25,7 +27,7 @@ const uploadSchema = z.object({
   tags: z.string().optional().transform((val) => val ? val.split(',').map((tag) => tag.trim()).filter((tag) => tag.length > 0) : []),
   thumbnail: z
     .any()
-    .refine((files) => files?.length === 1, "Thumbnail is required"),
+    .refine((files) => files?.length === 1, "Thumbnail is required").transform((file) => file[0] as File),
   timestamps: z.string().optional().transform((val) => val ? val.split('\n').map((time) => time.trim()).filter((time) => time.length > 0) : []),
   playlist: z.string().optional(),
   generateSubtitles: z.string().optional().transform((val) => val === "true"),
@@ -46,6 +48,7 @@ const Page = () => {
     setValue,
     trigger,
     formState: { errors },
+    reset
   } = useForm<UploadFormValues, unknown, UploadFormOutputValues>({
     resolver: zodResolver(uploadSchema),
     defaultValues: {
@@ -71,8 +74,19 @@ const Page = () => {
     return `${minutes}m ${Math.round(second % 60)}s remaining`;
   }
   const router = useRouter();
-  const { isLoaded } = useUser();
+  const { isLoaded, isSignedIn } = useUser();
+  const { getToken } = useAuth();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Reset form
+  const resetForm = () => {
+    reset();
+    setVideoPreview(null); 
+    setEstimatedTime(null);
+    setIsUploading(false);
+    setUploadProgress(0);
+    if(fileInputRef.current) fileInputRef.current.value = ""
+  }
 
   const onSubmit = async (data: UploadFormOutputValues) => {
     try {
@@ -106,14 +120,48 @@ const Page = () => {
             setEstimatedTime(formatTIme(remainingTime));
           }
         },
-        }) 
+        })
+        resetForm();
+        toast.success(
+          "Video uploaded Successfully! Currently video is getting processed.",
+          {
+            position: "top-right",
+            duration: 5000
+          }
+        )
       } catch (error) {
-        console.error(error);  
+        console.error(error);
+        setIsUploading(false);
+        toast.error(
+          error instanceof Error ? error.message : "Failed to upload video.",
+          { position: "top-right", duration: 5000 },
+        );
       }
     } catch (error) {
-      console.error(error);  
+      console.error(error);
+      setIsUploading(false);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to upload video.",
+        { position: "top-right", duration: 5000 },
+      );
     }
   };
+
+  // Tanstack -> fetch playlist
+  const {data: playlistData, isLoading: playlistLoading} = useQuery({
+    queryKey: ["playlist"],
+    queryFn: async () => {
+      if (!isSignedIn) return;
+      const token = await getToken();
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/playlists`,
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      )
+      return res.json();
+    },
+    enabled: isLoaded && isSignedIn
+  })
 
   const generateSlug = () => {
     const randomSlug = `video-${Math.random().toString(36).substring(7)}`;
@@ -126,7 +174,7 @@ const Page = () => {
     e.preventDefault();
     setIsDragging(false);
     const file = e.dataTransfer.files?.[0];
-    if (file && file.type.startsWith("video/")) {
+    if (file && file.type.startsWith("video/")) { 
       const url = URL.createObjectURL(file);
       setVideoPreview(url);
       setValue("video", [file], { shouldValidate: true });
@@ -295,13 +343,18 @@ const Page = () => {
                     <Label htmlFor="playlist">Playlist</Label>
                     <select
                       {...register("playlist")}
+                      disabled = {playlistLoading}
                       className="flex h-10 w-full rounded-md border border-border bg-muted px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50 dark:border-border dark:bg-card dark:ring-offset-slate-950 dark:placeholder:text-muted-foreground dark:focus-visible:ring-slate-300"
                     >
-                      <option value="">Select a playlist</option>
-                      <option value="frontend">Frontend Development</option>
-                      <option value="backend">Backend Tips</option>
-                      <option value="ai">AI & Machine Learning</option>
-                    </select>
+                      <option value="">
+                        {playlistLoading ? "Loading..." : "Select a playlist"}
+                      </option>
+                      {playlistData?.map((pl : {id: string, name: string}) => (
+                        <option value={pl.id} key={pl.id}>
+                          {pl.name}
+                        </option>
+                      ))}
+                    </select> 
                   </div>
 
                   <div className="space-y-2">

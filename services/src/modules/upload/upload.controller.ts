@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   Post,
+  Put,
   Req,
   UploadedFile,
   UseGuards,
@@ -41,7 +42,7 @@ export class UploadController {
     return this.uploadService.initiateUpload(req.user!.id, dto);
   }
 
-  @Post('complete')
+  @Put('complete')
   @HttpCode(200)
   @UseGuards(ClerkAuthGuard, UploadGuard)
   @ApiBearerAuth()

@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { UploadFilePart } from '@oneminutecloud/storage-bucket';
+import { Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -14,6 +15,11 @@ export class InitiateUploadDTO {
   @IsString()
   @IsNotEmpty()
   title: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  slug: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -71,7 +77,7 @@ export class InitiateUploadDTO {
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  generateSubtitle?: boolean;
+  generateSubtitles?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -123,6 +129,7 @@ export class ThumbnailUploadDTO {
   thumbnailContentType: string;
 
   @ApiProperty()
+  @Type(() => Number)
   @IsNumber()
   thumbnailSize: number;
 }

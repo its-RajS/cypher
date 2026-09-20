@@ -10,7 +10,7 @@ type UploadOptions = {
 
 export async function uploadFile(file: File, uploadData: any, options?: UploadOptions) {
     const {objectId, uploadId, key, partSize, parts} = uploadData
-    
+
     let uploadedParts = 0
     const completedParts: Promise<{partNumber: number, eTag: string}>[] = []
 
@@ -21,7 +21,7 @@ export async function uploadFile(file: File, uploadData: any, options?: UploadOp
 
         const res = await fetch(part.url, {
             method: "PUT",
-            body: chunk
+        body: chunk
         })
 
         if(!res.ok){

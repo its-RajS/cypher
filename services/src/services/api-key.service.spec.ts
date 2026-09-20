@@ -103,7 +103,7 @@ describe('ApiKeyService', () => {
       });
 
       await expect(service.createApiKey('user-123')).rejects.toThrow(
-        'You have reached the maximum limit of 1 API keys',
+        'You have reached the maximum limit of 2 API keys',
       );
     });
   });
@@ -172,36 +172,37 @@ describe('ApiKeyService', () => {
 
   describe('last_used_apiKey', () => {
     it('should return from redis if available', async () => {
+      const userId = 'user-123';
       const id = 'key-123';
       const now = Date.now();
+      db.query.api_key.findFirst.mockResolvedValue({ id, last_used_at: null });
       redis.hget.mockResolvedValue(now.toString());
 
-      const result = await service.last_used_apiKey(id);
+      const result = await service.last_used_apiKey(userId, id);
 
-      expect(result).toBeInstanceOf(Date);
-      expect((result as unknown as Date).getTime()).toBe(now);
+      expect(result).toEqual({ last_used_at: new Date(now) });
       expect(redis.hget).toHaveBeenCalled();
     });
 
     it('should return from db if not in redis', async () => {
+      const userId = 'user-123';
       const id = 'key-123';
       const now = new Date();
+      db.query.api_key.findFirst.mockResolvedValue({ id, last_used_at: now });
       redis.hget.mockResolvedValue(null);
-      db.query.api_key.findFirst.mockResolvedValue({ last_used_at: now });
 
-      const result = await service.last_used_apiKey(id);
+      const result = await service.last_used_apiKey(userId, id);
 
-      expect(result).toEqual(now);
+      expect(result).toEqual({ last_used_at: now });
       expect(db.query.api_key.findFirst).toHaveBeenCalled();
     });
 
     it('should throw if not found', async () => {
-      redis.hget.mockResolvedValue(null);
       db.query.api_key.findFirst.mockResolvedValue(null);
 
-      await expect(service.last_used_apiKey('key-123')).rejects.toThrow(
-        'API key not found',
-      );
+      await expect(
+        service.last_used_apiKey('user-123', 'key-123'),
+      ).rejects.toThrow('API key not found');
     });
   });
 });

@@ -69,7 +69,27 @@ export class UploadGuard implements CanActivate {
     });
 
     if (!record) {
-      return;
+      void this.db
+        .insert(schema.plan)
+        .values({
+          user_id: userId,
+          tier: PlanTier.FREE,
+          price: 0,
+          currency: 'usd',
+        })
+        .onConflictDoNothing()
+        .catch((err) => {
+          console.log(
+            `[UploadGuard] failed to seed the plan row of ${userId}, ${err}`,
+          );
+        });
+
+      const plan: CachedPlan = {
+        tier: PlanTier.FREE,
+        updatedAt: Date.now(),
+      };
+      cachedPlan.set(lru_key, plan);
+      return plan;
     }
 
     const tierName = normalizePlanTier(record.tier);

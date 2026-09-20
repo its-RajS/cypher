@@ -5,6 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  dfk: link:../../../../../.local/share/pnpm/global/5/node_modules/@cypher/dfk
   sdk: link:../../../../../.local/share/pnpm/global/5/node_modules/@cypher/sdk
 
 importers:
@@ -50,6 +51,9 @@ importers:
       cmdk:
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      dfk:
+        specifier: link:../../../../../.local/share/pnpm/global/5/node_modules/@cypher/dfk
+        version: link:../../../../../.local/share/pnpm/global/5/node_modules/@cypher/dfk
       framer-motion:
         specifier: ^12.34.0
         version: 12.40.0(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)

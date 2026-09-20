@@ -52,7 +52,10 @@ export class ApiKeyController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get an API key last used at' })
-  async last_used_apiKey(@Param('id') id: string) {
-    return this.apiKeyService.last_used_apiKey(id);
+  async last_used_apiKey(
+    @Req() req: AuthenticatedRequest,
+    @Param('id') id: string,
+  ) {
+    return this.apiKeyService.last_used_apiKey(req.user!.id, id);
   }
 }

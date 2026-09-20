@@ -19,6 +19,7 @@ import DeleteAccountModal from "@/components/modals/delete-account.modal";
 import { useUser } from "@clerk/nextjs";
 import { useAuth } from '@clerk/nextjs';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const tabs = ["General", "Developer Access", "Security"];
 
@@ -63,22 +64,28 @@ export default function SettingsPage() {
   };
 
   const handleGenerateSecretKey = async () => {
-    const token = await getToken();
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api-keys`, {
-      method: "POST", 
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (!res.ok) {
-      throw new Error(`Failed to generate API key: ${res.status}`);
+    try {
+      const token = await getToken();
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api-keys`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) {
+        throw new Error(`Failed to generate API key: ${res.status}`);
+      }
+      const data = await res.json();
+      setSecretKey(data.key);
+      setShowKeyModal(!showKeyModal);
+      queryClient.invalidateQueries({
+        queryKey: ['api-keys'],
+      });
+      toast.success("API key generated successfully!");
+    } catch (error) {
+      console.error("Generate API key error:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to generate API key");
     }
-    const data = await res.json(); 
-    setSecretKey(data.key);
-    setShowKeyModal(!showKeyModal);
-    queryClient.invalidateQueries({
-      queryKey: ['api-keys'],
-    });
   };
 
   const handleRegenerateSecretKey = async (keyId: string) => {

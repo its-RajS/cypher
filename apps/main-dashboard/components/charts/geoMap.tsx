@@ -59,7 +59,7 @@ const GeographicalMap = () => {
         <Geographies geography={geoUrl}>
           {({ geographies }) =>
             geographies.map((geo) => {
-              const countryName = geo.properties.name;
+              const countryName = geo.properties?.name;
               const match = countryData.find((c) => c.name === countryName);
               const baseColor = getColor(countryName);
 
@@ -91,7 +91,7 @@ const GeographicalMap = () => {
                       transition: "fill 0.3s ease-in-out",
                     },
                     pressed: { fill: "var(--tertiary)", outline: "none" },
-                  }}
+                  } as any}
                 />
               );
             })
