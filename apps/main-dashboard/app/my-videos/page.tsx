@@ -1,6 +1,6 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import {
   ChevronRight,
   Trash2,
@@ -14,37 +14,21 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
-const videos = [
-  {
-    id: "vid123",
-    title: "React Basics",
-    description: "This is a testing description!",
-    playlist: "Frontend Development",
-    views: 1245,
-    thumbnail:
-      "https://ik.imagekit.io/sjbr5usgh/Banners/WhatsApp%20Image%202025-04-08%20at%203.51.12%20PM.jpeg?updatedAt=1744410635917",
-  },
-  {
-    id: "vid124",
-    title: "Node.js Crash Course",
-    description: "This is a testing description!",
-    playlist: "Backend Tips",
-    views: 980,
-    thumbnail:
-      "https://ik.imagekit.io/sjbr5usgh/Banners/WhatsApp%20Image%202025-04-08%20at%203.51.12%20PM.jpeg?updatedAt=1744410635917",
-  },
-  {
-    id: "vid125",
-    title: "Intro to AI Agents",
-    description:
-      "This is a testing description! This is a testing description!",
-    playlist: "AI & Machine Learning",
-    views: 2210,
-    thumbnail:
-      "https://ik.imagekit.io/sjbr5usgh/Banners/WhatsApp%20Image%202025-04-08%20at%203.51.12%20PM.jpeg?updatedAt=1744410635917",
-  },
-];
+type VideoMetaData = {
+  title : string;
+  description: string | null;
+  status: string;
+  playlist_id: string | null;
+  playlist_name: string| null;
+  thumbnailTrackingId: string| null;
+  videotTrackingId: string | null;
+}
+
+type VideoWithThumbnail = VideoMetaData & {
+  thumbnailUrl : string;
+}
 
 const Page = () => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -52,6 +36,15 @@ const Page = () => {
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null);
+  // const [getToken, isSignedIn] = useAuth();
+
+  // const {} = useQuery<VideoWithThumbnail[]>({
+  //   queryKey: ["video-metadata"],
+  //   queryFn: async () => {
+  //     const token = await getToken();
+
+  //   }
+  // })
 
   const openDeleteModal = (id: string) => {
     setSelectedVideoId(id);
@@ -73,6 +66,7 @@ const Page = () => {
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 1500);
   };
+
 
   return (
     <>
